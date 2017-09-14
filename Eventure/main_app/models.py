@@ -26,7 +26,7 @@ class Host(models.Model):
 class EventInfo(models.Model):
     id = models.AutoField(primary_key = True)
     host = models.ForeignKey(Host, null = True)
-    type = models.BooleanField()  #auto-set to public
+    type = models.BooleanField(default = False)  #auto-set to public
     name = models.CharField(max_length = 255, default = '')
     location = models.CharField(max_length = 255)
     date = models.DateField(null = True)
@@ -41,10 +41,10 @@ class EventInfo(models.Model):
 
 class Item(models.Model):
     itemID = models.AutoField(primary_key = True)
-    eventID = models.ForeignKey(EventInfo.id, null = True)
+    eventID = models.ForeignKey(EventInfo, null = True)
     name = models.CharField(max_length = 255, default = '')
     amount = models.IntegerField(default = 0)
-    isTaken = models.BooleanField()
+    isTaken = models.BooleanField(default = False)
 
     def __str__(self):
         return self.name + ' ' + self. amount
@@ -52,6 +52,6 @@ class Item(models.Model):
 
 class Attendees(models.Model):
     name = models.OneToOneField(User,related_name = 'Attendee')
-    attendeeID = models.ForeignKey(UserProfile.id, null = True)
-    eventID = models.ForeignKey(EventInfo.id, null = True)
-    itemID = models.ForeignKey(Item.itemID, null = True)
+    attendeeID = models.ForeignKey(UserProfile, null = True)
+    eventID = models.ForeignKey(EventInfo, null = True)
+    itemID = models.ForeignKey(Item, null = True)
