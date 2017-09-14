@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name = 'user')
+    email = models.EmailField(max_length = 256, default = '');
     id = models.AutoField(primary_key = True)
     firstName = models.CharField(max_length = 50, default = '')
     lastName = models.CharField(max_length = 50, default = '')
@@ -50,7 +51,7 @@ class Item(models.Model):
         return self.name + ' ' + self. amount
 
 
-class Attendees(models.Model):
+class Attendee(models.Model):
     name = models.OneToOneField(User,related_name = 'Attendee')
     attendeeID = models.ForeignKey(UserProfile, null = True)
     eventID = models.ForeignKey(EventInfo, null = True)
