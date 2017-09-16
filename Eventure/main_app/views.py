@@ -1,21 +1,22 @@
 from django.shortcuts import render
 import random, string
 
+WEBSITENAME = 'Eventure'
 # Create your views here.
 
-# Will return a group id, a string of 10 digits
-def createGroupID():
-	digitSequence = ''.join(random.choice(string.digits) for digits in range(10))
-	print(digitSequence)
+# Used to display an event from a URL given to anon users from an email
+def displayEvent(request, groupID, userID):
+	print("groupID:%s -- userID:%s -- website %s" % (groupID, userID, WEBSITENAME))
+	return render(request, 'DisplayEvent.html')
 
-#
-def createUserID():
+# Will return a string of specified length of alphanumeric characters
+def createAlphanumericSequence(sequenceLength):
 	alphaNumericSequence = ''.join(random.choice(string.ascii_letters + string.digits) \
-	                        for digits in range(16))
-	print(alphaNumericSequence)
+	                        for digits in range(sequenceLength))
 	
+# 
 def createURL():
-	groupID = createGroupID()
-	userID = createUserID()
+	groupID = createAlphanumericSequence(10)
+	userID = createAlphanumericSequence(6)
 	
 	print(groupID + userID)
