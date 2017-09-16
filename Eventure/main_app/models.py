@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 from django.contrib.auth.models import User
 
 
@@ -56,3 +57,4 @@ class Attendee(models.Model):
     attendeeID = models.ForeignKey(UserProfile, null = True)
     eventID = models.ForeignKey(EventInfo, null = True)
     itemID = models.ForeignKey(Item, null = True)
+    
