@@ -3,8 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
+<script type="text/html" id="item-template">
+<div id="item-__prefix__">
+    {{ itemCreationFormset.empty_form }}
+</div>
+</script>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ itemCreationFormset.management_form }}
+    <div id="items-form-container">
+        {% for items in itemCreationFormset %}
+            <div id="item-{{ forloop.counter0 }}">
+                {{ items.id }}
+                {{ items }}
+            </div>
+        {% endfor %}
+    </div>
+    <a href="#" id="add-item-button" class="btn btn-info add-item">Add Item</a>
+</form>
+
+
+
+
+
+<script>
+$(document).ready(function() {
+    $('.add-item').click(function(ev) {
+        ev.preventDefault();
+        var count = $('#items-form-container').children().length;
+        var tmplMarkup = $('#item-template').html();
+        var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+        $('div#items-form-container').append(compiledTmpl);
+
+        // update form count
+        $('#id_item_items-TOTAL_FORMS').attr('value', count+1);
+
+        // some animate to scroll to view our new form
+        $('html, body').animate({
+                scrollTop: $("#add-item-button").position().top-200
+            }, 800);
+    });
+});
+</script>
 </body>
 </html>

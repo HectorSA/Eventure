@@ -8,21 +8,25 @@ WEBSITENAME = 'Eventure'
 
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
-	InviteeFormSet = formset_factory(InviteeForm)
+	print("groupID:%s -- userID:%s -- website %s" % (groupID, userID, WEBSITENAME))
+
+
+
+def createEvent(request):
+	
+	## Select what item
+	
+	## Create a formset from the ItemForm
+	ItemFormSet = formset_factory(ItemForm)
 	if request.method == 'POST':
-		formset = InviteeFormSet(request.POST, request.FILES)
-		if formset.is_valid():
+		itemCreationFormset = ItemFormSet(request.POST, request.FILES)
+		if itemCreationFormset.is_valid():
 			# do something with the formset.cleaned_data
 			pass
 	else:
-		formset = InviteeFormSet()
-	#print("groupID:%s -- userID:%s -- website %s" % (groupID, userID, WEBSITENAME))
-	print(formset)
-	return render(request, 'DisplayEvent.html', {'formset': formset})
-
-
-
-
+		itemCreationFormset = ItemFormSet()
+	
+	return render(request, 'createEvent.html', {'itemCreationFormset': itemCreationFormset})
 
 
 ################# Functions used by views #################
