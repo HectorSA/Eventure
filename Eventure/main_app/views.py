@@ -51,9 +51,9 @@ def createAlphanumericSequence(sequenceLength):
 	                        for digits in range(sequenceLength))
 	
 def createURL():
-	groupID = createAlphanumericSequence(10)
+	eventID = createAlphanumericSequence(10)
 	userID = createAlphanumericSequence(6)
 	
-	print(groupID + userID)
+	print(eventID + userID)
 	
 ############################################################
