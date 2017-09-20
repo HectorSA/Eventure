@@ -26,7 +26,7 @@ class Host(models.Model):
     
 
 class EventInfo(models.Model):
-    id = models.AutoField(primary_key = True)
+    id = models.CharField(max_length = 10, default = '')
     host = models.ForeignKey(Host, null = True)
     type = models.BooleanField(default = False)  #auto-set to public
     name = models.CharField(max_length = 255, default = '')
@@ -54,7 +54,7 @@ class Item(models.Model):
 
 class Attendee(models.Model):
     name = models.OneToOneField(User,related_name = 'Attendee')
-    attendeeID = models.ForeignKey(UserProfile, null = True)
+    attendeeID = models.CharField(max_length = 6, default = '')
     eventID = models.ForeignKey(EventInfo, null = True)
     itemID = models.ForeignKey(Item, null = True)
 
