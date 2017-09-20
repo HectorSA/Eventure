@@ -58,3 +58,5 @@ class Attendee(models.Model):
     eventID = models.ForeignKey(EventInfo, null = True)
     itemID = models.ForeignKey(Item, null = True)
 
+class EmailInvitee(models.Model):
+    email = models.EmailField(max_length=256, default='')

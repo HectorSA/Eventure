@@ -16,7 +16,8 @@
 
 <form action="" method="post">
     {% csrf_token %}
-    {{ itemCreationFormset.management_form }}
+
+    {{ inviteToEventFormset.management_form }}
     <div id="items-form-container">
         {% for items in itemCreationFormset %}
             <div id="item-{{ forloop.counter0 }}">

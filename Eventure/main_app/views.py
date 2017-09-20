@@ -14,8 +14,18 @@ def displayEvent(request, groupID, userID):
 
 def createEvent(request):
 	
-	## Select what item
+	## Select who to invite to event
+	EmailFormSet = formset_factory(EmailInviteeForm)
+	if request.method == 'POST':
+		inviteToEventFormset = EmailFormSet(request.POST, request.FILES)
+		if inviteToEventFormset.is_valid():
+			# do something with the formset.cleaned_data
+			pass
+	else:
+		inviteToEventFormset = EmailFormSet()
 	
+	
+	## Select what items you want people to bring
 	## Create a formset from the ItemForm
 	ItemFormSet = formset_factory(ItemForm)
 	if request.method == 'POST':
@@ -26,7 +36,12 @@ def createEvent(request):
 	else:
 		itemCreationFormset = ItemFormSet()
 	
-	return render(request, 'createEvent.html', {'itemCreationFormset': itemCreationFormset})
+	mapping = {
+		'itemCreationFormset': itemCreationFormset,
+		'inviteToEventFormset': inviteToEventFormset,
+	}
+	
+	return render(request, 'createEvent.html', mapping)
 
 
 ################# Functions used by views #################
