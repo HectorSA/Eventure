@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name = 'user')
-    email = models.EmailField(max_length = 256, default = '')
     id = models.AutoField(primary_key = True)
     firstName = models.CharField(max_length = 50, default = '')
     lastName = models.CharField(max_length = 50, default = '')
+    email = models.EmailField(max_length=256, default='')
     #profilePhoto = models.ImageField(upload_to = 'profile_photos', blank = True, default = None)
     city = models.CharField(max_length = 50, default = '')
     state = models.CharField(max_length = 50, default = '')
