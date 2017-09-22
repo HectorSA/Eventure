@@ -10,4 +10,4 @@ class EmailInviteeForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
 	class Meta:
 		model = Item
-		fields = ('itemID','eventID','name','amount','isTaken',)
+		fields = ('name','amount','isTaken',)
