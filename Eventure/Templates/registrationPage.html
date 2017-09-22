@@ -1,0 +1,39 @@
+{% extends "Eventure/Base.html" %}
+{% load staticfiles %}
+
+{% block body_block %}
+
+<body style="background-color:blanchedalmond;">
+
+  <div class="container">
+    <div class="jumbotron">
+      {% if registered %}
+        <h1>Thank you for registering!</h1>
+      {% else %}
+      <div class="container">
+        <h1 class="well">Registration Form</h1>
+        <div class="col-lg-12 well">
+	<div class="row">
+
+        <!--<h3>Just fill out the form.</h3>-->
+
+        <form enctype="multipart/form-data" method="POST">
+          {% csrf_token %}
+
+        <p>Username: {{ user_form.username }} </p>
+        <p> Email Address: {{ user_form.email }} </p>
+        <p> Password: {{ user_form.password }} </p>
+        <p> First Name: {{ user_profile_form.firstname }} </p>
+        <p> Last Name:{{ user_profile_form.lastname }} </p>
+        <p> Profile Picture: {{ user_profile_form.profilePic }}
+        <p> City: {{ user_profile_form.city }} </p>
+        <p> State: {{ user_profile_form.state }} </p>
+        <p> Zip: {{ user_profile_form.zip }} </p>
+
+
+          <input type="submit" name="" value="Register">
+        </form>
+      {% endif %}
+
+
+{% endblock %}
