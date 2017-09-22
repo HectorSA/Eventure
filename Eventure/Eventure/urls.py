@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^event/(\w{10})(\w{6})$', views.displayEvent, name = 'DisplayEvent'),
     url(r'^createEvent$', views.createEvent, name = 'CreateEvent'),
+    url(r'^register/$',views.register, name='registrationPage'),
 ]

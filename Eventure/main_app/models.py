@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 from django.contrib.auth.models import User
+from localflavor.us.models import USStateField
 
 
 class UserProfile(models.Model):
@@ -8,10 +9,10 @@ class UserProfile(models.Model):
     id = models.AutoField(primary_key = True)
     firstName = models.CharField(max_length = 50, default = '')
     lastName = models.CharField(max_length = 50, default = '')
-    #profilePhoto = models.ImageField(upload_to = 'profile_photos', blank = True, default = None)
-    city = models.CharField(max_length = 50, default = '')
-    state = models.CharField(max_length = 50, default = '')
-    zip = models.IntegerField()
+    profilePhoto = models.ImageField(upload_to = 'profile_photos', blank = True, default = None)
+    city = models.CharField(("city"), max_length=64, default="Zanesville")
+    state = USStateField(("state"), default="TX")
+    zip = models.CharField(("zip code"), max_length=5, default="43701")
 
     def __str__(self):
         return self.firstName + ' ' + self.lastName
