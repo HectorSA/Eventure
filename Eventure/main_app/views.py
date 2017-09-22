@@ -13,30 +13,22 @@ def displayEvent(request, groupID, userID):
 
 
 def createEvent(request):
-	
-	## Select who to invite to event
+
 	EmailFormSet = formset_factory(EmailInviteeForm)
+	ItemFormSet = formset_factory(ItemForm)
+	EventForm = CreateEventForm()
+	
 	if request.method == 'POST':
 		inviteToEventFormset = EmailFormSet(request.POST, request.FILES)
 		if inviteToEventFormset.is_valid():
-			# do something with the formset.cleaned_data
+			pass
+		
+		itemCreationFormset = ItemFormSet(request.POST, request.FILES)
+		if itemCreationFormset.is_valid():
 			pass
 	else:
 		inviteToEventFormset = EmailFormSet()
-	
-	
-	## Select what items you want people to bring
-	## Create a formset from the ItemForm
-	ItemFormSet = formset_factory(ItemForm)
-	if request.method == 'POST':
-		itemCreationFormset = ItemFormSet(request.POST, request.FILES)
-		if itemCreationFormset.is_valid():
-			# do something with the formset.cleaned_data
-			pass
-	else:
 		itemCreationFormset = ItemFormSet()
-	
-	EventForm = CreateEventForm()
 	
 	mapping = {
 		'eventForm' : EventForm,
