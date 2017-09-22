@@ -1,4 +1,4 @@
-{% extends "Eventure/Base.html" %}
+{% extends "Base.html" %}
 {% load staticfiles %}
 
 {% block body_block %}
@@ -23,9 +23,9 @@
         <p>Username: {{ user_form.username }} </p>
         <p> Email Address: {{ user_form.email }} </p>
         <p> Password: {{ user_form.password }} </p>
-        <p> First Name: {{ user_profile_form.firstname }} </p>
-        <p> Last Name:{{ user_profile_form.lastname }} </p>
-        <p> Profile Picture: {{ user_profile_form.profilePic }}
+        <p> First Name: {{ user_profile_form.firstName }} </p>
+        <p> Last Name:{{ user_profile_form.lastName }} </p>
+        <p> Profile Picture: {{ user_profile_form.profilePhoto }}
         <p> City: {{ user_profile_form.city }} </p>
         <p> State: {{ user_profile_form.state }} </p>
         <p> Zip: {{ user_profile_form.zip }} </p>
