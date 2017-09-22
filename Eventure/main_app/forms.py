@@ -6,11 +6,17 @@ class EmailInviteeForm(forms.ModelForm):
 	class Meta:
 		model = Attendee
 		fields = ('email',)
+class UserForm(forms.ModelForm):
+	password = forms.CharField(widget=forms.PasswordInput())
+
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'password')
 		
 class RegisterForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
-		fields = ('firstName', 'lastName', 'email', 'city', 'state', 'zip',)
+		fields = ('firstName', 'lastName', 'city', 'state', 'zip',)
 
 class ItemForm(forms.ModelForm):
 	class Meta:
