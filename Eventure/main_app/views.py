@@ -10,7 +10,8 @@ WEBSITENAME = 'Eventure'
 def displayEvent(request, groupID, userID):
 	print("groupID:%s -- userID:%s -- website %s" % (groupID, userID, WEBSITENAME))
 
-
+def index(request):
+    return render(request, 'index.html', {})
 
 def createEvent(request):
 
