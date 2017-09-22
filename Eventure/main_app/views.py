@@ -36,7 +36,10 @@ def createEvent(request):
 	else:
 		itemCreationFormset = ItemFormSet()
 	
+	EventForm = CreateEventForm()
+	
 	mapping = {
+		'eventForm' : EventForm,
 		'itemCreationFormset': itemCreationFormset,
 		'inviteToEventFormset': inviteToEventFormset,
 	}
