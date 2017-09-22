@@ -15,4 +15,9 @@ class RegisterForm(forms.ModelForm):
 class ItemForm(forms.ModelForm):
 	class Meta:
 		model = Item
-		fields = ('name','amount','isTaken',)
+		fields = ('name','amount',)
+
+class CreateEventForm(forms.ModelForm):
+	class Meta:
+		model = EventInfo
+		fields = ('id','host','type','name','location','date','time','description','eventPhoto',)

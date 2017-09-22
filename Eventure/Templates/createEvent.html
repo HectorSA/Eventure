@@ -19,6 +19,21 @@
         {{ inviteToEventFormset.empty_form }}
     </div>
 </script>
+
+
+<form enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <p> Event Name: {{ eventForm.name }} <p>
+    <p> Location: {{ eventForm.location }} <p>
+    <p> Date: {{ eventForm.date }} <p>
+    <p> Time: {{ eventForm.time }} <p>
+    <p> Discription: {{ eventForm.description }} <p>
+    <p> Picture: {{ eventForm.eventPhoto }} <p>
+    <input type="submit" name="">
+</form>
+
+
+
 <form action="" method="post">
     {% csrf_token %}
     {{ inviteToEventFormset.management_form }}
