@@ -26,7 +26,7 @@ class Host(models.Model):
     
 
 class EventInfo(models.Model):
-    id = models.CharField(max_length = 10, default = '')
+    id = models.CharField(primary_key = True, max_length = 10, default = '')
     host = models.ForeignKey(Host, null = True)
     type = models.BooleanField(default = False)  #auto-set to public
     name = models.CharField(max_length = 255, default = '')
@@ -57,6 +57,4 @@ class Attendee(models.Model):
     attendeeID = models.CharField(max_length = 6, default = '')
     eventID = models.ForeignKey(EventInfo, null = True)
     itemID = models.ForeignKey(Item, null = True)
-
-class EmailInvitee(models.Model):
     email = models.EmailField(max_length=256, default='')

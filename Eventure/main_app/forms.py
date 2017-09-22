@@ -4,7 +4,7 @@ from .models import *
 
 class EmailInviteeForm(forms.ModelForm):
 	class Meta:
-		model = EmailInvitee
+		model = Attendee
 		fields = ('email', )
 
 class ItemForm(forms.ModelForm):

@@ -39,7 +39,6 @@
     <div id="items-form-container">
         {% for items in itemCreationFormset %}
             <div id="item-{{ forloop.counter0 }}">
-                {{ items.id }}
                 {{ items }}
             </div>
         {% endfor %}
