@@ -2,10 +2,10 @@ from django.forms import formset_factory
 from django import forms
 from .models import *
 
-class EmailInviteeForm(forms.ModelForm):
-	class Meta:
-		model = Attendee
-		fields = ('email',)
+class EmailInviteeForm(forms.Form):
+	email = forms.EmailField(max_length=256,
+	                         widget=forms.TextInput(attrs={'placeholder': ' abc@xyz.com'}))
+
 class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
 
@@ -18,10 +18,11 @@ class RegisterForm(forms.ModelForm):
 		model = UserProfile
 		fields = ('firstName', 'lastName', 'profilePhoto','city', 'state', 'zip',)
 
-class ItemForm(forms.ModelForm):
-	class Meta:
-		model = Item
-		fields = ('name','amount',)
+class ItemForm(forms.Form):
+	name = forms.CharField(max_length=255,
+	                         widget=forms.TextInput(attrs={'placeholder': ' Pizza'}))
+	amount = forms.IntegerField()
+
 
 class CreateEventForm(forms.ModelForm):
 	class Meta:

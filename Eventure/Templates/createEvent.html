@@ -1,11 +1,12 @@
 {% extends "Base.html" %}
+{% load staticfiles %}
+
 {% block body_block %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Yellow</title>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -29,29 +30,20 @@
     <p> Location: {{ eventForm.location }} <p>
     <p> Date: {{ eventForm.date }} <p>
     <p> Time: {{ eventForm.time }} <p>
-    <p> Discription: {{ eventForm.description }} <p>
+    <p> Description: {{ eventForm.description }} <p>
     <p> Picture: {{ eventForm.eventPhoto }} <p>
-    <input type="submit" name="">
-</form>
 
 
-
-<form action="" method="post">
-    {% csrf_token %}
     {{ inviteToEventFormset.management_form }}
     <div id="invitees-form-container">
         {% for invitee in inviteToEventFormset %}
             <div id="invitee-{{ forloop.counter0 }}">
-                {{ invitee.id }}
                 {{ invitee }}
             </div>
         {% endfor %}
     </div>
     <a href="#" id="invitee-item-button" class="btn btn-info add-invitee">Add Invitee</a>
-</form>
 
-<form action="" method="post">
-    {% csrf_token %}
     {{ itemCreationFormset.management_form }}
     <div id="items-form-container">
         {% for items in itemCreationFormset %}
@@ -61,6 +53,7 @@
         {% endfor %}
     </div>
     <a href="#" id="add-item-button" class="btn btn-info add-item">Add Item</a>
+    <input type="submit" name="">
 </form>
 
 
@@ -78,11 +71,6 @@ $(document).ready(function() {
 
         // update form count
         $('#id_item_items-TOTAL_FORMS').attr('value', count+1);
-
-        // some animate to scroll to view our new form
-        $('html, body').animate({
-                scrollTop: $("#add-item-button").position().top-200
-            }, 800);
     });
 });
 
@@ -97,10 +85,6 @@ $(document).ready(function() {
         // update form count
         $('#id_invitee_invitees-TOTAL_FORMS').attr('value', count+1);
 
-        // some animate to scroll to view our new form
-        $('html, body').animate({
-                scrollTop: $("#add-invitee-button").position().top-200
-            }, 800);
     });
 });
 </script>
