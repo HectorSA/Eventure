@@ -17,3 +17,6 @@
 .NavButtons{
     margin: 4px 8px 8px 8px;
 }
+#email{
+    float: right;
+}
