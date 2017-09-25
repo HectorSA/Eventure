@@ -6,10 +6,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Yellow</title>
-
+    <title>Create Event</title>
+    <link rel="stylesheet" href="{% static 'css/CreateEvent.css' %}"/>
 </head>
 <body>
+
 
 <script type="text/html" id="item-template">
     <div id="item-__prefix__">
@@ -23,37 +24,73 @@
     </div>
 </script>
 
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#EventInfo">Event Info</a></li>
+    <li><a data-toggle="tab" href="#inviteList">Invite List</a></li>
+    <li><a data-toggle="tab" href="#itemList">Item List</a></li>
+  </ul>
+
 
 <form enctype="multipart/form-data" method="POST">
-    {% csrf_token %}
-    <p> Event Name: {{ eventForm.name }} <p>
-    <p> Location: {{ eventForm.location }} <p>
-    <p> Date: {{ eventForm.date }} <p>
-    <p> Time: {{ eventForm.time }} <p>
-    <p> Description: {{ eventForm.description }} <p>
-    <p> Picture: {{ eventForm.eventPhoto }} <p>
+    <div class="tab-content">
+        {% csrf_token %}
 
-
-    {{ inviteToEventFormset.management_form }}
-    <div id="invitees-form-container">
-        {% for invitee in inviteToEventFormset %}
-            <div id="invitee-{{ forloop.counter0 }}">
-                {{ invitee }}
+        <!-- First Tab -->
+        <div id="EventInfo" class="tab-pane fade in active">
+            <table class="table">
+                {{ eventForm.as_table }}
+            </table>
+            <br/>
+            <div id="NavButtons">
+                <a class="btn btn-primary btnNext">Next</a>
             </div>
-        {% endfor %}
-    </div>
-    <a href="#" id="invitee-item-button" class="btn btn-info add-invitee">Add Invitee</a>
+        </div>
 
-    {{ itemCreationFormset.management_form }}
-    <div id="items-form-container">
-        {% for items in itemCreationFormset %}
-            <div id="item-{{ forloop.counter0 }}">
-                {{ items }}
+        <!-- Second Tab -->
+        <div id="inviteList" class="tab-pane fade">
+            <h3>Who would you like to invite?</h3>
+            {{ inviteToEventFormset.management_form }}
+            <div id="invitees-form-container">
+                {% for invitee in inviteToEventFormset %}
+                    <div id="invitee-{{ forloop.counter0 }}" class="inviteTable">
+                        {{ invitee.as_table }}
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+            <a href="#" id="invitee-item-button" class="btn btn-info add-invitee">Add Invitee</a>
+            <br/>
+
+            <div class="NavButtons">
+                <a class="btn btn-primary btnPrevious">Previous</a>
+                <a class="btn btn-primary btnNext">Next</a>
+            </div>
+        </div>
+
+        <!-- Third Tab -->
+        <div id="itemList" class="tab-pane fade">
+            {{ itemCreationFormset.management_form }}
+            <h3>What would you like people to bring?</h3>
+            <div id="items-form-container" class="itemTable">
+                {% for items in itemCreationFormset %}
+                    <div id="item-{{ forloop.counter0 }}" class="itemTable ">
+                        {{ items }}
+                    </div>
+                {% endfor %}
+            </div>
+            <a href="#" id="add-item-button" class="btn btn-info add-item">Add Item</a>
+            <br/>
+            <div class="NavButtons">
+                <a class="btn btn-primary btnPrevious">Previous</a>
+            </div>
+
+            <div class="NavButtons">
+                <input type="submit" class="btn btn-warning" value="Create Event">
+            </div>
+        </div>
+
+
     </div>
-    <a href="#" id="add-item-button" class="btn btn-info add-item">Add Item</a>
-    <input type="submit" name="">
 </form>
 
 
@@ -67,7 +104,9 @@ $(document).ready(function() {
         var count = $('#items-form-container').children().length;
         var tmplMarkup = $('#item-template').html();
         var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+
         $('div#items-form-container').append(compiledTmpl);
+        $('div#items-form-container [id^=item-]').addClass("itemTable");
 
         // update form count
         $('#id_item_items-TOTAL_FORMS').attr('value', count+1);
@@ -80,13 +119,31 @@ $(document).ready(function() {
         var count = $('#invitees-form-container').children().length;
         var tmplMarkup = $('#invitee-template').html();
         var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+
         $('div#invitees-form-container').append(compiledTmpl);
+        $('div#invitees-form-container [id^=invitee-]').addClass("inviteTable");
 
         // update form count
         $('#id_invitee_invitees-TOTAL_FORMS').attr('value', count+1);
 
     });
 });
+
+  $(function () {
+    $('#myTab a:last').tab('show')
+  })
+
+
+
+     $('.btnNext').click(function(){
+  $('.nav-tabs > .active').next('li').find('a').trigger('click');
+});
+
+  $('.btnPrevious').click(function(){
+  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+});
+
+
 </script>
     {% endblock %}
 

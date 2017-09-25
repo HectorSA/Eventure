@@ -19,7 +19,7 @@ class RegisterForm(forms.ModelForm):
 		fields = ('firstName', 'lastName', 'profilePhoto','city', 'state', 'zip',)
 
 class ItemForm(forms.Form):
-	name = forms.CharField(max_length=255,
+	itemName = forms.CharField(max_length=255, label = 'Item',
 	                         widget=forms.TextInput(attrs={'placeholder': ' Pizza'}))
 	amount = forms.IntegerField()
 
@@ -27,4 +27,4 @@ class ItemForm(forms.Form):
 class CreateEventForm(forms.ModelForm):
 	class Meta:
 		model = EventInfo
-		fields = ('id','host','type','name','location','date','time','description','eventPhoto',)
+		fields = ('name','location','date','time','description','eventPhoto',)

@@ -1,0 +1,19 @@
+.itemTable{
+     padding: 8px;
+}
+
+.inviteTable{
+    padding: 8px;
+}
+
+#invitee-item-button{
+    margin:8px;
+}
+
+#add-item-button{
+    margin:8px;
+}
+
+.NavButtons{
+    margin: 4px 8px 8px 8px;
+}
