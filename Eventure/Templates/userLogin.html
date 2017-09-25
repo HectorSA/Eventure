@@ -1,0 +1,25 @@
+{% extends "Base.html" %}
+{% load staticfiles %}
+
+{% block body_block %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/userLogin.css' %}"/>
+<body>
+<div class="logo"></div>
+<div class="login-block">
+    <h1 class="h1">Welcome, please login.</h1>
+    <form enctype="multipart/form-data" method="POST">
+        {%csrf_token%}
+        <p type="username">User Name:{{loginForm.userName}}</p>
+        <p>Password:{{loginForm.password}}</p>
+        <input type="submit"  class="save btn btn-default" value="Enter" >
+    </form>
+  </div>
+</body>
+{%endblock%}
+</body>
+</html>
