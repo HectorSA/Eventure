@@ -18,8 +18,8 @@ def register(request):
 
         # Get info from "both" forms
         # It appears as one form to the user on the .html page
-        user_form = UserForm(data=request.POST)
-        user_profile_form = UserProfile(data=request.POST)
+        user_form = UserForm(request.POST)
+        user_profile_form = UserProfile(request.POST)
 
         # Check to see both forms are valid
         if user_form.is_valid() and user_profile_form.is_valid():
@@ -41,20 +41,16 @@ def register(request):
             profile.user = user
 
             # Check if they provided a profile picture
-            if 'profilePhoto' in request.FILES:
-                print('found it')
+            #if 'profilePhoto' in request.FILES:
+               # print('found it')
                 # If yes, then grab it from the POST form reply
-                profile.profilePic = request.FILES['profilePhoto']
+                #profile.profilePic = request.FILES['profilePhoto']
 
             # Now save model
             profile.save()
 
             # Registration Successful!
             registered = True
-
-        else:
-            # One of the forms was invalid if this else gets called.
-            print(user_form.errors, user_profile_form.errors)
 
     else:
         # Was not an HTTP post so we just render the forms as blank.

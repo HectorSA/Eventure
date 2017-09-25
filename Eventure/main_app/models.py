@@ -9,25 +9,16 @@ class UserProfile(models.Model):
     id = models.AutoField(primary_key = True)
     firstName = models.CharField(max_length = 50, default = '')
     lastName = models.CharField(max_length = 50, default = '')
-    profilePhoto = models.ImageField(upload_to = 'profile_photos', blank = True, default = None)
+    #profilePhoto = models.ImageField(upload_to = 'profile_photos', blank = True, default = None)
     city = models.CharField(("city"), max_length=64)
     state = USStateField(("state"), default="TX")
     zip = models.CharField(("zip code"), max_length=5)
 
-    def __str__(self):
-        return self.firstName + ' ' + self.lastName
-
-
-class Host(models.Model):
-    user = models.OneToOneField(User, related_name = 'Host')
-
-    def __str__(self):
-        return self.user.first_name
     
 
 class EventInfo(models.Model):
     id = models.CharField(primary_key = True, max_length = 10, default = '')
-    host = models.ForeignKey(Host, null = True)
+    userProfile = models.ForeignKey(UserProfile, null = True)
     type = models.BooleanField(default = False)  #auto-set to public
     name = models.CharField(max_length = 255, default = '')
     location = models.CharField(max_length = 255)
