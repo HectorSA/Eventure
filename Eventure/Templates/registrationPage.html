@@ -2,38 +2,87 @@
 {% load staticfiles %}
 
 {% block body_block %}
+    <!DOCTYPE html>
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/registrationPage.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-social.css' %}"/>
+</head>
 
-<body style="background-color:blanchedalmond;">
+<body>
 
   <div class="container">
-    <div class="jumbotron">
+
       {% if registered %}
         <h1>Thank you for registering!</h1>
       {% else %}
-      <div class="container">
-        <h1 class="well">Registration Form</h1>
-        <div class="col-lg-12 well">
-	<div class="row">
+          <div><h1 id="createAccount" style="display:flex;justify-content:center;align-items:center;">Create A Free Account</h1></div>
+          <div id="registerForm" class="container" style="display:flex;justify-content:center;align-items:center;">
 
-        <!--<h3>Just fill out the form.</h3>-->
+         <!--<h3>Just fill out the form.</h3>-->
+            <form enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <div>
+                <div id="username">
+                    <label>Username</label>
+                    <p>{{ user_form.username }} </p>
+                </div>
+                </div>
 
-        <form enctype="multipart/form-data" method="POST">
-          {% csrf_token %}
+                <div id="email">
+                    <label>Email Address</label>
+                    <p> {{ user_form.email }} </p>
+                </div>
 
-        <p>Username: {{ user_form.username }} </p>
-        <p> Email Address: {{ user_form.email }} </p>
-        <p> Password: {{ user_form.password }} </p>
-        <p> First Name: {{ user_profile_form.firstName }} </p>
-        <p> Last Name:{{ user_profile_form.lastName }} </p>
-        <p> Profile Picture: {{ user_profile_form.profilePhoto }}
-        <p> City: {{ user_profile_form.city }} </p>
-        <p> State: {{ user_profile_form.state }} </p>
-        <p> Zip: {{ user_profile_form.zip }} </p>
+                <div id="password">
+                    <label>Password</label>
+                    <p>{{ user_form.password }} </p>
+                </div>
+
+                <div id="fname">
+                    <label>Fist Name</label>
+                    <p>{{ user_profile_form.firstName }} </p>
+                </div>
+
+                <div id="lname">
+                    <label>Last Name</label>
+                    <p>{{ user_profile_form.lastName }} </p>
+                </div>
+
+                <div id="city">
+                    <label>City</label>
+                    <p>{{ user_profile_form.city }} </p>
+                </div>
+
+                <div id="state">
+                    <label>State</label>
+                    <p>{{ user_profile_form.state }} </p>
+                </div>
+
+                <div id="zip">
+                    <label>Zip</label>
+                    <p>{{ user_profile_form.zip }} </p>
+                </div>
 
 
-          <input type="submit" name="" value="Register">
-        </form>
+                <input type="submit" class="btn btn-primary" value="Join now">
+
+            </form>
+        </div>
+
+
       {% endif %}
+  </div>
+    <div id = "socialDiv" class="container"style="display:flex;justify-content:center;align-items:center;">
+        <h3>Log in with social</h3>
+    </div>
+    <div>
+        <div><a class="btn btn-block btn-social btn-facebook"><span class="fa fa-facebook"></span>Sign in with Facebook</a></div>
+        <div><a class="btn btn-block btn-social btn-twitter"><span class="fa fa-twitter"></span> Sign in with Twitter</a></div>
+    </div>
 
-
+  <p>Already have an account <a>Log in</a>
+</body>
 {% endblock %}

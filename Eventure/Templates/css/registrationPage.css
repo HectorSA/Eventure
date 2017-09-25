@@ -1,0 +1,30 @@
+#registerForm{
+    width: 700px ;
+    margin-left: auto ;
+    margin-right: auto ;
+    margin-top: 20px;
+    border-style: solid;
+    border-color: blueviolet;
+}
+
+
+p{
+
+
+}
+#createAccount{
+    border-style: solid;
+    border-color: yellow;
+
+}
+#socialDiv{
+    margin-top: 80px;
+    border-style: solid;
+    border-color: red;
+
+}
+#logIn{
+    align-content: center;
+    border-style: solid;
+    border-color: blue;
+}
