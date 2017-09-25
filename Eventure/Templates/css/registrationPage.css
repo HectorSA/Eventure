@@ -1,30 +1,44 @@
 #registerForm{
-    width: 700px ;
-    margin-left: auto ;
-    margin-right: auto ;
+    width: 400px ;
     margin-top: 20px;
     border-style: solid;
     border-color: blueviolet;
+    margin-left: 200px;
 }
 
 
-p{
-
-
-}
 #createAccount{
     border-style: solid;
     border-color: yellow;
 
 }
-#socialDiv{
-    margin-top: 80px;
+#socialLinks{
     border-style: solid;
     border-color: red;
+    margin-bottom: 100px;
+    margin-top: 100px;
+    margin-right: 200px;
 
 }
 #logIn{
     align-content: center;
     border-style: solid;
-    border-color: blue;
+    color: #0f4bac;
+}
+
+
+
+#alreadyLogIn{
+
+}
+#logInText{
+    color: #0f4bac;
+}
+#wrap{
+    border-style: solid;
+    border-color: green;
+}
+#footer{
+    margin-top: 100px;
+
 }
