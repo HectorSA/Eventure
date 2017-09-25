@@ -25,24 +25,20 @@
              <!--<h3>Just fill out the form.</h3>-->
                 <form enctype="multipart/form-data" method="POST">
                     {% csrf_token %}
-                    <div>
+                    <div id ="form">
                         <div id="username">
                         <label>Username</label>
                         <p>{{ user_form.username }} </p>
                         </div>
-                    </div>
-
-                    <div id="email">
+                        <div id="email">
                         <label>Email Address</label>
                         <p> {{ user_form.email }} </p>
                     </div>
-
-                    <div id="password">
+                        <div id="password">
                         <label>Password</label>
                         <p>{{ user_form.password }} </p>
                     </div>
-
-                    <div id="fname">
+                        <div id="fname">
                         <label>Fist Name</label>
                         <p>{{ user_profile_form.firstName }} </p>
                     </div>
@@ -66,9 +62,16 @@
                         <label>Zip</label>
                         <p>{{ user_profile_form.zip }} </p>
                     </div>
+                    </div>
 
 
-                    <input type="submit" class="btn btn-primary" value="Join now">
+
+
+
+
+
+
+                    <input type="submit" class="btn btn-primary" value="Join now" style="width: 100%">
 
             </form>
         </div>
