@@ -1,6 +1,7 @@
 from django.forms import formset_factory
 from django import forms
 from .models import *
+from .models import UserProfile
 from django.forms import ModelForm
 
 

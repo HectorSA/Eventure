@@ -19,7 +19,7 @@ def register(request):
         # Get info from "both" forms
         # It appears as one form to the user on the .html page
         user_form = UserForm(request.POST)
-        user_profile_form = UserProfile(request.POST)
+        user_profile_form = RegisterForm(request.POST)
 
         # Check to see both forms are valid
         if user_form.is_valid() and user_profile_form.is_valid():
