@@ -14,22 +14,14 @@ class UserProfile(models.Model):
     state = USStateField(("state"), default="TX")
     zip = models.CharField(("zip code"), max_length=5)
 
-<<<<<<< HEAD
     def __str__(self):
         return self.firstName + ' ' + self.lastName
-
-    def is_authenticated(self):
-        return True
-
 
 class Host(models.Model):
     user = models.OneToOneField(User, related_name = 'Host')
 
     def __str__(self):
         return self.user.first_name
-=======
->>>>>>> bb52b5fc5c8f31d05590a4889b30644dfec3c07d
-    
 
 class EventInfo(models.Model):
     id = models.CharField(primary_key = True, max_length = 10, default = '')

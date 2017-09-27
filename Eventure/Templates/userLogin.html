@@ -13,9 +13,8 @@
     <h1 class="h1">Welcome, please login.</h1>
     <form enctype="multipart/form-data" method="POST">
         {% csrf_token %}
-        <p>User Name:{{loginForm.userName}}</p>
-        <p>Password:{{loginForm.password}}</p>
-        <input type="submit"  class="save btn btn-default" value="Enter" >
+        <p class="username">{{loginForm}}</p>
+        <p class="button"><center><input type="submit" value="Sign In" class="btn btn-info"></center></p>
     </form>
   </div>
 {%endif%}

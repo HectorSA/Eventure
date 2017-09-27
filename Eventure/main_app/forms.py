@@ -35,5 +35,5 @@ class CreateEventForm(forms.ModelForm):
 		fields = ('name','location','date','time','description','eventPhoto',)
 
 class userLoginForm(forms.Form):
-	userName = forms.CharField(label='userName', max_length=32)
-	password = forms.CharField(label='password', widget=forms.PasswordInput())
+	username = forms.CharField(label='User Name', max_length=32)
+	password = forms.CharField(label='Password', widget=forms.PasswordInput())

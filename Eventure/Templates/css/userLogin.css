@@ -10,6 +10,12 @@ body {
     margin: 30px auto;
 }
 
+button.blogin {
+    width: 50%;
+    height: 10%;
+    margin-left: 35%;
+    font-size: 30px;
+}
 .login-block {
     width: 320px;
     padding: 20px;

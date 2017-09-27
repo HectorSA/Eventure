@@ -127,9 +127,12 @@ def userLogin(request):
         loginForm = userLoginForm(request.POST)
         print(loginForm)
         if loginForm.is_valid():
-            userName = loginForm.cleaned_data['userName']
-            password = loginForm.cleaned_data['password']
-            user = authenticate(userName=userName, password=password)
+            username = loginForm.cleaned_data['username']
+            print(username)
+            password = request.POST['password']
+            print(password)
+            user = authenticate(username=username, password=password)
+            print(user)
             if user is not None:
                 print("user is not none")
                 if user.is_active:
