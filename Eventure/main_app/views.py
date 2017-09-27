@@ -1,7 +1,8 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, render_to_response
 import random, string
 from .forms import *
+from .forms import userLoginForm
 from django.forms import formset_factory
 from django.http import HttpResponseRedirect, HttpResponse
 
@@ -125,14 +126,30 @@ def createURL():
 
 ################userLogin(request)#########################
 def userLogin(request):
-    if (request.method == 'POST'):
-        loginForm = userLoginForm(data=request.POST)
-        userName = request.POST['userName']
-        password = request.POST['password']
-        user = authenticate(userName=userName, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('index.html')
-    loginForm = userLoginForm()
-    return render(request, 'userLogin.html', {'loginForm': loginForm})
+    if request.method == 'POST':
+        print("Inside Post sattemente")
+        loginForm = userLoginForm(request.POST)
+        print(loginForm)
+        if loginForm.is_valid():
+            userName = loginForm.cleaned_data['userName']
+            password = loginForm.cleaned_data['password']
+            user = authenticate(userName=userName, password=password)
+            if user is not None:
+                print("user is not none")
+                if user.is_active:
+                    login(request, user)
+                    return render(request,'index.html')
+                else:
+                    print("user is not Active")
+                    return render(request,'userLogin.html')
+            else:
+                print("user is none")
+                loginForm = userLoginForm()
+                return render(request,'userLogin.html',{'loginForm':loginForm})
+    else:
+        loginForm = userLoginForm()
+        return render(request,'userLogin.html',{'loginForm':loginForm})
+
+def userLogout(request):
+    logout(request)
+    return HttpResponseRedirect('/')

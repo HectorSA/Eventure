@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^event/(\w{10})(\w{6})$', views.displayEvent, name = 'DisplayEvent'),
     url(r'^createEvent$', views.createEvent, name = 'CreateEvent'),
 	url(r'^register/$',views.register, name='registrationPage'),
-    url(r'^userLogin/$',views.userLogin,  name='userLogin')
+    url(r'^userLogin/$',views.userLogin,  name='userLogin'),
+    url(r'^logout/$',views.userLogout, name='logout')
 ]

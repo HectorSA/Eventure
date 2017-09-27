@@ -17,6 +17,9 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.firstName + ' ' + self.lastName
 
+    def is_authenticated(self):
+        return True
+
 
 class Host(models.Model):
     user = models.OneToOneField(User, related_name = 'Host')
