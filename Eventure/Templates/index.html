@@ -1,5 +1,6 @@
 {% extends "Base.html" %}
 {% load staticfiles %}
+
 {% block body_block %}
 <!-- Right now using w3 template, plan to create homepage own css(It will be easy)-->
 <!--This is the general idea of what I was going for on homepage-->
@@ -9,7 +10,7 @@
 <title></title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="{% static 'css/general.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/index.css' %}"/>
 <!--If we wanted to use Icons-->
 <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 <style>
@@ -23,7 +24,7 @@ body {font-family: "Times New Roman", sans-serif}
   <!-- Automatic Slideshow Images -->
   <div class="mySlides media-display-container media-center">
     <!--Event#1-->
-    <img src="/media/event1.jpg">
+    <!--<img src="/media/event1.jpg">-->
     <div class="media-display-bottommiddle media-container media-text-black media-padding-32 media-hide-small">
       <h3>Event#1</h3>
       <p><b>We had the best time playing at Venice Beach!</b></p>
@@ -31,7 +32,7 @@ body {font-family: "Times New Roman", sans-serif}
   </div>
   <!--Event#2-->
   <div class="mySlides media-display-container media-center">
-    <img src="/mediaimages/ny.jpg" style="width:100%">
+   <!-- <img src="/mediaimages/ny.jpg" style="width:100%">-->
     <div class="media-display-bottommiddle media-container media-text-black media-padding-32 media-hide-small">
       <h3>Event#2</h3>
       <p><b>The atmosphere in New York is lorem ipsum.</b></p>
@@ -39,7 +40,7 @@ body {font-family: "Times New Roman", sans-serif}
   </div>
   <!--Event#3-->
   <div class="mySlides media-display-container media-center">
-    <img src="/mediaimages/chicago.jpg" style="width:100%">
+   <!-- <img src="/mediaimages/chicago.jpg" style="width:100%">-->
     <div class="media-display-bottommiddle media-container media-text-black media-padding-32 media-hide-small">
       <h3>Event#3</h3>
       <p><b>Thank you, Chicago - A night we won't forget.</b></p>
@@ -69,7 +70,7 @@ body {font-family: "Times New Roman", sans-serif}
       <div class="media-row-padding media-padding-32i"style="margin:0 -16px">
         <div class="media-third media-margin-bottom">
 
-          <img src="Media/heb.jpg"height="100%"width="100%"> <!--class="media-hover-opacity"-->
+         <!-- <img src="Media/heb.jpg"height="100%"width="100%"> <!--class="media-hover-opacity"-->
           <div class="media-container media-white">
             <p><b>HEB</b></p>
             <p class="media-opacity">Fri 27 Nov 2016</p>
@@ -78,7 +79,7 @@ body {font-family: "Times New Roman", sans-serif}
           </div>
         </div>
         <div class="media-third media-margin-bottom">
-          <img src="/mediaimages/paris.jpg"  style="width:100%" class="media-hover-opacity">
+          <!--<img src="/mediaimages/paris.jpg"  style="width:100%" class="media-hover-opacity">-->
           <div class="media-container media-white">
             <p><b>4th of July</b></p>
             <p class="media-opacity">Sat 28 Nov 2016</p>
@@ -87,7 +88,7 @@ body {font-family: "Times New Roman", sans-serif}
           </div>
         </div>
         <div class="media-third media-margin-bottom">
-          <img src="/mediaimages/sanfran.jpg" style="width:100%" class="media-hover-opacity">
+         <!-- <img src="/mediaimages/sanfran.jpg" style="width:100%" class="media-hover-opacity">-->
           <div class="media-container media-white">
             <p><b>Hector's Birthday Party</b></p>
             <p class="media-opacity">Sun 29 Nov 2016</p>
