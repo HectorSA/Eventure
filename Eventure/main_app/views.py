@@ -71,7 +71,7 @@ def register(request):
 
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
-	print("groupID:%s -- userID:%s -- website %s" % (groupID, userID, WEBSITENAME))
+	return render(request, 'displayEvent.html', {'groupID':groupID, 'userID':userID})
 
 
 def index(request):
