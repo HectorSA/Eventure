@@ -64,7 +64,7 @@ class Attendee(models.Model):
 	attendeeID = models.CharField(max_length = 8, default = '')
 	userAttendeeID = models.IntegerField(null = True)
 	eventID = models.ForeignKey(EventInfo, null = True)
-	itemID = models.ForeignKey(Item, null = True)
+	items = models.ManyToManyField(Item)
 	email = models.EmailField(max_length=256, default='')
 	RSVPStatus = models.IntegerField(choices=RSVPSTATUS, blank=True, null=True)
 	
