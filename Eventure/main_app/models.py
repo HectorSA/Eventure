@@ -61,7 +61,7 @@ class Attendee(models.Model):
     
     name = models.OneToOneField(User,related_name = 'Attendee')
     attendeeID = models.CharField(max_length = 6, default = '')
-    userattendeeID = models.IntegerField(default = -1)
+    userattendeeID = models.IntegerField(null=True)
     eventID = models.ForeignKey(EventInfo, null = True)
     itemID = models.ForeignKey(Item, null = True)
     email = models.EmailField(max_length=256, default='')
