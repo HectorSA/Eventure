@@ -7,10 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Event</title>
-    <link rel="stylesheet" href="{% static 'css/CreateEvent.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/createEvent.css' %}"/>
 </head>
 <body>
-
 
 <script type="text/html" id="item-template">
     <div id="item-__prefix__">
@@ -50,6 +49,7 @@
         <!-- Second Tab -->
         <div id="inviteList" class="tab-pane fade">
             <h3>Who would you like to invite?</h3>
+            <!-- InviteList management_form -->
             {{ inviteToEventFormset.management_form }}
             <div id="invitees-form-container">
                 {% for invitee in inviteToEventFormset %}
@@ -68,6 +68,7 @@
 
         <!-- Third Tab -->
         <div id="itemList" class="tab-pane fade">
+            <!-- ItemList management_form -->
             {{ itemCreationFormset.management_form }}
             <h3>What would you like people to bring?</h3>
             <div id="items-form-container" class="itemTable">
@@ -82,10 +83,17 @@
                 <a class="btn btn-primary btnPrevious">Previous</a>
                 <a href="#" id="add-item-button" class="btn btn-info add-item">Add Item</a>
                 <br/>
-                <input type="submit" class="btn btn-warning" value="Create Event">
+                <input id="submitButton" type="submit" class="btn btn-warning" value="Create Event">
             </div>
 
-
+        <div>
+            <ul>
+                <li class="emptyForm" id="nameCheck">Event Name Required</li>
+                <li class="emptyForm" id="locationCheck">Event Location Required</li>
+                <li class="emptyForm" id="dateCheck">Event Date Required</li>
+                <li class="emptyForm" id="timeCheck">Event Time is Required</li>
+                <li class="emptyForm" id="descriptionCheck">Event Description Required</li>
+            </ul>
         </div>
 
 
@@ -108,7 +116,7 @@ $(document).ready(function() {
         $('div#items-form-container [id^=item-]').addClass("itemTable");
 
         // update form count
-        $('#id_item_items-TOTAL_FORMS').attr('value', count+1);
+        $('#id_item-TOTAL_FORMS').attr('value', count+1);
     });
 });
 
@@ -123,7 +131,7 @@ $(document).ready(function() {
         $('div#invitees-form-container [id^=invitee-]').addClass("inviteTable");
 
         // update form count
-        $('#id_invitee_invitees-TOTAL_FORMS').attr('value', count+1);
+        $('#id_invitee-TOTAL_FORMS').attr('value', count+1);
 
     });
 });
@@ -134,14 +142,53 @@ $(document).ready(function() {
 
 
 
-     $('.btnNext').click(function(){
+$('.btnNext').click(function(){
   $('.nav-tabs > .active').next('li').find('a').trigger('click');
 });
 
-  $('.btnPrevious').click(function(){
+$('.btnPrevious').click(function(){
   $('.nav-tabs > .active').prev('li').find('a').trigger('click');
 });
 
+function isEmpty( el ){
+    return !$.trim(el.html())
+}
+
+$('#submitButton').on("click",function() {
+    if (isEmpty($('#id_name'))) {
+         $('#nameCheck').show();
+         console.log("Show");
+    } else {
+        $('#nameCheck').hide();
+        console.log("Hide");
+    }
+
+    if (isEmpty($('#id_location'))) {
+         $('#locationCheck').show();
+    } else {
+        $('#locationCheck').hide();
+    }
+
+    if (isEmpty($('#id_date'))) {
+         $('#dateCheck').show();
+    } else {
+        $('#dateCheck').hide();
+    }
+
+    if (isEmpty($('#id_time'))) {
+         $('#timeCheck').show();
+         console.log("Show");
+    } else {
+        $('#timeCheck').hide();
+        console.log("Hide");
+    }
+
+    if (isEmpty($('#id_description'))) {
+         $('#descriptionCheck').show();
+    } else {
+        $('#descriptionCheck').hide();
+    }
+});
 
 </script>
     {% endblock %}

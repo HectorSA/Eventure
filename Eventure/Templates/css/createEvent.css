@@ -21,3 +21,6 @@
     float: right;
 }
 
+.emptyForm{
+    display:none;
+}
