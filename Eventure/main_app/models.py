@@ -17,12 +17,6 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.firstName + ' ' + self.lastName
 
-class Host(models.Model):
-    user = models.OneToOneField(User, related_name = 'Host')
-
-    def __str__(self):
-        return self.user.first_name
-
 class EventInfo(models.Model):
     id = models.CharField(primary_key = True, max_length = 10, default = '')
     userProfile = models.ForeignKey(UserProfile, null = True)
@@ -50,9 +44,25 @@ class Item(models.Model):
         return self.name + ' ' + self. amount
 
 
+
+
 class Attendee(models.Model):
+    NOTATTENDING = 1
+    MAYBE = 2
+    ATTENDING = 3
+    
+    RSVPSTATUS = (
+        (NOTATTENDING, "Not Attending"),
+        (MAYBE, "Maybe"),
+        (ATTENDING, "Attending"),
+        
+    )
+    
+    
     name = models.OneToOneField(User,related_name = 'Attendee')
     attendeeID = models.CharField(max_length = 6, default = '')
+    userattendeeID = models.IntegerField(default = -1)
     eventID = models.ForeignKey(EventInfo, null = True)
     itemID = models.ForeignKey(Item, null = True)
     email = models.EmailField(max_length=256, default='')
+    RSVP = models.IntegerField(choices=RSVPSTATUS, blank=True, null=True)
