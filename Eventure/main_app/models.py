@@ -58,8 +58,7 @@ class Attendee(models.Model):
         
     )
     
-    
-    name = models.OneToOneField(User,related_name = 'Attendee')
+    name = models.CharField(max_length=256, default = '')
     attendeeID = models.CharField(max_length = 6, default = '')
     userattendeeID = models.IntegerField(default = -1)
     eventID = models.ForeignKey(EventInfo, null = True)
