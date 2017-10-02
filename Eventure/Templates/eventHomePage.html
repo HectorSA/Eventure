@@ -1,0 +1,22 @@
+{% extends "Base.html" %}
+{% load staticfiles %}
+
+{% block body_block %}
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your event</title>
+    <link rel="stylesheet" href="{% static 'css/eventHomePage.css' %}"/>
+</head>
+<body>
+
+</body>
+    <div class="container" id="wrap" style="position:relative;">>
+        <div id="photo" class="container" style="float:left;"></div>
+        <div id="info" class="container" style="float:right;"></div>
+    </div>
+    <div id="eventContent"></div>
+
+
+
+{% endblock %}
