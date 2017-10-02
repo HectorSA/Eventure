@@ -5,6 +5,10 @@ from .models import UserProfile
 from django.forms import ModelForm
 
 
+EVENT_TYPE_CHOICES = (
+    (True, 'Private'),
+    (False, 'Public')
+)
 
 			    
 class EmailInviteeForm(forms.Form):
@@ -30,9 +34,12 @@ class ItemForm(forms.Form):
 
 
 class CreateEventForm(forms.ModelForm):
+	
+	type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES, label="Event Type",
+	                              initial=False, widget=forms.Select(), required=True)
 	class Meta:
 		model = EventInfo
-		fields = ('name','location','date','time','description','eventPhoto',)
+		fields = ('name','location','date','time','description','type','eventPhoto',)
 
 class userLoginForm(forms.Form):
 	username = forms.CharField(label='User Name', max_length=32)

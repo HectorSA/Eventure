@@ -20,7 +20,7 @@ from main_app import views
 urlpatterns = [
 	url(r'^$',views.index,name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^event/(\w{10})(\w{6})$', views.displayEvent, name = 'DisplayEvent'),
+    url(r'^event/(\w{12})(\w{8})$', views.displayEvent, name = 'DisplayEvent'),
     url(r'^createEvent$', views.createEvent, name = 'CreateEvent'),
 	url(r'^register/$',views.register, name='registrationPage'),
     url(r'^userLogin/$',views.userLogin,  name='userLogin'),
