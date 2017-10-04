@@ -154,33 +154,6 @@ def findUserID(djangoUserID):
 
 ################userLogin(request)#########################
 def userLogin(request):
-<<<<<<< HEAD
-	if request.method == 'POST':
-		loginForm = userLoginForm(request.POST)
-		print(loginForm)
-		if loginForm.is_valid():
-			username = loginForm.cleaned_data['username']
-			print(username)
-			password = request.POST['password']
-			print(password)
-			user = authenticate(username=username, password=password)
-			print(user)
-			if user is not None:
-				print("user is not none")
-				if user.is_active:
-					login(request, user)
-					return render(request,'index.html')
-				else:
-					print("user is not Active")
-					return render(request,'userLogin.html')
-			else:
-				print("user is none")
-				loginForm = userLoginForm()
-				return render(request,'userLogin.html',{'loginForm':loginForm})
-	else:
-		loginForm = userLoginForm()
-		return render(request,'userLogin.html',{'loginForm':loginForm})
-=======
     if request.method == 'POST':
         loginForm = userLoginForm(request.POST)
         if loginForm.is_valid():
@@ -200,7 +173,6 @@ def userLogin(request):
     else:
         loginForm = userLoginForm()
         return render(request,'userLogin.html',{'loginForm':loginForm})
->>>>>>> my-saved-work
 
 def userLogout(request):
 	logout(request)
