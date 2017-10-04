@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, render_to_response
+from django.contrib import messages
+from django.shortcuts import render, render_to_response, redirect
 import random, string
 from .forms import *
 from .forms import userLoginForm
@@ -153,6 +154,7 @@ def findUserID(djangoUserID):
 
 ################userLogin(request)#########################
 def userLogin(request):
+<<<<<<< HEAD
 	if request.method == 'POST':
 		loginForm = userLoginForm(request.POST)
 		print(loginForm)
@@ -178,6 +180,27 @@ def userLogin(request):
 	else:
 		loginForm = userLoginForm()
 		return render(request,'userLogin.html',{'loginForm':loginForm})
+=======
+    if request.method == 'POST':
+        loginForm = userLoginForm(request.POST)
+        if loginForm.is_valid():
+            username = loginForm.cleaned_data['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return render(request,'index.html')
+                else:
+                    messages.info(request,'Sorry, this uses is not in our databse')
+                    return redirect('userLogin')
+            else:
+                messages.info(request, 'Sorry, wrong password/username.\n please try again\n')
+                return redirect('userLogin')
+    else:
+        loginForm = userLoginForm()
+        return render(request,'userLogin.html',{'loginForm':loginForm})
+>>>>>>> my-saved-work
 
 def userLogout(request):
 	logout(request)
