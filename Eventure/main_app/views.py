@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, render_to_response
+from django.contrib import messages
+from django.shortcuts import render, render_to_response, redirect
 import random, string
 from .forms import *
 from .forms import userLoginForm
@@ -123,28 +124,21 @@ def createURL():
 ################userLogin(request)#########################
 def userLogin(request):
     if request.method == 'POST':
-        print("Inside Post sattemente")
         loginForm = userLoginForm(request.POST)
-        print(loginForm)
         if loginForm.is_valid():
             username = loginForm.cleaned_data['username']
-            print(username)
             password = request.POST['password']
-            print(password)
             user = authenticate(username=username, password=password)
-            print(user)
             if user is not None:
-                print("user is not none")
                 if user.is_active:
                     login(request, user)
                     return render(request,'index.html')
                 else:
-                    print("user is not Active")
-                    return render(request,'userLogin.html')
+                    messages.info(request,'Sorry, this uses is not in our databse')
+                    return redirect('userLogin')
             else:
-                print("user is none")
-                loginForm = userLoginForm()
-                return render(request,'userLogin.html',{'loginForm':loginForm})
+                messages.info(request, 'Sorry, wrong password/username.\n please try again\n')
+                return redirect('userLogin')
     else:
         loginForm = userLoginForm()
         return render(request,'userLogin.html',{'loginForm':loginForm})
