@@ -86,13 +86,9 @@
                 <input id="submitButton" type="submit" class="btn btn-warning" value="Create Event">
             </div>
 
-        <div>
-            <ul>
-                <li class="emptyForm" id="nameCheck">Event Name Required</li>
-                <li class="emptyForm" id="locationCheck">Event Location Required</li>
-                <li class="emptyForm" id="dateCheck">Event Date Required</li>
-                <li class="emptyForm" id="timeCheck">Event Time is Required</li>
-                <li class="emptyForm" id="descriptionCheck">Event Description Required</li>
+        <div id="errorDiv">
+            <ul id="missingUL">
+
             </ul>
         </div>
 
@@ -151,44 +147,31 @@ $('.btnPrevious').click(function(){
 });
 
 function isEmpty( el ){
-    return !$.trim(el.html())
+    return $.trim($(el).val()) == '';
 }
 
 $('#submitButton').on("click",function() {
-    if (isEmpty($('#id_name'))) {
-         $('#nameCheck').show();
-         console.log("Show");
-    } else {
-        $('#nameCheck').hide();
-        console.log("Hide");
-    }
-
-    if (isEmpty($('#id_location'))) {
-         $('#locationCheck').show();
-    } else {
-        $('#locationCheck').hide();
-    }
-
-    if (isEmpty($('#id_date'))) {
-         $('#dateCheck').show();
-    } else {
-        $('#dateCheck').hide();
-    }
-
-    if (isEmpty($('#id_time'))) {
-         $('#timeCheck').show();
-         console.log("Show");
-    } else {
-        $('#timeCheck').hide();
-        console.log("Hide");
-    }
-
-    if (isEmpty($('#id_description'))) {
-         $('#descriptionCheck').show();
-    } else {
-        $('#descriptionCheck').hide();
-    }
+    emptyErrorDiv();
+    fillErrorDiv();
 });
+
+
+function emptyErrorDiv(){
+    $("#missingUL").empty();
+}
+
+function fillErrorDiv(){
+
+    $( "#EventInfo input,textarea" ).each(function( index ) {
+        if ($(this).prop('required') && isEmpty(this))
+            $("#errorDiv ul").append('<li>Event '
+                + $(this).attr('name') +' is required </li>');
+    });
+
+    if (isEmpty($('#invitee-0')))
+         $("#errorDiv ul").append('<li>You have to invite at least one person </li>');
+
+}
 
 </script>
     {% endblock %}

@@ -26,7 +26,8 @@ class EventInfo(models.Model):
 	date = models.DateField(null = True)
 	time = models.TimeField(null = True)
 	description = models.TextField()
-	eventPhoto = models.ImageField(upload_to = 'event_photos', blank = True, default = None)
+	eventPhoto = models.ImageField(upload_to = 'event_photos', blank = True, default = None
+	                               , verbose_name='picture')
 
 
 	def __str__(self):
