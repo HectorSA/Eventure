@@ -83,26 +83,30 @@ def createEvent(request):
 	EmailFormSet = formset_factory(EmailInviteeForm)
 	ItemFormSet = formset_factory(ItemForm)
 	
+	## This is the eventID that will be assigned to email invitees
 	eventID = 0
+	newEvent = None
 	if request.method == 'POST':
 		eventForm = CreateEventForm(request.POST,request.FILES)
 		
 		if eventForm.is_valid():
 			eventID = createAlphanumericSequence(groupIDLength)
-			userID = findUserID(request.user.id)
+			userID = findUser(request.user.id)
 			eventType = eventForm.cleaned_data["type"]
 			name = eventForm.cleaned_data["name"]
 			location = eventForm.cleaned_data["location"]
 			date = eventForm.cleaned_data["date"]
 			time = eventForm.cleaned_data["time"]
 			description = eventForm.cleaned_data["description"]
-			#newEvent = EventInfo(eventID, userID, eventType, name,location, date, time, description)
-						
+			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
+			                     name = name, location = location, date = date, \
+			                     time = time, description = description)
+			#newEvent.save()
 			
 			print('***********************************')
 			print('{}{}'.format("Event: ", name))
 			print('{}{}'.format("\tDUserID: ", request.user.id))
-			print('{}{}'.format("\tUUserID: ", userID))
+			print('{}{}'.format("\tUUserID: ", userID.id))
 			print('{}{}'.format("\tType: ", eventType))
 			print('{}{}'.format("\tLocation: ", location))
 			print('{}{}'.format("\tDate: ", date))
@@ -110,19 +114,27 @@ def createEvent(request):
 			print('{}{}'.format("\tDescription: ", description))
 			print('{}{}'.format("\tEventID: ", eventID))
 		
-		inviteToEventFormset = EmailFormSet(request.POST, request.FILES, prefix='invitee')
+		inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
 		if inviteToEventFormset.is_valid():
 			for invite in inviteToEventFormset:
+				emailUserID = createAlphanumericSequence(userIDLength)
 				email = invite.cleaned_data["email"]
-				print("\tEmail: " + email)
+				print('{}{}{}{}{}{}{}{}'.format("\tName: ", email, " , userID: ", emailUserID, \
+				      ", eventID: ", eventID, ", email: ", email))
+				newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID, \
+				                           eventID = newEvent, email = email, RSVPStatus = 1)
+				#newEmailInvitee.save()
 		
-		
-		itemCreationFormset = ItemFormSet(request.POST, request.FILES, prefix='item')
+		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 		if itemCreationFormset.is_valid():
 			for item in itemCreationFormset:
 				itemName = item.cleaned_data["itemName"]
-				amount = item.cleaned_data["amount"]
-				print('{}{}{}{}'.format("\tItem: ",itemName," x ",amount))
+				itemAmount = item.cleaned_data["amount"]
+				print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
+				newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
+				#newItem.save()
+		else:
+			print("HELLO")
 
 	else:
 		eventForm = CreateEventForm()
@@ -145,12 +157,16 @@ def createAlphanumericSequence(sequenceLength):
 								   for digits in range(sequenceLength))
 	return alphaNumericSequence
 
-############################################################
-def findUserID(djangoUserID):
+
+
+
+################### findUser ########################
+# Pass a django UserID , get a Eventure User
+def findUser(djangoUserID):
 	print(djangoUserID)
-	applicationUser = UserProfile.objects.get(user_id=djangoUserID)
-	print(applicationUser.id)
-	return applicationUser.id
+	eventureUser = UserProfile.objects.get(user_id=djangoUserID)
+	print(eventureUser.id)
+	return eventureUser
 
 ################userLogin(request)#########################
 def userLogin(request):
