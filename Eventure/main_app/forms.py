@@ -3,7 +3,7 @@ from django import forms
 from .models import *
 from .models import UserProfile
 from django.forms import ModelForm
-
+from django.forms import ValidationError
 
 EVENT_TYPE_CHOICES = (
     (True, 'Private'),
@@ -13,7 +13,8 @@ EVENT_TYPE_CHOICES = (
 			    
 class EmailInviteeForm(forms.Form):
 	email = forms.EmailField(max_length=256,
-	                         widget=forms.TextInput(attrs={'placeholder': ' abc@xyz.com'}))
+	                         widget=forms.TextInput(attrs={'placeholder': ' abc@xyz.com', 'required': True},),
+	                         )
 
 class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
