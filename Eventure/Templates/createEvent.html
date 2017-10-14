@@ -31,14 +31,14 @@
   </ul>
 
 
-<form enctype="multipart/form-data" method="POST">
+<form enctype="multipart/form-data" method="POST" id="SigningUp">
     <div class="tab-content">
         {% csrf_token %}
 
         <!-- First Tab -->
         <div id="EventInfo" class="tab-pane fade in active">
             <table class="table">
-                {{ eventForm.as_table }}
+                    {{ eventForm.as_table }}
             </table>
             <br/>
             <div id="NavButtons">
@@ -86,13 +86,8 @@
                 <input id="submitButton" type="submit" class="btn btn-warning" value="Create Event">
             </div>
 
-        <div id="errorDiv">
-            <ul id="missingUL">
 
-            </ul>
         </div>
-
-
     </div>
 </form>
 
@@ -124,17 +119,78 @@ $(document).ready(function() {
 
         // update form count
         $('#id_invitee-TOTAL_FORMS').attr('value', count+1);
+        addValidationRules();
 
     });
+});
+
+$(document).ready(function (){
+      highLightBox();
 });
 
 $(document).ready(function() {
-    submitFormValidation();
-    $('input[type="text"], #id_description').on('input change', function() { //'input change keyup paste'
-        submitFormValidation();
-    });
 
+     var validator = $("#SigningUp").validate({
+      onkeyup: function (element, event) {
+            if (event.which === 9 && this.elementValue(element) === "") {
+                return;
+            } else {
+                this.element(element);
+            }
+      },
+      rules: {
+        name: {
+            required: true,
+            minlength: 6
+        },
+        location : "required",
+        date : {
+            required: true,
+            date: true
+        },
+        time :{
+            required : true,
+            timeAMPM : true
+        },
+      },
+      message: {
+          name:{
+              required : "This field is required",
+              minlength : "Name has to be at least 6 characters"
+          },
+          time: {
+              timeAMPM : "Please enter a valid time"
+          },
+
+      }
+    });
+    validator.invalidElements();
+    addValidationRules();
 });
+
+function addValidationRules(){
+     $('[name$="-email"]').each(function() {
+         $(this).rules('add', {
+             EmailWithDot: true
+         });
+     });
+}
+
+function highLightBox(){
+    $('.errorlist').parent().each(function(){
+        $(this).children(':input').addClass('form-control')
+        $(this).addClass('has-error')
+     });
+}
+
+jQuery.validator.addMethod("EmailWithDot", function(value, element) {
+    return this.optional( element ) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/
+        .test( value ) && /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test( value ) );
+}, 'Not a valid email address.');
+
+jQuery.validator.addMethod("timeAMPM", function(value, element) {
+    return this.optional( element ) || ( /^[01]?[0-9]:[0-6]{2}[a,p]m$/.test( value ) );
+}, 'Please enter a valid time');
 
 $(function () {
       $('#myTab a:last').tab('show')
@@ -148,53 +204,7 @@ $('.btnPrevious').click(function(){
     $('.nav-tabs > .active').prev('li').find('a').trigger('click');
 
 });
-function isEmpty( el ){
-    return $.trim($(el).val()) == '';
 
-}
-
-function submitFormValidation(){
-    submitValidation = true;
-    $( "#submitButton" ).prop( "disabled", true );
-    emptyErrorDiv();
-    fillErrorDiv();
-    validateALLEmails();
-    if (submitValidation)
-        $( "#submitButton" ).prop( "disabled", false);
-}
-
-function validateALLEmails(){
-        $( '[id^=id_invitee][id$=email]' ).each(function( index ) {
-            if(!validateAEmail(this.value)){
-                submitValidation = false;
-                return false;
-            }
-    });
-}
-
-function validateAEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-}
-
-function emptyErrorDiv(){
-    $("#missingUL").empty();
-}
-
-function fillErrorDiv(){
-    $( "#EventInfo input,textarea" ).each(function( index ) {
-        if ($(this).prop('required') && isEmpty(this)) {
-            $("#errorDiv ul").append('<li>Event '
-                + $(this).attr('name') + ' is required </li>');
-            submitValidation = false;
-        }
-    });
-
-    if (isEmpty('#id_invitee-0-email')){
-         $("#errorDiv ul").append('<li>You have to invite at least one person </li>');
-         submitValidation = false;
-    }
-}
 </script>
     {% endblock %}
 
