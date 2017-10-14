@@ -24,3 +24,12 @@
 .emptyForm{
     display:none;
 }
+.errorForm{
+    box-shadow: 0 0 10px #d45252;
+    border-color: red;
+
+}
+
+th {
+    width :15%
+}
