@@ -6,6 +6,10 @@
 
 <div class="page-header">
     <h1>Welcome,{{currentUser}}</h1>
+    {% for event in allEvents %}
+        Event: {{event}}
+        Location: {{event.location}}
+    {% endfor %}
 </div>
 {% endif %}
 {% endblock %}

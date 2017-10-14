@@ -104,8 +104,8 @@ def createEvent(request):
 			time = eventForm.cleaned_data["time"]
 			description = eventForm.cleaned_data["description"]
 			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
-			                     name = name, location = location, date = date, \
-			                     time = time, description = description)
+								 name = name, location = location, date = date, \
+								 time = time, description = description)
 			#newEvent.save()
 			
 			print('***********************************')
@@ -125,9 +125,9 @@ def createEvent(request):
 				emailUserID = createAlphanumericSequence(userIDLength)
 				email = invite.cleaned_data["email"]
 				print('{}{}{}{}{}{}{}{}'.format("\tName: ", email, " , userID: ", emailUserID, \
-				      ", eventID: ", eventID, ", email: ", email))
+					  ", eventID: ", eventID, ", email: ", email))
 				newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID, \
-				                           eventID = newEvent, email = email, RSVPStatus = 1)
+										   eventID = newEvent, email = email, RSVPStatus = 1)
 				#newEmailInvitee.save()
 		
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
@@ -175,25 +175,25 @@ def findUser(djangoUserID):
 
 ################userLogin(request)#########################
 def userLogin(request):
-    if request.method == 'POST':
-        loginForm = userLoginForm(request.POST)
-        if loginForm.is_valid():
-            username = loginForm.cleaned_data['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return render(request,'index.html')
-                else:
-                    messages.info(request,'Sorry, this uses is not in our databse')
-                    return redirect('userLogin')
-            else:
-                messages.info(request, 'Sorry, wrong password/username.\n please try again\n')
-                return redirect('userLogin')
-    else:
-        loginForm = userLoginForm()
-        return render(request,'userLogin.html',{'loginForm':loginForm})
+	if request.method == 'POST':
+		loginForm = userLoginForm(request.POST)
+		if loginForm.is_valid():
+			username = loginForm.cleaned_data['username']
+			password = request.POST['password']
+			user = authenticate(username=username, password=password)
+			if user is not None:
+				if user.is_active:
+					login(request, user)
+					return render(request,'index.html')
+				else:
+					messages.info(request,'Sorry, this uses is not in our databse')
+					return redirect('userLogin')
+			else:
+				messages.info(request, 'Sorry, wrong password/username.\n please try again\n')
+				return redirect('userLogin')
+	else:
+		loginForm = userLoginForm()
+		return render(request,'userLogin.html',{'loginForm':loginForm})
 
 def userLogout(request):
 	logout(request)
@@ -202,7 +202,8 @@ def userLogout(request):
 def landingPageView(request):
 	if request.method == 'GET':
 		print("helllo")
-		currentUser=findUser(request.user.id)
+		currentUser = findUser(request.user.id)
+		userID = currentUser.id
 		print('***********************************')
 		print('{}{}'.format("\tDUserID: ", request.user.id))
 		print('{}{}'.format("\tUUserID: ", currentUser.id))
@@ -211,8 +212,15 @@ def landingPageView(request):
 		print('{}{}'.format("\tCity: ", currentUser.city))
 		print('{}{}'.format("\tState: ", currentUser.state))
 		print('{}{}'.format("\tZip: ", currentUser.zip))
+
+
+		allEvents = EventInfo.objects.filter(userProfile_id=userID).order_by('date')
+		print(allEvents)
 		mapping ={
 			'currentUser' : currentUser,
+			'allEvents': allEvents,
+
+
 		}
 
 
