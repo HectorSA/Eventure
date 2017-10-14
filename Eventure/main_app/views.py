@@ -200,19 +200,22 @@ def userLogout(request):
 	return HttpResponseRedirect('/')
 
 def landingPageView(request):
-	if request.method == 'POST':
+	if request.method == 'GET':
 		print("helllo")
-		currentUser=findUser(request.POST)
+		currentUser=findUser(request.user.id)
 		print('***********************************')
-		print('{}{}'.format("\tDUserID: ", request.POST.id))
+		print('{}{}'.format("\tDUserID: ", request.user.id))
 		print('{}{}'.format("\tUUserID: ", currentUser.id))
 		print('{}{}'.format("\tFirst Name: ", currentUser.firstName))
 		print('{}{}'.format("\tLast Name: ", currentUser.lastName))
 		print('{}{}'.format("\tCity: ", currentUser.city))
 		print('{}{}'.format("\tState: ", currentUser.state))
 		print('{}{}'.format("\tZip: ", currentUser.zip))
+		mapping ={
+			'currentUser' : currentUser,
+		}
 
 
-		return render(request,'landingPage.html')
+	return render(request,'landingPage.html',mapping)
 
 
