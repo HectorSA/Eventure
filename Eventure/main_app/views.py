@@ -6,7 +6,12 @@ from .forms import *
 from .forms import userLoginForm
 from django.forms import formset_factory
 from django.http import HttpResponseRedirect, HttpResponse
-
+from django.contrib.auth.models import User
+from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import get_object_or_404
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
 userIDLength = 8
@@ -193,3 +198,21 @@ def userLogin(request):
 def userLogout(request):
 	logout(request)
 	return HttpResponseRedirect('/')
+
+def landingPageView(request):
+	if request.method == 'POST':
+		print("helllo")
+		currentUser=findUser(request.POST)
+		print('***********************************')
+		print('{}{}'.format("\tDUserID: ", request.POST.id))
+		print('{}{}'.format("\tUUserID: ", currentUser.id))
+		print('{}{}'.format("\tFirst Name: ", currentUser.firstName))
+		print('{}{}'.format("\tLast Name: ", currentUser.lastName))
+		print('{}{}'.format("\tCity: ", currentUser.city))
+		print('{}{}'.format("\tState: ", currentUser.state))
+		print('{}{}'.format("\tZip: ", currentUser.zip))
+
+
+		return render(request,'landingPage.html')
+
+
