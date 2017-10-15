@@ -13,7 +13,7 @@ EVENT_TYPE_CHOICES = (
 			    
 class EmailInviteeForm(forms.Form):
 	email = forms.EmailField(max_length=256,
-	                         widget=forms.TextInput(attrs={'placeholder': ' abc@xyz.com', 'required': True},),
+	                         widget=forms.TextInput(attrs={'placeholder': ' abc@xyz.com'},),
 	                         )
 
 class UserForm(forms.ModelForm):

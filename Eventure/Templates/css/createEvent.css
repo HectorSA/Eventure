@@ -30,6 +30,19 @@
 
 }
 
-th {
-    width :15%
+
+input.form-control {
+  width: auto;
+}
+
+.itemAmountInput.form-control{
+    width: 50px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
 }

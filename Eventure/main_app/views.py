@@ -100,41 +100,29 @@ def createEvent(request):
 			description = eventForm.cleaned_data["description"]
 			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
 			                     name = name, location = location, date = date, \
-			                     time = time, description = description)
+			                     time = time, description = description, )
 			#newEvent.save()
-			
-			print('***********************************')
-			print('{}{}'.format("Event: ", name))
-			print('{}{}'.format("\tDUserID: ", request.user.id))
-			print('{}{}'.format("\tUUserID: ", userID.id))
-			print('{}{}'.format("\tType: ", eventType))
-			print('{}{}'.format("\tLocation: ", location))
-			print('{}{}'.format("\tDate: ", date))
-			print('{}{}'.format("\tTime: ", time))
-			print('{}{}'.format("\tDescription: ", description))
-			print('{}{}'.format("\tEventID: ", eventID))
 		
 		inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
 		if inviteToEventFormset.is_valid():
 			for invite in inviteToEventFormset:
-				emailUserID = createAlphanumericSequence(userIDLength)
-				email = invite.cleaned_data["email"]
-				print('{}{}{}{}{}{}{}{}'.format("\tName: ", email, " , userID: ", emailUserID, \
-				      ", eventID: ", eventID, ", email: ", email))
-				newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID, \
-				                           eventID = newEvent, email = email, RSVPStatus = 1)
-				#newEmailInvitee.save()
+				if invite.has_changed():
+					emailUserID = createAlphanumericSequence(userIDLength)
+					email = invite.cleaned_data["email"]
+					print('{}{}{}{}'.format(email, " : http://127.0.0.1:8000/event/", newEvent.id, emailUserID))
+					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID, \
+					                           eventID = newEvent, email = email, RSVPStatus = 1)
+					#newEmailInvitee.save()
 		
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 		if itemCreationFormset.is_valid():
 			for item in itemCreationFormset:
-				itemName = item.cleaned_data["itemName"]
-				itemAmount = item.cleaned_data["amount"]
-				print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
-				newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
-				#newItem.save()
-		else:
-			print("HELLO")
+				if item.has_changed():
+					itemName = item.cleaned_data["itemName"]
+					itemAmount = item.cleaned_data["amount"]
+					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
+					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
+					#newItem.save()
 
 	else:
 		eventForm = CreateEventForm()
@@ -150,6 +138,8 @@ def createEvent(request):
 	return render(request, 'createEvent.html', mapping)
 
 
+
+
 ################# Functions used by views #################
 # Will return a string of specified length of alphanumeric characters
 def createAlphanumericSequence(sequenceLength):
@@ -163,9 +153,7 @@ def createAlphanumericSequence(sequenceLength):
 ################### findUser ########################
 # Pass a django UserID , get a Eventure User
 def findUser(djangoUserID):
-	print(djangoUserID)
 	eventureUser = UserProfile.objects.get(user_id=djangoUserID)
-	print(eventureUser.id)
 	return eventureUser
 
 ################userLogin(request)#########################
