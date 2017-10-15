@@ -4,12 +4,58 @@
 {% block body_block %}
 {% if user.is_authenticated %}
 
-<div class="page-header">
-    <h1>Welcome,{{currentUser}}</h1>
-    {% for event in allEvents %}
-        Event: {{event}}
-        Location: {{event.location}}
-    {% endfor %}
+<body>
+<hr class="">
+<div class="container target">
+    <div class="row">
+        <div class="col-sm-10">
+             <h1 class="">Welcome,{{currentUser}}!</h1>
+
+            <a href="{% url 'CreateEvent' %}" class = "btn btn-success" role="button">Create an Event!</a>
+            <button type="button" class="btn btn-info">View Upcoming Events!</button>
+<br>
+        </div>
+
+    </div>
+  <br>
+    <div class="row">
+        <div class="col-sm-3">
+            <!--left col-->
+            <ul class="list-group">
+                {% for event in allEvents %}
+                <li class="list-group-item text-muted" contenteditable="true">My Hosted Event</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">EventID:</strong></span> {{event.id}}</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Event:</strong></span>{{event}}</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Location:</strong></span>{{event.location}}</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Date:</strong></span>{{event.date}}</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Time:</strong></span>{{event.time}}</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Description:</strong></span>{{event.description}}</li>
+            </ul>
+
+        </div>
+        <!--/col-3-->
+        <div class="col-sm-9" style="" contenteditable="false">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Attending Events</strong></div>
+                <div class="panel-body"> This is where the events im attending will go
+
+                </div>
+            </div>
+            <div class="panel panel-default target">
+                <div class="panel-heading" contenteditable="false"><strong>Public Events</strong></div>
+                <div class="panel-body">Public Event Feed</div>
+
+    </div>
+           <div class="panel panel-default">
+               <div class="panel-heading"><strong>Private Events</strong></div>
+                <div class="panel-body"> Private Event Feed
+
+                </div>
+</div></div>
+            <div id="push"></div>
+        </div>
+{% endfor %}
 </div>
+</body>
 {% endif %}
 {% endblock %}
