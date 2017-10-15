@@ -24,11 +24,12 @@
       <!-- <div class="col-sm-9" style="" contenteditable="false">-->
 
             <div class="panel panel-default">
+
                <div class="panel-heading"><strong>My Events</strong></div>
                 <div class="panel-body">
-                    {% for event in allEvents %}
-                    <div class="card-group">
 
+                    <div class="card-group">
+                    {% for event in allEvents %}
                     <div class="card" style="width: 20rem;">
                          <img class="card-img-top" src="..." alt="Card image cap">
                      <div class="card-block">
@@ -36,17 +37,20 @@
                          <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{currentUser}}</h6>
                             <p class="card-text">Date:{{event.date}}</p>
                             <p class="card-text">Time:{{event.time}}</p>
+
                          <a href="#" class="btn btn-primary">More Info</a>
 
                         </div>
-</div>          {% endfor %}
-                    </div>
+</div>
+                        {% endfor %}
                     </div>
 
+                    </div>
+                {% endif %}
                 </div>
 
-            </div>
-                {% endif %}
+
+
             <div class="panel panel-default">
                 <div class="panel-heading"><strong>Attending Events</strong></div>
                 <div class="panel-body"> This is where the events im attending will go
