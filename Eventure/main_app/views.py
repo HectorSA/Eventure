@@ -106,8 +106,6 @@ def createEvent(request):
 			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
 			                     name = name, location = location, date = date, \
 			                     time = time, description = description, )
-								 name = name, location = location, date = date, \
-								 time = time, description = description)
 			#newEvent.save()
 			
 			print('***********************************')
