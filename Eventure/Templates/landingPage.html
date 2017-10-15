@@ -3,7 +3,7 @@
 
 {% block body_block %}
 {% if user.is_authenticated %}
-    <link rel="stylesheet" href="{% static 'css/userLogin.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/landingPage.css' %}"/>
 
 <body>
 <!--<hr class="">-->
@@ -34,7 +34,8 @@
                      <div class="card-block">
                          <h4 class="card-title">{{event}}</h4>
                          <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{currentUser}}</h6>
-                            <p class="card-text">Date:{{event.date}}    Time:{{event.time}}</p>
+                            <p class="card-text">Date:{{event.date}}</p>
+                            <p class="card-text">Time:{{event.time}}</p>
                          <a href="#" class="btn btn-primary">More Info</a>
 
   </div>
