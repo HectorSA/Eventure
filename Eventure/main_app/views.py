@@ -6,7 +6,12 @@ from .forms import *
 from .forms import userLoginForm
 from django.forms import formset_factory
 from django.http import HttpResponseRedirect, HttpResponse
-
+from django.contrib.auth.models import User
+from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import get_object_or_404
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
 userIDLength = 8
@@ -101,7 +106,20 @@ def createEvent(request):
 			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
 			                     name = name, location = location, date = date, \
 			                     time = time, description = description, )
+								 name = name, location = location, date = date, \
+								 time = time, description = description)
 			#newEvent.save()
+			
+			print('***********************************')
+			print('{}{}'.format("Event: ", name))
+			print('{}{}'.format("\tDUserID: ", request.user.id))
+			print('{}{}'.format("\tUUserID: ", userID.id))
+			print('{}{}'.format("\tType: ", eventType))
+			print('{}{}'.format("\tLocation: ", location))
+			print('{}{}'.format("\tDate: ", date))
+			print('{}{}'.format("\tTime: ", time))
+			print('{}{}'.format("\tDescription: ", description))
+			print('{}{}'.format("\tEventID: ", eventID))
 		
 		inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
 		if inviteToEventFormset.is_valid():
@@ -138,8 +156,6 @@ def createEvent(request):
 	return render(request, 'createEvent.html', mapping)
 
 
-
-
 ################# Functions used by views #################
 # Will return a string of specified length of alphanumeric characters
 def createAlphanumericSequence(sequenceLength):
@@ -153,31 +169,62 @@ def createAlphanumericSequence(sequenceLength):
 ################### findUser ########################
 # Pass a django UserID , get a Eventure User
 def findUser(djangoUserID):
+	print(djangoUserID)
 	eventureUser = UserProfile.objects.get(user_id=djangoUserID)
+	print(eventureUser.id)
 	return eventureUser
 
 ################userLogin(request)#########################
 def userLogin(request):
-    if request.method == 'POST':
-        loginForm = userLoginForm(request.POST)
-        if loginForm.is_valid():
-            username = loginForm.cleaned_data['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return render(request,'index.html')
-                else:
-                    messages.info(request,'Sorry, this uses is not in our databse')
-                    return redirect('userLogin')
-            else:
-                messages.info(request, 'Sorry, wrong password/username.\n please try again\n')
-                return redirect('userLogin')
-    else:
-        loginForm = userLoginForm()
-        return render(request,'userLogin.html',{'loginForm':loginForm})
+	if request.method == 'POST':
+		loginForm = userLoginForm(request.POST)
+		if loginForm.is_valid():
+			username = loginForm.cleaned_data['username']
+			password = request.POST['password']
+			user = authenticate(username=username, password=password)
+			if user is not None:
+				if user.is_active:
+					login(request, user)
+					return render(request,'index.html')
+				else:
+					messages.info(request,'Sorry, this uses is not in our databse')
+					return redirect('userLogin')
+			else:
+				messages.info(request, 'Sorry, wrong password/username.\n please try again\n')
+				return redirect('userLogin')
+	else:
+		loginForm = userLoginForm()
+		return render(request,'userLogin.html',{'loginForm':loginForm})
 
 def userLogout(request):
 	logout(request)
 	return HttpResponseRedirect('/')
+
+def landingPageView(request):
+	if request.method == 'GET':
+		print("helllo")
+		currentUser = findUser(request.user.id)
+		userID = currentUser.id
+		print('***********************************')
+		print('{}{}'.format("\tDUserID: ", request.user.id))
+		print('{}{}'.format("\tUUserID: ", currentUser.id))
+		print('{}{}'.format("\tFirst Name: ", currentUser.firstName))
+		print('{}{}'.format("\tLast Name: ", currentUser.lastName))
+		print('{}{}'.format("\tCity: ", currentUser.city))
+		print('{}{}'.format("\tState: ", currentUser.state))
+		print('{}{}'.format("\tZip: ", currentUser.zip))
+
+
+		allEvents = EventInfo.objects.filter(userProfile_id=userID).order_by('date')
+		print(allEvents)
+		mapping ={
+			'currentUser' : currentUser,
+			'allEvents': allEvents,
+
+
+		}
+
+
+	return render(request,'landingPage.html',mapping)
+
+

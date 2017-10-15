@@ -46,6 +46,7 @@
 
         <ul class="nav navbar-nav">
 		  {% if user.is_authenticated %}
+            <li><a href="{% url 'Home' %}">Home</a></li>
 		    <li><a href="{% url 'CreateEvent' %}">Create Event</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}

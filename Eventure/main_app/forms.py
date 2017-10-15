@@ -47,3 +47,8 @@ class CreateEventForm(forms.ModelForm):
 class userLoginForm(forms.Form):
 	username = forms.CharField(label='User Name', max_length=32)
 	password = forms.CharField(label='Password', widget=forms.PasswordInput())
+
+class LandingViewForm(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ('user','id','firstName','lastName','city','state','zip',)
