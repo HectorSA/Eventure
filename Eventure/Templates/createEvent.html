@@ -147,7 +147,10 @@ $(document).ready(function() {
             minlength: 6
         },
 
-        location : "required",
+        location : {
+             required: true,
+             minlength: 3
+        },
         date : {
             required: true,
             date: true
@@ -157,10 +160,14 @@ $(document).ready(function() {
             timeAMPM : true
         },
       },
-      message: {
+      messages: {
           name:{
-              required : "This field is required",
+              required : "Name field is required",
               minlength : "Name has to be at least 6 characters"
+          },
+          location: {
+              required : "Location field is required",
+              minlength : "Location has to be at least 3 characters"
           },
           time: {
               timeAMPM : "Please enter a valid time"
@@ -187,8 +194,8 @@ function highLightBox(){
 }
 
 jQuery.validator.addMethod("EmailWithDot", function(value, element) {
-    return this.optional( element ) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/
-        .test( value ) && /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test( value ) );
+    return this.optional( element ) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{1,4}$/
+        .test( value ) && /^(?=.{1,64}@.{3,64}$)(?=.{3,100}$).*/.test( value ) );
 }, 'Not a valid email address.');
 
 jQuery.validator.addMethod("timeAMPM", function(value, element) {
