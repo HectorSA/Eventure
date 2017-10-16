@@ -78,22 +78,31 @@ def register(request):
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
 	event = findGroup(groupID)
-	if(event is not None):
-		if(findAttendee(userID) is not None):
-			atendee = findAttendee(userID)
-			print(event)
-			mapping = {
-				'atendee':atendee,
-				'event':event
-			}
-			return render(request, 'displayEvent.html', mapping)
-		userID = findUser(request.user.id)
-		if(userID.is_valid()):
-			mapping = {
-				'userID': userID,
-				'event':event
-			}
-			return render(request, 'displayEvent.html',mapping)
+	attendee = findAttendee(userID)
+	if(request.method == 'GET'):
+		if(event is not None):
+			if(attendee is not None):
+				rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
+				address = getParsedEventAddr(groupID)
+				print(rsvpStatus)
+				mapping = {
+					'attendee':attendee,
+					'event':event,
+					'address':address,
+					'rsvpStatus':rsvpStatus
+				}
+				return render(request, 'displayEvent.html', mapping)
+			userID = findUser(request.user.id)
+			if(userID.is_valid()):
+				mapping = {
+					'userID': userID,
+					'event':event
+				}
+				return render(request, 'displayEvent.html',mapping)
+	elif(request.method == 'POST'):
+		if(attendee is not None):
+			RSVPstatus = setUserRSVP(request.POST)
+
 
 
 def index(request):
@@ -176,6 +185,35 @@ def createAlphanumericSequence(sequenceLength):
 	alphaNumericSequence = ''.join(random.choice(string.ascii_letters + string.digits) \
 								   for digits in range(sequenceLength))
 	return alphaNumericSequence
+
+###############getParsedEventAddress###################
+def getParsedEventAddr(groupId):
+	valueList = EventInfo.objects.filter(id = groupId).values_list('location',flat=True)
+	newList = []
+	newList.insert(0,"query=")
+	newList.extend(valueList[0])
+	i = 0
+	for value in newList:
+		if(value.isspace()):
+			newList[i] = "+"
+		i = i + 1
+	address = ''.join(str(s) for s in newList)
+	print(address)
+	return address
+
+
+####################get RSVP status ###################
+def getRSVPStatus(rsvpNumber):
+	NOTATTENDING = 1
+	MAYBE = 2
+	ATTENDING = 3
+
+	RSVPSTATUS = {
+		NOTATTENDING : "not attending",
+		MAYBE: "undecided",
+		ATTENDING: "attending"
+	}
+	return RSVPSTATUS[rsvpNumber]
 
 ################### findGorup ########################
 def findGroup(groupID):

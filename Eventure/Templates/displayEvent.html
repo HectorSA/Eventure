@@ -22,8 +22,22 @@
                         <img src ="{{event.eventPhoto.url}}">
                     </a>
                </div>
-                <p class="">{{atendee}}</p>
+            <p class="welcome_text_font">Howdy, {{attendee}}</p>
+           <br>
+           <div class="page_font">
+               <p>You have been invite to {{event.name}}</p>
+               <p>You are currently {{rsvpStatus}}</p>
+               <p>Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{event.location}}</a></p>
+               <p>Date: {{event.date}} </p>
+               <p>Time: {{event.time}}</p>
+               <p>Description:</p>
+           </div>
+           <p class="description_text">{{event.description}}</p>
+           <p class="page_font"> Would you like to attend?</p>
            {%endfor%}
+           <div class="rsvp_button"><input type="submit" value="ATTENDING" class="btn btn-info"></div>
+            <div class="rsvp_button"><input type="submit" value="MAYBE" class="btn btn-info"></div>
+           <div class="rsvp_button"><input type="submit" value="NOTATTENDING" class="btn btn-info"></div>
 
        </div>
    </div>

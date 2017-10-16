@@ -33,9 +33,8 @@ class ItemForm(forms.Form):
 	                         widget=forms.TextInput(attrs={'placeholder': ' Pizza'}))
 	amount = forms.IntegerField()
 
-
 class CreateEventForm(forms.ModelForm):
-	
+
 	type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES, label="Event Type",
 	                              initial=False, widget=forms.Select(), required=True)
 
@@ -52,3 +51,6 @@ class LandingViewForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
 		fields = ('user','id','firstName','lastName','city','state','zip',)
+
+class setUserRSVP(forms.ModelForm):
+	RSVPStatus = models.IntegerField(choices=[1,2,3], blank=True, null=True)
