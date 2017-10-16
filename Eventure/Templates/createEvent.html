@@ -125,10 +125,16 @@ $(document).ready(function() {
     });
 });
 
+
+
 $(document).ready(function (){
-      highLightBox();
-      addEmailBootStrap();
-      addItemBootStrap();
+    $( "#submitButton" ).prop( "disabled", true );
+    highLightBox();
+    addEmailBootStrap();
+    addItemBootStrap();
+
+    constantErrorChecking();
+
 });
 
 $(document).ready(function() {
@@ -178,6 +184,7 @@ $(document).ready(function() {
     addValidationRules();
 });
 
+/* This adds a validator to all email classes */
 function addValidationRules(){
      $('[name$="-email"]').each(function() {
          $(this).rules('add', {
@@ -186,12 +193,7 @@ function addValidationRules(){
      });
 }
 
-function highLightBox(){
-    $('.errorlist').parent().each(function(){
-        $(this).children(':input').addClass('form-control')
-        $(this).addClass('has-error')
-     });
-}
+/************** Custom validators *******************/
 
 jQuery.validator.addMethod("EmailWithDot", function(value, element) {
     return this.optional( element ) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{1,4}$/
@@ -246,8 +248,59 @@ function addItemBootStrap(){
     });
 }
 
+function constantErrorChecking(){
+    $('input[type="text"], #id_description').on('input change', function () { //'input change keyup paste'
+        submitOnlyWhenValid();
+        //checkAndMarkActiveTyping(this);
+
+
+    });
+    checkAndMarkBlur();
+}
+
+/* This highlights al the boxes that has an error */
+function checkAndMarkActiveTyping(field){
+        if ( $(field).attr('aria-invalid') != 'false')
+            addError(field);
+        else
+            removeError(field);
+}
+
+function checkAndMarkBlur(){
+    $('input[type="text"], #id_description').blur(function(){
+         if ( $(this).attr('aria-invalid') != 'false'){
+             addError(this);
+         } else {
+             removeError(this);
+         }
+     });
+}
+
+function highLightBox(){
+    $('.errorlist').parent().each(function(){
+        addError(this);
+     });
+}
+
+function addError(field){
+    $(field).addClass('form-control')
+    $(field).parent().addClass('has-error')
+}
+
+function removeError(field){
+    $(field).parent().removeClass('has-error')
+}
+
+function submitOnlyWhenValid(){
+    if ($('#SigningUp').valid()) {
+        $( "#submitButton" ).prop( "disabled", false );
+    } else {
+        $( "#submitButton" ).prop( "disabled", true );
+    }
+}
+
 </script>
-    {% endblock %}
+{% endblock %}
 
 </body>
 </html>
