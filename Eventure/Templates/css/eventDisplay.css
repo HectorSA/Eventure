@@ -1,0 +1,41 @@
+.block{
+    background-color:rgb(210,220,200);
+    border-style: none;
+    margin: auto;
+    padding:5%;
+    width: 75%;
+}
+
+
+p.imageAlignedText{
+
+}
+
+.center{
+    padding: 15% 0;
+    border-style:none;
+
+}
+
+div.picture_position {
+    display: block;
+    margin: 0 auto;
+    border-syle: none;
+    position: relative;
+    float:left;
+    padding: 10px;
+
+ }
+table {
+    border-collapse: collapse;
+
+}
+
+table, th,td{
+    border: 1px solid black;
+}
+
+.media-grey,{
+    color:#000;
+    background-color:#bbb;
+}

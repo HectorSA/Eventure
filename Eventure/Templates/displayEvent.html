@@ -9,10 +9,26 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!-- http://127.0.0.1:8000/event/11112222333300000000 -->
+    {%if user.is_authenticated%}
+        <p>User ID: {{userId}}</p>
+        <p>Event ID: {{event}}</p>
+    {%endif%}
+    {%if not user.is_authenticated%}
+   <div class="block">
+       <div class="centered">
+           {%for event in event%}
+                <div class="picture_position">
+                    <a targe="_blank" href="{{event.eventPhoto.url}}">
+                        <img src ="{{event.eventPhoto.url}}">
+                    </a>
+               </div>
+                <p class="">{{atendee}}</p>
+           {%endfor%}
 
+       </div>
+   </div>
 
-    <p>Group ID: {{ groupID }}</p>
-    <p>User ID: {{ userID }}</p>
+    {%endif%}
 </head>
 <body>
 

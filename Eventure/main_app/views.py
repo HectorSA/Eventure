@@ -77,7 +77,23 @@ def register(request):
 
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
-	return render(request, 'displayEvent.html', {'groupID':groupID, 'userID':userID})
+	event = findGroup(groupID)
+	if(event is not None):
+		if(findAttendee(userID) is not None):
+			atendee = findAttendee(userID)
+			print(event)
+			mapping = {
+				'atendee':atendee,
+				'event':event
+			}
+			return render(request, 'displayEvent.html', mapping)
+		userID = findUser(request.user.id)
+		if(userID.is_valid()):
+			mapping = {
+				'userID': userID,
+				'event':event
+			}
+			return render(request, 'displayEvent.html',mapping)
 
 
 def index(request):
@@ -161,7 +177,10 @@ def createAlphanumericSequence(sequenceLength):
 								   for digits in range(sequenceLength))
 	return alphaNumericSequence
 
-
+################### findGorup ########################
+def findGroup(groupID):
+	eventInfo = EventInfo.objects.filter(id = groupID)
+	return eventInfo
 
 
 ################### findUser ########################
