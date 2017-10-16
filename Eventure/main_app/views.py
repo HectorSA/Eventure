@@ -167,10 +167,14 @@ def createAlphanumericSequence(sequenceLength):
 ################### findUser ########################
 # Pass a django UserID , get a Eventure User
 def findUser(djangoUserID):
-	print(djangoUserID)
 	eventureUser = UserProfile.objects.get(user_id=djangoUserID)
-	print(eventureUser.id)
 	return eventureUser
+
+################### findAttendee ########################
+# Pass a attendeeID get Attendee Object
+def findAttendee(attendeeID):
+	eventureAttendee = Attendee.objects.get(attendeeID=attendeeID)
+	return eventureAttendee
 
 ################userLogin(request)#########################
 def userLogin(request):
