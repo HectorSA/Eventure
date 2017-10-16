@@ -18,14 +18,14 @@
        <div class="centered">
            {%for event in event%}
                 <div class="picture_position">
-                    <a targe="_blank" href="{{event.eventPhoto.url}}">
+                    <a target="_blank" href="{{event.eventPhoto.url}}">
                         <img src ="{{event.eventPhoto.url}}">
                     </a>
                </div>
             <p class="welcome_text_font">Howdy, {{attendee}}</p>
            <br>
            <div class="page_font">
-               <p>You have been invite to {{event.name}}</p>
+               <p>You have been invited to {{event.name}}</p>
                <p>You are currently {{rsvpStatus}}</p>
                <p>Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{event.location}}</a></p>
                <p>Date: {{event.date}} </p>
