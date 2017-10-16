@@ -128,10 +128,13 @@ def createEvent(request):
 			date = eventForm.cleaned_data["date"]
 			time = eventForm.cleaned_data["time"]
 			description = eventForm.cleaned_data["description"]
+			
 			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
 			                     name = name, location = location, date = date, \
 			                     time = time, description = description, )
-			#newEvent.save()
+			if 'eventPhoto' in request.FILES:
+				newEvent.eventPhoto = request.FILES['eventPhoto']
+			newEvent.save()
 			
 			print('***********************************')
 			print('{}{}'.format("Event: ", name))
@@ -153,7 +156,7 @@ def createEvent(request):
 					print('{}{}{}{}'.format(email, " : http://127.0.0.1:8000/event/", newEvent.id, emailUserID))
 					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID, \
 					                           eventID = newEvent, email = email, RSVPStatus = 1)
-					#newEmailInvitee.save()
+					newEmailInvitee.save()
 		
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 		if itemCreationFormset.is_valid():
@@ -163,7 +166,7 @@ def createEvent(request):
 					itemAmount = item.cleaned_data["amount"]
 					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
 					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
-					#newItem.save()
+					newItem.save()
 
 	else:
 		eventForm = CreateEventForm()
