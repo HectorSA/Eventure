@@ -101,7 +101,9 @@ def displayEvent(request, groupID, userID):
 				return render(request, 'displayEvent.html',mapping)
 	elif(request.method == 'POST'):
 		if(attendee is not None):
-			RSVPstatus = setUserRSVP(request.POST)
+			if '3' in request.POST:
+				attendee
+				print("is going")
 
 
 

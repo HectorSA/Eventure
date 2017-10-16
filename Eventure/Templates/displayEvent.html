@@ -35,10 +35,12 @@
            <p class="description_text">{{event.description}}</p>
            <p class="page_font"> Would you like to attend?</p>
            {%endfor%}
-           <div class="rsvp_button"><input type="submit" value="ATTENDING" class="btn btn-info"></div>
-            <div class="rsvp_button"><input type="submit" value="MAYBE" class="btn btn-info"></div>
-           <div class="rsvp_button"><input type="submit" value="NOTATTENDING" class="btn btn-info"></div>
-
+            <form enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+                <div class="rsvp_button"><input type="submit" name="3" value="ATTENDING" class="btn btn-info"></div>
+                <div class="rsvp_button"><input type="submit" name="2" value="MAYBE" class="btn btn-info"></div>
+                <div class="rsvp_button"><input type="submit" name="1" value="NOTATTENDING" class="btn btn-info"></div>
+            </form>
        </div>
    </div>
 
