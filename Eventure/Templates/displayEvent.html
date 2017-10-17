@@ -19,7 +19,7 @@
            {%for event in event%}
                 <div class="picture_position">
                     <a target="_blank" href="{{event.eventPhoto.url}}">
-                        <img src ="{{event.eventPhoto.url}}">
+                        <img src ="{{event.eventPhoto.url}}" height="165px" width="175px">
                     </a>
                </div>
             <p class="welcome_text_font">Howdy, {{attendee}}</p>
@@ -35,10 +35,15 @@
            <p class="description_text">{{event.description}}</p>
            <p class="page_font"> Would you like to attend?</p>
            {%endfor%}
-           <div class="rsvp_button"><input type="submit" value="ATTENDING" class="btn btn-info"></div>
-            <div class="rsvp_button"><input type="submit" value="MAYBE" class="btn btn-info"></div>
-           <div class="rsvp_button"><input type="submit" value="NOTATTENDING" class="btn btn-info"></div>
+            <form enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+                <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+                      <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="ATTENDING" value="Count me in!"></button>
+                      <button type="button" class="btn btn-secondary"><input type="submit" name="MAYBE" value="I am still thinking about it!" ></button>
+                      <button type="button" class="btn btn-secondary"><input type="submit" name="NOTATTENDING" value="no rsvp, thank you!"></button>
+                    </div>
 
+            </form>
        </div>
    </div>
 
