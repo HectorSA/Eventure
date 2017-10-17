@@ -35,7 +35,7 @@
 
 }
 
-.rsvp_button{
+#rsvp_button{
     display: inline-block;
     border-radius: 25px;
     background: rgb(072,041,229);
@@ -60,7 +60,7 @@ table, th,td{
     border: 1px solid black;
 }
 
-.media-grey,{
+.media-grey{
     color:#000;
     background-color:#bbb;
 }
