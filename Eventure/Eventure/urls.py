@@ -16,11 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from main_app import views
+from django.views.static import serve
+from Eventure import settings
 
 urlpatterns = [
 	url(r'^$',views.index,name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^event/(\w{12})(\w{8})$', views.displayEvent, name = 'DisplayEvent'),
+	url(r'^media/(?P<path>.*)$',serve , {'document_root': settings.MEDIA_ROOT, }),
     url(r'^createEvent$', views.createEvent, name = 'CreateEvent'),
 	url(r'^landingPage$', views.landingPageView, name = 'Home'),
 	url(r'^register/$',views.register, name='registrationPage'),

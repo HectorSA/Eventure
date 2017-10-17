@@ -77,7 +77,34 @@ def register(request):
 
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
-	return render(request, 'displayEvent.html', {'groupID':groupID, 'userID':userID})
+	event = findGroup(groupID)
+	attendee = findAttendee(userID)
+	if(request.method == 'GET'):
+		if(event is not None):
+			if(attendee is not None):
+				rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
+				address = getParsedEventAddr(groupID)
+				print(rsvpStatus)
+				mapping = {
+					'attendee':attendee,
+					'event':event,
+					'address':address,
+					'rsvpStatus':rsvpStatus
+				}
+				return render(request, 'displayEvent.html', mapping)
+			userID = findUser(request.user.id)
+			if(userID.is_valid()):
+				mapping = {
+					'userID': userID,
+					'event':event
+				}
+				return render(request, 'displayEvent.html',mapping)
+	elif(request.method == 'POST'):
+		if(attendee is not None):
+			if '3' in request.POST:
+				attendee
+				print("is going")
+
 
 
 def index(request):
@@ -103,10 +130,13 @@ def createEvent(request):
 			date = eventForm.cleaned_data["date"]
 			time = eventForm.cleaned_data["time"]
 			description = eventForm.cleaned_data["description"]
+			
 			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
 			                     name = name, location = location, date = date, \
 			                     time = time, description = description, )
-			#newEvent.save()
+			if 'eventPhoto' in request.FILES:
+				newEvent.eventPhoto = request.FILES['eventPhoto']
+			newEvent.save()
 			
 			print('***********************************')
 			print('{}{}'.format("Event: ", name))
@@ -128,7 +158,7 @@ def createEvent(request):
 					print('{}{}{}{}'.format(email, " : http://127.0.0.1:8000/event/", newEvent.id, emailUserID))
 					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID, \
 					                           eventID = newEvent, email = email, RSVPStatus = 1)
-					#newEmailInvitee.save()
+					newEmailInvitee.save()
 		
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 		if itemCreationFormset.is_valid():
@@ -138,7 +168,7 @@ def createEvent(request):
 					itemAmount = item.cleaned_data["amount"]
 					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
 					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
-					#newItem.save()
+					newItem.save()
 
 	else:
 		eventForm = CreateEventForm()
@@ -161,16 +191,52 @@ def createAlphanumericSequence(sequenceLength):
 								   for digits in range(sequenceLength))
 	return alphaNumericSequence
 
+###############getParsedEventAddress###################
+def getParsedEventAddr(groupId):
+	valueList = EventInfo.objects.filter(id = groupId).values_list('location',flat=True)
+	newList = []
+	newList.insert(0,"query=")
+	newList.extend(valueList[0])
+	i = 0
+	for value in newList:
+		if(value.isspace()):
+			newList[i] = "+"
+		i = i + 1
+	address = ''.join(str(s) for s in newList)
+	print(address)
+	return address
 
+
+####################get RSVP status ###################
+def getRSVPStatus(rsvpNumber):
+	NOTATTENDING = 1
+	MAYBE = 2
+	ATTENDING = 3
+
+	RSVPSTATUS = {
+		NOTATTENDING : "not attending",
+		MAYBE: "undecided",
+		ATTENDING: "attending"
+	}
+	return RSVPSTATUS[rsvpNumber]
+
+################### findGorup ########################
+def findGroup(groupID):
+	eventInfo = EventInfo.objects.filter(id = groupID)
+	return eventInfo
 
 
 ################### findUser ########################
 # Pass a django UserID , get a Eventure User
 def findUser(djangoUserID):
-	print(djangoUserID)
 	eventureUser = UserProfile.objects.get(user_id=djangoUserID)
-	print(eventureUser.id)
 	return eventureUser
+
+################### findAttendee ########################
+# Pass a attendeeID get Attendee Object
+def findAttendee(attendeeID):
+	eventureAttendee = Attendee.objects.get(attendeeID=attendeeID)
+	return eventureAttendee
 
 ################userLogin(request)#########################
 def userLogin(request):

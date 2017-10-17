@@ -1,0 +1,70 @@
+.block{
+    background-color: #D3D3D3;
+    border-style: none;
+    margin: auto;
+    padding:5%;
+    width: 75%;
+}
+
+.second_text{
+
+}
+
+.welcome_text_font{
+    text-align: justify;
+    color: #000000;
+    font-size: 1.65em;
+    font-weight: bold;
+}
+.page_font{
+    font-size: 1.25em;
+}
+
+.description_text{
+    text-align: justify;
+    border-style: groove;
+    border-width:2px;
+    margin: auto;
+    font-size: 1.35em;
+    padding:15px;
+}
+
+.center{
+    padding: 15% 0;
+    border-style:none;
+
+}
+
+.rsvp_button{
+    display: inline-block;
+    border-radius: 25px;
+    background: rgb(072,041,229);
+    position:relative;
+}
+
+div.picture_position {
+    display: block;
+    margin: 0 auto;
+    border-syle: none;
+    position: relative;
+    float:left;
+    padding: 10px;
+
+ }
+table {
+    border-collapse: collapse;
+
+}
+
+table, th,td{
+    border: 1px solid black;
+}
+
+.media-grey,{
+    color:#000;
+    background-color:#bbb;
+}
+
+a:active{
+    color: blue;
+}

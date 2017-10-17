@@ -18,7 +18,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'Templates')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "Templates"),
 ]
-
+MEDIA_DIR = os.path.join(BASE_DIR,'Media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -129,3 +129,6 @@ TIME_INPUT_FORMATS = ('%I:%M%p',)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
