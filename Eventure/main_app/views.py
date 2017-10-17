@@ -171,7 +171,7 @@ def createEvent(request):
 					newItem.save()
 				
 		if eventForm.is_valid():
-			return HttpResponseRedirect('/landingPage.html')
+			return HttpResponseRedirect('/landingPage')
 	else:
 		eventForm = CreateEventForm()
 		inviteToEventFormset = EmailFormSet(prefix='invitee')
