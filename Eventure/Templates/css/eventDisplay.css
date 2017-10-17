@@ -11,12 +11,9 @@
 }
 
 .welcome_text_font{
-    text-align: justify;
-    color: #000000;
-    font-size: 1.65em;
     font-weight: bold;
 }
-.page_font{
+#page_font{
     font-size: 1.25em;
 }
 
@@ -37,12 +34,13 @@
 
 #rsvp_button{
     display: inline-block;
-    border-radius: 25px;
-    background: rgb(072,041,229);
+    background: #1a8cff;
+    color: #ffffff;
     position:relative;
 }
 
-div.picture_position {
+.picture_position {
+    d-flex align-self-center mr-3
     display: block;
     margin: 0 auto;
     border-syle: none;

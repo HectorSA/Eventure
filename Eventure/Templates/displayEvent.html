@@ -1,4 +1,9 @@
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
 {% extends "Base.html" %}
+
 {% load staticfiles %}
 
 {% block body_block %}
@@ -10,38 +15,34 @@
     <title>Title</title>
     <!-- http://127.0.0.1:8000/event/11112222333300000000 -->
     {%if user.is_authenticated%}
-        <p>User ID: {{userId}}</p>
-        <p>Event ID: {{event}}</p>
     {%endif%}
     {%if not user.is_authenticated%}
-   <div class="block">
-       <div class="centered">
-           {%for event in event%}
-                <div class="picture_position">
-                    <a target="_blank" href="{{event.eventPhoto.url}}">
-                        <img src ="{{event.eventPhoto.url}}" height="165px" width="175px">
-                    </a>
-               </div>
-            <p class="welcome_text_font">Howdy, {{attendee}}</p>
-           <br>
-           <div class="page_font">
-               <p>You have been invited to {{event.name}}</p>
-               <p>You are currently {{rsvpStatus}}</p>
-               <p>Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{event.location}}</a></p>
-               <p>Date: {{event.date}} </p>
-               <p>Time: {{event.time}}</p>
-               <p>Description:</p>
-           </div>
-           <p class="description_text">{{event.description}}</p>
-           <p class="page_font"> Would you like to attend?</p>
-           {%endfor%}
+        <div class="block">
+            <div class="centered">
+                {%for event in event%}
+                    <div class="media">
+                        <img  class="d-flex align-self-start mr-3" src="{{event.eventPhoto.url}}" height="205px" width="255px" alt="Generic placeholder image">
+                        <div class="media-body">
+                            <h3 class="mt-0">Howdy, {{attendee}}</h3>
+                                <p id="page_font">You have been invited to {{event.name}}</p>
+                                <p id="page_font">You are currently {{rsvpStatus}}</p>
+                                <p id="page_font">Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{event.location}}</a></p>
+                                <p id="page_font">Date: {{event.date}} </p>
+                                <p id="page_font">Time: {{event.time}}</p>
+                        </div>
+                    </div>
+                    <p id="page_font" >Description:</p>
+                    <p class="description_text">{{event.description}}</p>
+                {% endfor %}
+            <br>
+            <p id="page_font"> Would you like to attend?</p>
             <form enctype="multipart/form-data" method="POST">
             {% csrf_token %}
-                <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-                      <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="ATTENDING" value="Count me in!"></button>
-                      <button type="button" class="btn btn-secondary"><input type="submit" name="MAYBE" value="I am still thinking about it!" ></button>
-                      <button type="button" class="btn btn-secondary"><input type="submit" name="NOTATTENDING" value="no rsvp, thank you!"></button>
-                    </div>
+                <div class="btn-group btn-group-lg" role="group" ">
+                      <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="ATTENDING" value="Count me in!">
+                      <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="MAYBE" value="I am still thinking about it!" >
+                       <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="NOTATTENDING" value="no rsvp, thank you!">
+`               </div>
 
             </form>
        </div>
@@ -49,9 +50,6 @@
 
     {%endif%}
 </head>
-<body>
-
-</body>
 </html>
 
 {% endblock %}
