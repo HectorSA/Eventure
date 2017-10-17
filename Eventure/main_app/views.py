@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, render_to_response, redirect
+from django.views.generic import DetailView
 import random, string
 from .forms import *
 from .forms import userLoginForm
@@ -17,7 +18,6 @@ groupIDLength = 12
 userIDLength = 8
 
 # Create your views here.
-
 
 def register(request):
 	registered = False
@@ -180,7 +180,9 @@ def createEvent(request):
 					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
 					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
 					newItem.save()
-
+				
+		if eventForm.is_valid():
+			return HttpResponseRedirect('/landingPage')
 	else:
 		eventForm = CreateEventForm()
 		inviteToEventFormset = EmailFormSet(prefix='invitee')
@@ -231,7 +233,7 @@ def getRSVPStatus(rsvpNumber):
 	}
 	return RSVPSTATUS[rsvpNumber]
 
-################### findGorup ########################
+################### findGroup ########################
 def findGroup(groupID):
 	eventInfo = EventInfo.objects.filter(id = groupID)
 	return eventInfo
@@ -303,3 +305,18 @@ def landingPageView(request):
 	return render(request,'landingPage.html',mapping)
 
 
+def eventHomePageView(request,groupID):
+	print('test')
+	
+	if request.method == 'GET':
+		currentEvent = EventInfo.objects.get(id=groupID)
+		guests = Attendee.objects.filter(eventID=groupID,RSVPStatus=3)
+		print(currentEvent)
+		print(guests)
+		mapping = {
+			'currentEvent' : currentEvent,
+			'guests' : guests,
+			
+		}
+	
+	return render(request, 'eventHomePage.html', mapping)

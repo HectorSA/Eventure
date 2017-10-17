@@ -1,0 +1,44 @@
+#wrap{
+    border-style: solid;
+    border-color: blueviolet;
+}
+#wrap1{
+    border-style: solid;
+    border-color: orange;
+}
+#photo{
+    border-style: solid;
+    border-color: #e22444;
+    width: 20%;
+    height: 300px;
+}
+
+#info{
+    border-style: solid;
+    border-color: green;
+    width: 60%;
+
+}
+
+#guests{
+    border-style: solid;
+    border-color: yellow;
+    width: 40%;
+
+}
+
+#eventContent{
+    border-style: solid;
+    border-color: saddlebrown;
+    width: 50%;
+    height: 200px;
+    overflow: scroll;
+    text-overflow: ellipsis; // This is where the magic happens
+
+}
+#footer{
+    height: 50px;
+    width: 100%;
+    border-style: solid;
+    border-color: black;
+}

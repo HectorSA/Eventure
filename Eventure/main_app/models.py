@@ -9,7 +9,7 @@ class UserProfile(models.Model):
 	id = models.AutoField(primary_key = True)
 	firstName = models.CharField(max_length = 50, default = '')
 	lastName = models.CharField(max_length = 50, default = '')
-	#profilePhoto = models.ImageField(upload_to = 'profile_photos', blank = True, default = None)
+	profilePhoto = models.ImageField(upload_to = 'profile_photos', blank = True, default = None)
 	city = models.CharField(("city"), max_length=64)
 	state = USStateField(("state"), default="TX")
 	zip = models.CharField(("zip code"), max_length=5)
