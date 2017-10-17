@@ -79,14 +79,14 @@ def register(request):
 def displayEvent(request, groupID, userID):
 	event = findGroup(groupID)
 	attendee = findAttendee(userID)
+	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
+	address = getParsedEventAddr(groupID)
 	if(request.method == 'GET'):
 		if(event is not None):
 			if(attendee is not None):
-				rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
-				address = getParsedEventAddr(groupID)
 				print(rsvpStatus)
 				mapping = {
-					'attendee':attendee,
+					'attendee':getattr(attendee,"attendeeName"),
 					'event':event,
 					'address':address,
 					'rsvpStatus':rsvpStatus
@@ -100,12 +100,23 @@ def displayEvent(request, groupID, userID):
 				}
 				return render(request, 'displayEvent.html',mapping)
 	elif(request.method == 'POST'):
+		print(request.method)
 		if(attendee is not None):
-			if '3' in request.POST:
-				attendee
-				print("is going")
-
-
+			choices = ['ATTENDING','MAYBE','NOTATTENDING']
+			if request.POST.get("ATTENDING"):
+				setattr(attendee,"RSVPStatus",3)
+			elif request.POST.get("MAYBE"):
+				setattr(attendee, "RSVPStatus", 2)
+			elif request.POST.get("NOTATTENDING"):
+				setattr(attendee, "RSVPStatus", 1)
+			rsvpStatus = getRSVPStatus(getattr(attendee,"RSVPStatus"))
+			mapping = {
+				'attendee': attendee,
+				'event': event,
+				'address': address,
+				'rsvpStatus': rsvpStatus
+			}
+			return render(request, 'displayEvent.html', mapping)
 
 def index(request):
 	return render(request, 'index.html', {})
@@ -231,7 +242,7 @@ def findGroup(groupID):
 ################### findUser ########################
 # Pass a django UserID , get a Eventure User
 def findUser(djangoUserID):
-	eventureUser = UserProfile.objects.get(user_id=djangoUserID)
+	eventureUser = UserProfile.objects.filter(user_id=djangoUserID)
 	return eventureUser
 
 ################### findAttendee ########################
