@@ -28,5 +28,6 @@ urlpatterns = [
 	url(r'^landingPage$', views.landingPageView, name = 'Home'),
 	url(r'^register/$',views.register, name='registrationPage'),
     url(r'^userLogin/$',views.userLogin,  name='userLogin'),
-    url(r'^logout/$',views.userLogout, name='logout')
+    url(r'^logout/$',views.userLogout, name='logout'),
+	url(r'^event/(\w{12})$',views.eventHomePageView,name = 'eventHome'),
 ]

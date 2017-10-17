@@ -11,12 +11,49 @@
 <body>
 
 </body>
-    <div class="container" id="wrap" style="position:relative;">>
-        <div id="photo" class="container" style="float:left;"></div>
-        <div id="info" class="container" style="float:right;"></div>
-    </div>
-    <div id="eventContent"></div>
+    <div class="container" id="wrap1">
+        <div id="photo" class="container" style="float:left">
+                <div>
+                    <a target="_blank" href="{{currentEvent.eventPhoto.url}}">
+                        <img class ="img-thumbnail" src ="{{currentEvent.eventPhoto.url}}">
+                    </a>
+                </div>
+            <p>Hosted by {{ currentEvent.userProfile}}</p>
+            <button type="button" class="btn btn-info">Chip In</button>
 
+        </div>
+        <div id="info" class="container" style="float:left">
+            <h2>{{ currentEvent.name }}</h2>
+            <p>Location: {{ currentEvent.location}}</p>
+            <p>Date: {{ currentEvent.date }}</p>
+            <p>Time: {{ currentEvent.time }}</p>
+        </div>
+        <div id=buttonStuff" style="float:left">
+            <h3>Want to attend?</h3>
+            <button type="button" class="btn btn-primary">RSVP</button>
+        </div>
+    </div>
+
+
+    <div class="container" id="wrap" style="position: relative">
+        <div class="container" id="eventContent" style="float:left"><p>{{ currentEvent.description }}</p></div>
+        <div id = "guests" style="overflow: scroll; float: right">
+            <h2>Who's Going</h2>
+
+                {% for guest in guests %}
+                    <div class="media">
+                        <img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">
+                        <div class="media-body">
+                            <h5 class="mt-0">{{guest.attendeeName}}</h5>
+                        </div>
+                    </div>
+
+                {%  endfor %}
+
+        </div>
+    </div>
+
+    <div id="footer"><p>Copyright @Eventure</p></div>
 
 
 {% endblock %}
