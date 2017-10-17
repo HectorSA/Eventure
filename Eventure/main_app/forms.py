@@ -51,6 +51,3 @@ class LandingViewForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
 		fields = ('user','id','firstName','lastName','city','state','zip',)
-
-class setUserRSVP(forms.ModelForm):
-	RSVPStatus = models.IntegerField(choices=[1,2,3], blank=True, null=True)
