@@ -167,7 +167,9 @@ def createEvent(request):
 					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
 					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
 					newItem.save()
-
+				
+		if eventForm.is_valid():
+			return HttpResponseRedirect('/landingPage.html')
 	else:
 		eventForm = CreateEventForm()
 		inviteToEventFormset = EmailFormSet(prefix='invitee')
@@ -218,7 +220,7 @@ def getRSVPStatus(rsvpNumber):
 	}
 	return RSVPSTATUS[rsvpNumber]
 
-################### findGorup ########################
+################### findGroup ########################
 def findGroup(groupID):
 	eventInfo = EventInfo.objects.filter(id = groupID)
 	return eventInfo
