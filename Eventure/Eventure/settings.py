@@ -18,7 +18,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'Templates')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "Templates"),
 ]
-MEDIA_DIR = os.path.join(BASE_DIR,'Media')
+MEDIA_DIR = os.path.join(BASE_DIR,'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -29,7 +29,7 @@ SECRET_KEY = '&wt6^kx-!#3j41r6x^)c2!^_1+0m&bs05s^p4@dq^c==wt7ir&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.4','192.168.1.8']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.1.4','192.168.1.8']
 
 
 # Application definition
