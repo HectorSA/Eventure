@@ -196,8 +196,8 @@ function addValidationRules(){
 /************** Custom validators *******************/
 
 jQuery.validator.addMethod("EmailWithDot", function(value, element) {
-    return this.optional( element ) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{1,4}$/
-        .test( value ) && /^(?=.{1,64}@.{3,64}$)(?=.{3,100}$).*/.test( value ) );
+    return this.optional( element ) || ( /^[A-Za-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{1,4}$/
+        .test( value ) && /^(?=.{1,64}@.{3,64}$)(?=.{6,100}$).*/.test( value ) );
 }, 'Not a valid email address.');
 
 jQuery.validator.addMethod("timeAMPM", function(value, element) {
