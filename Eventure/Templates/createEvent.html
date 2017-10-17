@@ -31,14 +31,14 @@
   </ul>
 
 
-<form enctype="multipart/form-data" method="POST">
+<form enctype="multipart/form-data" method="POST" id="SigningUp">
     <div class="tab-content">
         {% csrf_token %}
 
         <!-- First Tab -->
         <div id="EventInfo" class="tab-pane fade in active">
             <table class="table">
-                {{ eventForm.as_table }}
+                    {{ eventForm.as_table }}
             </table>
             <br/>
             <div id="NavButtons">
@@ -86,23 +86,10 @@
                 <input id="submitButton" type="submit" class="btn btn-warning" value="Create Event">
             </div>
 
-        <div>
-            <ul>
-                <li class="emptyForm" id="nameCheck">Event Name Required</li>
-                <li class="emptyForm" id="locationCheck">Event Location Required</li>
-                <li class="emptyForm" id="dateCheck">Event Date Required</li>
-                <li class="emptyForm" id="timeCheck">Event Time is Required</li>
-                <li class="emptyForm" id="descriptionCheck">Event Description Required</li>
-            </ul>
+
         </div>
-
-
     </div>
 </form>
-
-
-
-
 
 <script>
 $(document).ready(function() {
@@ -117,6 +104,7 @@ $(document).ready(function() {
 
         // update form count
         $('#id_item-TOTAL_FORMS').attr('value', count+1);
+        addItemBootStrap();
     });
 });
 
@@ -132,63 +120,124 @@ $(document).ready(function() {
 
         // update form count
         $('#id_invitee-TOTAL_FORMS').attr('value', count+1);
-
+        addValidationRules();
+        addEmailBootStrap();
     });
 });
 
-  $(function () {
-    $('#myTab a:last').tab('show')
-  })
-
-
-
-$('.btnNext').click(function(){
-  $('.nav-tabs > .active').next('li').find('a').trigger('click');
+$(document).ready(function (){
+      highLightBox();
+      addEmailBootStrap();
+      addItemBootStrap();
 });
 
-$('.btnPrevious').click(function(){
-  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+$(document).ready(function() {
+
+     var validator = $("#SigningUp").validate({
+      onkeyup: function (element, event) {
+            if (event.which === 9 && this.elementValue(element) === "") {
+                return;
+            } else {
+                this.element(element);
+            }
+      },
+      rules: {
+        name: {
+            required: true,
+            minlength: 6
+        },
+
+        location : "required",
+        date : {
+            required: true,
+            date: true
+        },
+        time :{
+            required : true,
+            timeAMPM : true
+        },
+      },
+      message: {
+          name:{
+              required : "This field is required",
+              minlength : "Name has to be at least 6 characters"
+          },
+          time: {
+              timeAMPM : "Please enter a valid time"
+          },
+
+      }
+    });
+    addValidationRules();
 });
 
-function isEmpty( el ){
-    return !$.trim(el.html())
+function addValidationRules(){
+     $('[name$="-email"]').each(function() {
+         $(this).rules('add', {
+             EmailWithDot: true
+         });
+     });
 }
 
-$('#submitButton').on("click",function() {
-    if (isEmpty($('#id_name'))) {
-         $('#nameCheck').show();
-         console.log("Show");
-    } else {
-        $('#nameCheck').hide();
-        console.log("Hide");
-    }
+function highLightBox(){
+    $('.errorlist').parent().each(function(){
+        $(this).children(':input').addClass('form-control')
+        $(this).addClass('has-error')
+     });
+}
 
-    if (isEmpty($('#id_location'))) {
-         $('#locationCheck').show();
-    } else {
-        $('#locationCheck').hide();
-    }
+jQuery.validator.addMethod("EmailWithDot", function(value, element) {
+    return this.optional( element ) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/
+        .test( value ) && /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test( value ) );
+}, 'Not a valid email address.');
 
-    if (isEmpty($('#id_date'))) {
-         $('#dateCheck').show();
-    } else {
-        $('#dateCheck').hide();
-    }
+jQuery.validator.addMethod("timeAMPM", function(value, element) {
+    return this.optional( element ) || ( /^[01]?[0-9]:[0-6]{2}[a,p]m$/.test( value ) );
+}, 'Please enter a valid time');
 
-    if (isEmpty($('#id_time'))) {
-         $('#timeCheck').show();
-         console.log("Show");
-    } else {
-        $('#timeCheck').hide();
-        console.log("Hide");
-    }
 
-    if (isEmpty($('#id_description'))) {
-         $('#descriptionCheck').show();
-    } else {
-        $('#descriptionCheck').hide();
-    }
+/************** Tab Functions *******************/
+$(function () {
+      $('#myTab a:last').tab('show')
+  })
+
+$('.btnNext').click(function(){
+    $('.nav-tabs > .active').next('li').find('a').trigger('click');
+
 });
+$('.btnPrevious').click(function(){
+    $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+
+});
+/**********************************************/
+
+// Mark Event Info as Boostrap forms
+$("#EventInfo :text, textarea" ).each(function( index ) {
+    $(this).addClass("form-control");
+});
+
+function addEmailBootStrap(){
+    $('[id$="email"]').each(function(index) {
+        $(this).addClass("form-control");
+    });
+
+    $('.inviteTable').each(function(){
+       $(this).addClass('form-inline');
+    });
+}
+
+function addItemBootStrap(){
+    $('[id$="itemName"]').each(function(index) {
+        $(this).addClass("form-control");
+    });
+
+    $('[id$="amount"]').each(function(index) {
+        $(this).addClass("form-control itemAmountInput");
+    });
+    $('.itemTable ').each(function(){
+       $(this).addClass('form-inline');
+    });
+}
 
 </script>
     {% endblock %}

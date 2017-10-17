@@ -1,11 +1,17 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, render_to_response
+from django.contrib import messages
+from django.shortcuts import render, render_to_response, redirect
 import random, string
 from .forms import *
 from .forms import userLoginForm
 from django.forms import formset_factory
 from django.http import HttpResponseRedirect, HttpResponse
-
+from django.contrib.auth.models import User
+from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import get_object_or_404
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
 userIDLength = 8
@@ -71,7 +77,7 @@ def register(request):
 
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
-	print("groupID:%s -- userID:%s -- website %s" % (groupID, userID, WEBSITENAME))
+	return render(request, 'displayEvent.html', {'groupID':groupID, 'userID':userID})
 
 
 def index(request):
@@ -82,26 +88,30 @@ def createEvent(request):
 	EmailFormSet = formset_factory(EmailInviteeForm)
 	ItemFormSet = formset_factory(ItemForm)
 	
+	## This is the eventID that will be assigned to email invitees
 	eventID = 0
+	newEvent = None
 	if request.method == 'POST':
 		eventForm = CreateEventForm(request.POST,request.FILES)
 		
 		if eventForm.is_valid():
 			eventID = createAlphanumericSequence(groupIDLength)
-			userID = findUserID(request.user.id)
+			userID = findUser(request.user.id)
 			eventType = eventForm.cleaned_data["type"]
 			name = eventForm.cleaned_data["name"]
 			location = eventForm.cleaned_data["location"]
 			date = eventForm.cleaned_data["date"]
 			time = eventForm.cleaned_data["time"]
 			description = eventForm.cleaned_data["description"]
-			#newEvent = EventInfo(eventID, userID, eventType, name,location, date, time, description)
-						
+			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType, \
+			                     name = name, location = location, date = date, \
+			                     time = time, description = description, )
+			#newEvent.save()
 			
 			print('***********************************')
 			print('{}{}'.format("Event: ", name))
 			print('{}{}'.format("\tDUserID: ", request.user.id))
-			print('{}{}'.format("\tUUserID: ", userID))
+			print('{}{}'.format("\tUUserID: ", userID.id))
 			print('{}{}'.format("\tType: ", eventType))
 			print('{}{}'.format("\tLocation: ", location))
 			print('{}{}'.format("\tDate: ", date))
@@ -109,19 +119,26 @@ def createEvent(request):
 			print('{}{}'.format("\tDescription: ", description))
 			print('{}{}'.format("\tEventID: ", eventID))
 		
-		inviteToEventFormset = EmailFormSet(request.POST, request.FILES, prefix='invitee')
+		inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
 		if inviteToEventFormset.is_valid():
 			for invite in inviteToEventFormset:
-				email = invite.cleaned_data["email"]
-				print("\tEmail: " + email)
+				if invite.has_changed():
+					emailUserID = createAlphanumericSequence(userIDLength)
+					email = invite.cleaned_data["email"]
+					print('{}{}{}{}'.format(email, " : http://127.0.0.1:8000/event/", newEvent.id, emailUserID))
+					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID, \
+					                           eventID = newEvent, email = email, RSVPStatus = 1)
+					#newEmailInvitee.save()
 		
-		
-		itemCreationFormset = ItemFormSet(request.POST, request.FILES, prefix='item')
+		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 		if itemCreationFormset.is_valid():
 			for item in itemCreationFormset:
-				itemName = item.cleaned_data["itemName"]
-				amount = item.cleaned_data["amount"]
-				print('{}{}{}{}'.format("\tItem: ",itemName," x ",amount))
+				if item.has_changed():
+					itemName = item.cleaned_data["itemName"]
+					itemAmount = item.cleaned_data["amount"]
+					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
+					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
+					#newItem.save()
 
 	else:
 		eventForm = CreateEventForm()
@@ -144,37 +161,35 @@ def createAlphanumericSequence(sequenceLength):
 								   for digits in range(sequenceLength))
 	return alphaNumericSequence
 
-############################################################
-def findUserID(djangoUserID):
+
+
+
+################### findUser ########################
+# Pass a django UserID , get a Eventure User
+def findUser(djangoUserID):
 	print(djangoUserID)
-	applicationUser = UserProfile.objects.get(user_id=djangoUserID)
-	print(applicationUser.id)
-	return applicationUser.id
+	eventureUser = UserProfile.objects.get(user_id=djangoUserID)
+	print(eventureUser.id)
+	return eventureUser
 
 ################userLogin(request)#########################
 def userLogin(request):
 	if request.method == 'POST':
 		loginForm = userLoginForm(request.POST)
-		print(loginForm)
 		if loginForm.is_valid():
 			username = loginForm.cleaned_data['username']
-			print(username)
 			password = request.POST['password']
-			print(password)
 			user = authenticate(username=username, password=password)
-			print(user)
 			if user is not None:
-				print("user is not none")
 				if user.is_active:
 					login(request, user)
 					return render(request,'index.html')
 				else:
-					print("user is not Active")
-					return render(request,'userLogin.html')
+					messages.info(request,'Sorry, this uses is not in our databse')
+					return redirect('userLogin')
 			else:
-				print("user is none")
-				loginForm = userLoginForm()
-				return render(request,'userLogin.html',{'loginForm':loginForm})
+				messages.info(request, 'Sorry, wrong password/username.\n please try again\n')
+				return redirect('userLogin')
 	else:
 		loginForm = userLoginForm()
 		return render(request,'userLogin.html',{'loginForm':loginForm})
@@ -182,3 +197,32 @@ def userLogin(request):
 def userLogout(request):
 	logout(request)
 	return HttpResponseRedirect('/')
+
+def landingPageView(request):
+	if request.method == 'GET':
+		print("helllo")
+		currentUser = findUser(request.user.id)
+		userID = currentUser.id
+		print('***********************************')
+		print('{}{}'.format("\tDUserID: ", request.user.id))
+		print('{}{}'.format("\tUUserID: ", currentUser.id))
+		print('{}{}'.format("\tFirst Name: ", currentUser.firstName))
+		print('{}{}'.format("\tLast Name: ", currentUser.lastName))
+		print('{}{}'.format("\tCity: ", currentUser.city))
+		print('{}{}'.format("\tState: ", currentUser.state))
+		print('{}{}'.format("\tZip: ", currentUser.zip))
+
+
+		allEvents = EventInfo.objects.filter(userProfile_id=userID).order_by('date')
+		print(allEvents)
+		mapping ={
+			'currentUser' : currentUser,
+			'allEvents': allEvents,
+
+
+		}
+
+
+	return render(request,'landingPage.html',mapping)
+
+

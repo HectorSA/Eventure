@@ -1,11 +1,21 @@
+<!DOCTYPE html>
 {% extends "Base.html" %}
 {% load staticfiles %}
 
 {% block body_block %}
-<!DOCTYPE html>
 <html lang="en">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/userLogin.css' %}"/>
+
+<title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/userLogin.css' %}"/>
+
+{% if messages %}
+<h3 class="messages">
+    {% for message in messages %}
+    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    {% endfor %}
+</h3>
+{% endif %}
+
 <body>
 {% if not user.is_authenticated %}
 <div class="logo"></div>
@@ -16,9 +26,12 @@
         <p class="username">{{loginForm}}</p>
         <p class="button"><center><input type="submit" value="Sign In" class="btn btn-info"></center></p>
     </form>
-  </div>
+</div>
 {%endif%}
+
 </body>
+
+
 {%endblock%}
 </body>
 </html>

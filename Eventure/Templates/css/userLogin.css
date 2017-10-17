@@ -10,6 +10,12 @@ body {
     margin: 30px auto;
 }
 
+.messages{
+    margin: auto;
+    width: 50%;
+    border: 3px solid grey;
+    padding: 10px;
+}
 button.blogin {
     width: 50%;
     height: 10%;
