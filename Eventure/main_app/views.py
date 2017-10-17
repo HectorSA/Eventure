@@ -300,11 +300,13 @@ def eventHomePageView(request,groupID):
 	if request.method == 'GET':
 		currentEvent = EventInfo.objects.get(id=groupID)
 		guests = Attendee.objects.filter(eventID=groupID,RSVPStatus=3)
+		items = Item.objects.filter(eventID=groupID)
 		print(currentEvent)
 		print(guests)
 		mapping = {
 			'currentEvent' : currentEvent,
 			'guests' : guests,
+			'items' : items,
 			
 		}
 	

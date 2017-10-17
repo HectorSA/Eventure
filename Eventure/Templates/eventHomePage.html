@@ -36,7 +36,10 @@
 
 
     <div class="container" id="wrap" style="position: relative">
-        <div class="container" id="eventContent" style="float:left"><p>{{ currentEvent.description }}</p></div>
+        <div class="container" id="eventContent" style="float:left">
+            <h4>Description</h4>
+            <p>{{ currentEvent.description }}</p>
+        </div>
         <div id = "guests" style="overflow: scroll; float: right">
             <h2>Who's Going</h2>
 
@@ -45,11 +48,19 @@
                         <img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">
                         <div class="media-body">
                             <h5 class="mt-0">{{guest.attendeeName}}</h5>
+                            <h5>{{ guest.items }}</h5>
                         </div>
                     </div>
 
                 {%  endfor %}
 
+        </div>
+        <div id ="bringing">
+            <h4>What to bring</h4>
+            {% for item in items %}
+                <p>{{ item }}</p>
+
+            {% endfor %}
         </div>
     </div>
 
