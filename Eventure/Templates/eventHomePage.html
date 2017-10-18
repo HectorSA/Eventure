@@ -48,7 +48,10 @@
                         <img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">
                         <div class="media-body">
                             <h5 class="mt-0">{{guest.attendeeName}}</h5>
-                            <h5>{{ guest.items }}</h5>
+
+                            {% for item in guest.items.all %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
                         </div>
                     </div>
 
