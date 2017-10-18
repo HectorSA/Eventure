@@ -56,7 +56,7 @@
                 <div class="media-body">
                     <h5 class="mt-0">{{guest.attendeeName}}</h5>
                     {% for item in guest.items.all %}
-                               <!--- <li>{{ item.name }}</li>-->
+                    <!--- <li>{{ item.name }}</li>-->
                     {% endfor %}
                 </div>
             </div>
@@ -64,9 +64,13 @@
     </div>
     <div id ="bringing">
         <h4>What to bring</h4>
+        <select name="{{ item.name }}" size="5" multiple>
         {% for item in items %}
-            <p>{{ item.name }}</p>
+            <option>
+                {{ item.name }}
+            </option>
         {% endfor %}
+        </select>
     </div>
 </div>
 
