@@ -47,7 +47,10 @@ class Item(models.Model):
 		return '{} x {}'.format(self.name, self.amount)
 
 
-
+class itemBeingTaken(models.Model):
+	itemBeingBroughtID = models.AutoField(primary_key=True)
+	eventID = models.ForeignKey(EventInfo)
+	itemLinkID = models.ForeignKey(Item)
 
 class Attendee(models.Model):
 	NOTATTENDING = 1
