@@ -1,55 +1,76 @@
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
 {% extends "Base.html" %}
-
 {% load staticfiles %}
 
 {% block body_block %}
-<!DOCTYPE html>
-<html lang="en">
-<link rel="stylesheet" href="{% static 'css/eventDisplay.css' %}">
+    <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <!-- http://127.0.0.1:8000/event/11112222333300000000 -->
-    {%if user.is_authenticated%}
-    {%endif%}
-    {%if not user.is_authenticated%}
-        <div class="block">
-            <div class="centered">
-                {%for event in event%}
-                    <div class="media">
-                        <img  class="d-flex align-self-start mr-3" src="{{event.eventPhoto.url}}" height="205px" width="255px" alt="Generic placeholder image">
-                        <div class="media-body">
-                            <h3 class="mt-0">Howdy, {{attendee}}</h3>
-                                <p id="page_font">You have been invited to {{event.name}}</p>
-                                <p id="page_font">You are currently {{rsvpStatus}}</p>
-                                <p id="page_font">Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{event.location}}</a></p>
-                                <p id="page_font">Date: {{event.date}} </p>
-                                <p id="page_font">Time: {{event.time}}</p>
-                        </div>
-                    </div>
-                    <p id="page_font" >Description:</p>
-                    <p class="description_text">{{event.description}}</p>
-                {% endfor %}
-            <br>
-            <p id="page_font"> Would you like to attend?</p>
-            <form enctype="multipart/form-data" method="POST">
-            {% csrf_token %}
-                <div class="btn-group btn-group-lg" role="group" ">
-                      <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="ATTENDING" value="Count me in!">
-                      <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="MAYBE" value="I am still thinking about it!" >
-                       <input type="submit"  class="btn btn-secondary" id="rsvp_button" name="NOTATTENDING" value="no rsvp, thank you!">
-`               </div>
-
-            </form>
-       </div>
-   </div>
-
-    {%endif%}
+    <title>Your event</title>
+    <link rel="stylesheet" href="{% static 'css/eventDisplay.css' %}"/>
 </head>
-</html>
+<body>
+</body>
+<!-- http://127.0.0.1:8000/event/11112222333300000000 -->
+{%if user.is_authenticated%}
+{%endif%}
+{%if not user.is_authenticated%}
+{%for currentEvent in currentEvent%}
+<div class="container" id="wrap1">
+    <div id="photo" class="container" style="float:left">
+        <div >
+            <a target="_blank" href="{{currentEvent.eventPhoto.url}}">
+                <img class ="img-fluid" id = "eventPhoto" src ="{{currentEvent.eventPhoto.url}}">
+            </a>
+        </div>
+            <p>Hosted by {{ currentEvent.userProfile}}</p>
+            <button type="button" class="btn btn-info btn-lg">Chip In</button>
+    </div>
+    <div id="info" class="container" style="float:left; margin:auto">
+        <h2>{{ currentEvent.name }}</h2>
+        <p>You are currently {{rsvpStatus}}</p>
+        <p>Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{currentEvent.location}}</a></p>
+        <p>Date: {{ currentEvent.date }}</p>
+        <p>Time: {{ currentEvent.time }}</p>
+    </div>
+    <div id="buttonStuff" style="float:left; margin:auto">
+        <h3>Want to attend?</h3>
+        <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+            <input type="submit" class="btn btn-primary btn-lg" id="rsvp_button" name="ATTENDING" value="Count me in!" >
+            <input type="submit" class="btn btn-primary btn-lg" id="rsvp_button" name="MAYBE" value="Maybe" >
+            <input type="submit" class="btn btn-primary btn-lg" id="rsvp_button" name="NOTATTENDING" value="no rsvp, thank you!" >
+        </form>
+    </div>
+</div>
 
+<div class="container" id="wrap" style="position: relative">
+    <div class="container" id="eventContent" style="float:left">
+        <h4>Description</h4>
+        <p>{{ currentEvent.description }}</p>
+    </div>
+    <div id = "guests" style="overflow: scroll; float: right">
+        <h2>Who's Going</h2>
+        {% for guest in guests %}
+            <div class="media">
+                <!---<img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">-->
+                <div class="media-body">
+                    <h5 class="mt-0">{{guest.attendeeName}}</h5>
+                    {% for item in guest.items.all %}
+                               <!--- <li>{{ item.name }}</li>-->
+                    {% endfor %}
+                </div>
+            </div>
+        {%  endfor %}
+    </div>
+    <div id ="bringing">
+        <h4>What to bring</h4>
+        {% for item in items %}
+            <p>{{ item.name }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+{%endfor%}
+{%endif%}
 {% endblock %}

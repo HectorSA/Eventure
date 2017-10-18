@@ -1,17 +1,27 @@
-.block{
-    background-color: #D3D3D3;
-    border-style: none;
+#wrap{
+   /* border-style: solid;
+    border-color: blueviolet;*/
+}
+#wrap1{
+   /* border-style: solid;
+    border-color: orange;*/
+}
+#photo{
+   /* border-style: solid;
+    border-color: #e22444;*/
+    width: 20%;
+    height: 300px;
+    margin-left: -10px;
+    padding:5px;
+}
+
+#info{
+    /*border-style: solid;
+    border-color: green;*/
+    width: 350px;
+    height: 300px;
     margin: auto;
-    padding:5%;
-    width: 75%;
-}
-
-.second_text{
-
-}
-
-.welcome_text_font{
-    font-weight: bold;
+    font-size:1.18em;
 }
 #page_font{
     font-size: 1.25em;
@@ -33,36 +43,54 @@
 }
 
 #rsvp_button{
-    display: inline-block;
+    font-size: 95%;
+    text-align: center;
+    font-weight:bold;
     background: #1a8cff;
     color: #ffffff;
     position:relative;
+    height: 35px;
+    width: 145px;
 }
 
-.picture_position {
-    d-flex align-self-center mr-3
-    display: block;
-    margin: 0 auto;
-    border-syle: none;
-    position: relative;
-    float:left;
-    padding: 10px;
 
- }
-table {
-    border-collapse: collapse;
+#guests{
+    /*border-style: solid;
+    border-color: yellow;*/
+    width: 20%;
+    margin-left: 10%;
+    overflow:auto;
 
 }
+.element::-webkit-scrollbar { width: 0 !important }
+#eventContent{
+   /* border-style: solid;
+    border-color: saddlebrown;*/
+    width: 70%;
+    height: 300px;
+    margin-top: 20px;
+    overflow: auto;
+    word-wrap: break-word;
+    text-overflow: ellipsis; // This is where the magic happens
 
-table, th,td{
-    border: 1px solid black;
+}
+#bringing{
+    margin-top: 30%;
+    /*border-style: solid;
+    border-color: deeppink;*/
+    width: 70%;
+    height: 200px;
 }
 
-.media-grey{
-    color:#000;
-    background-color:#bbb;
+#buttonStuff{
+   /* border-style: solid;
+    border-color: greenyellow;*/
+    margin-top: 15%;
 }
 
-a:active{
-    color: blue;
+#eventPhoto{
+    /*border-style: solid;
+    border-color: black;*/
+    width: 200px;
+    height: 200px;
 }

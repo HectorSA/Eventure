@@ -77,26 +77,30 @@ def register(request):
 
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
-	event = findGroup(groupID)
+	currentEvent = EventInfo.objects.filter(id = groupID)
 	attendee = findAttendee(userID)
 	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
 	address = getParsedEventAddr(groupID)
+	guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+	items = Item.objects.filter(eventID=groupID)
 	if(request.method == 'GET'):
-		if(event is not None):
+		if(currentEvent is not None):
 			if(attendee is not None):
 				print(rsvpStatus)
 				mapping = {
 					'attendee':getattr(attendee,"attendeeName"),
-					'event':event,
+					'currentEvent':currentEvent,
 					'address':address,
-					'rsvpStatus':rsvpStatus
+					'rsvpStatus':rsvpStatus,
+					'guests':guests,
+					'items':items,
 				}
 				return render(request, 'displayEvent.html', mapping)
 			userID = findUser(request.user.id)
 			if(userID.is_valid()):
 				mapping = {
 					'userID': userID,
-					'event':event
+					'currentEvent':currentEvent
 				}
 				return render(request, 'displayEvent.html',mapping)
 	elif(request.method == 'POST'):
@@ -112,9 +116,11 @@ def displayEvent(request, groupID, userID):
 			rsvpStatus = getRSVPStatus(getattr(attendee,"RSVPStatus"))
 			mapping = {
 				'attendee': attendee,
-				'event': event,
+				'currentEvent': currentEvent,
 				'address': address,
-				'rsvpStatus': rsvpStatus
+				'rsvpStatus': rsvpStatus,
+				'guests': guests,
+				'items': items,
 			}
 			return render(request, 'displayEvent.html', mapping)
 
