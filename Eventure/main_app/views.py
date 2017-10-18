@@ -358,3 +358,49 @@ def eventHomePageView(request,groupID):
 		}
 	
 	return render(request, 'eventHomePage.html', mapping)
+
+def edit(request,groupID):
+	instance = EventInfo.objects.get(id=groupID)
+	if request.user.is_authenticated():
+		currentUser = findUser(request.user.id)
+		print(currentUser)
+		print(instance.userProfile)
+		if currentUser == instance.userProfile:
+			print(request.user.id)
+			form = CreateEventForm(request.POST or None, instance=instance)
+			if form.is_valid():
+				form.save()
+				return redirect('next_view')
+			return render(request, 'editEvent.html', {'form': form})
+		else:
+			currentEvent = EventInfo.objects.get(id=groupID)
+			guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+			items = Item.objects.filter(eventID=groupID)
+			print(currentEvent)
+			print(guests)
+			print(items)
+			mapping = {
+				'currentEvent': currentEvent,
+				'guests': guests,
+				'items': items,
+			}
+			
+		return render(request, 'eventHomePage.html', mapping)
+			
+	else:
+		
+		currentEvent = EventInfo.objects.get(id=groupID)
+		guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+		items = Item.objects.filter(eventID=groupID)
+		print(currentEvent)
+		print(guests)
+		print(items)
+		mapping = {
+			'currentEvent': currentEvent,
+			'guests': guests,
+			'items': items,
+			}
+
+
+		return render(request, 'eventHomePage.html', mapping)
+	return HttpResponseRedirect('/')
