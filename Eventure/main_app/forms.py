@@ -36,12 +36,15 @@ class ItemForm(forms.Form):
 class CreateEventForm(forms.ModelForm):
 
 	type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES, label="Event Type",
-	                              initial=False, widget=forms.Select(), required=True)
+	                              initial=True, widget=forms.Select(), required=True)
 
 	class Meta:
 
 		model = EventInfo
 		fields = ('name','location','date','time','description','type','eventPhoto',)
+		labels = {
+			'name' : 'Event Name'
+		}
 
 class userLoginForm(forms.Form):
 	username = forms.CharField(label='User Name', max_length=32)
