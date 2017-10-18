@@ -50,7 +50,7 @@
                             <h5 class="mt-0">{{guest.attendeeName}}</h5>
 
                             {% for item in guest.items.all %}
-                                <li>{{ item }}</li>
+                                <li>{{ item.name }}</li>
                             {% endfor %}
                         </div>
                     </div>
