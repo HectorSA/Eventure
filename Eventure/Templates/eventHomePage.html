@@ -13,13 +13,13 @@
 </body>
     <div class="container" id="wrap1">
         <div id="photo" class="container" style="float:left">
-                <div>
+                <div >
                     <a target="_blank" href="{{currentEvent.eventPhoto.url}}">
-                        <img class ="img-thumbnail" src ="{{currentEvent.eventPhoto.url}}">
+                        <img class ="img-fluid" id = "eventPhoto" src ="{{currentEvent.eventPhoto.url}}">
                     </a>
                 </div>
             <p>Hosted by {{ currentEvent.userProfile}}</p>
-            <button type="button" class="btn btn-info">Chip In</button>
+            <button type="button" class="btn btn-info btn-lg">Chip In</button>
 
         </div>
         <div id="info" class="container" style="float:left">
@@ -28,9 +28,9 @@
             <p>Date: {{ currentEvent.date }}</p>
             <p>Time: {{ currentEvent.time }}</p>
         </div>
-        <div id=buttonStuff" style="float:left">
+        <div id="buttonStuff" style="float:left">
             <h3>Want to attend?</h3>
-            <button type="button" class="btn btn-primary">RSVP</button>
+            <button type="button" class="btn btn-primary btn-lg">RSVP</button>
         </div>
     </div>
 
@@ -58,7 +58,7 @@
         <div id ="bringing">
             <h4>What to bring</h4>
             {% for item in items %}
-                <p>{{ item }}</p>
+                <p>{{ item.name }}</p>
 
             {% endfor %}
         </div>

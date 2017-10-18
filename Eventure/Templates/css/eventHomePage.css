@@ -11,28 +11,32 @@
     border-color: #e22444;
     width: 20%;
     height: 300px;
+    margin-left: -10px;
 }
 
 #info{
     border-style: solid;
     border-color: green;
     width: 60%;
+    height: 300px;
 
 }
 
 #guests{
     border-style: solid;
     border-color: yellow;
-    width: 40%;
+    width: 20%;
+    margin-right: 10%;
 
 }
 
 #eventContent{
     border-style: solid;
     border-color: saddlebrown;
-    width: 50%;
-    height: 200px;
-    overflow: scroll;
+    width: 60%;
+    height: 300px;
+    overflow: auto;
+    word-wrap: break-word;
     text-overflow: ellipsis; // This is where the magic happens
 
 }
@@ -41,4 +45,22 @@
     width: 100%;
     border-style: solid;
     border-color: black;
+}
+#bringing{
+    margin-top: 30%;
+    border-style: solid;
+    border-color: deeppink;
+    width: 50%;
+}
+
+#buttonStuff{
+    border-style: solid;
+    border-color: greenyellow;
+}
+
+#eventPhoto{
+    border-style: solid;
+    border-color: black;
+    width: 200px;
+    height: 200px;
 }
