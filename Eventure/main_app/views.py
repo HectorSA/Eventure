@@ -141,30 +141,32 @@ def createEvent(request):
 		
 		if eventForm.is_valid():
 			eventID = createAlphanumericSequence(groupIDLength)
-			userID = findUser(request.user.id)
+			creatingUser = findUser(request.user.id)
 			eventType = eventForm.cleaned_data["type"]
 			name = eventForm.cleaned_data["name"]
 			location = eventForm.cleaned_data["location"]
 			date = eventForm.cleaned_data["date"]
 			time = eventForm.cleaned_data["time"]
 			description = eventForm.cleaned_data["description"]
+			eventCategory = eventForm.cleaned_data["eventCategory"]
 			
-			newEvent = EventInfo(id = eventID, userProfile = userID, type = eventType,
+			newEvent = EventInfo(id = eventID, userProfile = creatingUser, type = eventType,
 								 name = name, location = location, date = date,
-								 time = time, description = description, )
+								 time = time, description = description,
+								 eventCategory = eventCategory)
 			if 'eventPhoto' in request.FILES:
 				newEvent.eventPhoto = request.FILES['eventPhoto']
 			newEvent.save()
 			
 			print('***********************************')
 			print('{}{}'.format("Event: ", name))
-			print('{}{}'.format("\tDUserID: ", request.user.id))
-			print('{}{}'.format("\tUUserID: ", userID.id))
-			print('{}{}'.format("\tType: ", eventType))
+			print('{}{} {}'.format("\tEvent Creater: ", creatingUser.firstName, creatingUser.lastName))
 			print('{}{}'.format("\tLocation: ", location))
 			print('{}{}'.format("\tDate: ", date))
 			print('{}{}'.format("\tTime: ", time))
 			print('{}{}'.format("\tDescription: ", description))
+			print('{}{}'.format("\tType: ", eventType))
+			print('{}{}'.format("\tCategory: ", newEvent.get_eventCategory_display()))
 			print('{}{}'.format("\tEventID: ", eventID))
 		
 		inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
@@ -173,9 +175,23 @@ def createEvent(request):
 				if invite.has_changed():
 					emailUserID = createAlphanumericSequence(userIDLength)
 					email = invite.cleaned_data["email"]
-					print('{}{}{}{}'.format(email, " : http://127.0.0.1:8000/event/", newEvent.id, emailUserID))
+					userAttendeeID = -1
+					print('')
+					foundUser = findUserViaEmail(email)
+					if (foundUser):
+						print('{}{}{}{}{}'.format("\t", email, " : http://127.0.0.1:8000/event/", newEvent.id,
+						                          emailUserID))
+						print('{}{}{}{}{}{}'.format("\t", email, " - Found User -- ", foundUser.firstName, " ",
+						                            foundUser.lastName))
+						userAttendeeID = foundUser.id
+					else:
+						print('{}{}{}{}{}'.format("\t", email, " : http://127.0.0.1:8000/event/", newEvent.id,
+						                          emailUserID))
+					
 					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID,
-											   eventID = newEvent, email = email, RSVPStatus = 1)
+											   eventID = newEvent, email = email, RSVPStatus = 1,
+											   userAttendeeID = userAttendeeID)
+				
 					newEmailInvitee.save()
 		
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
@@ -189,6 +205,7 @@ def createEvent(request):
 					newItem.save()
 				
 		if eventForm.is_valid():
+			print('***********************************')
 			return HttpResponseRedirect('/landingPage')
 	else:
 		eventForm = CreateEventForm()
@@ -239,6 +256,16 @@ def getRSVPStatus(rsvpNumber):
 		ATTENDING: "attending"
 	}
 	return RSVPSTATUS[rsvpNumber]
+
+
+################### findGroup ########################
+def findUserViaEmail(emailAddress):
+	try:
+		eventureUser = UserProfile.objects.get(user__email=emailAddress)
+	except UserProfile.DoesNotExist:
+		eventureUser = None
+	return eventureUser
+
 
 ################### findGroup ########################
 def findGroup(groupID):
@@ -327,5 +354,67 @@ def eventHomePageView(request,groupID):
 			'items' : items,
 
 		}
+<<<<<<< HEAD
 
 	return render(request, 'eventHomePage.html', mapping)
+=======
+	
+	return render(request, 'eventHomePage.html', mapping)
+
+def edit(request,groupID):
+	instance = EventInfo.objects.get(id=groupID)
+	if request.user.is_authenticated():
+		currentUser = findUser(request.user.id)
+		print(currentUser)
+		print(instance.userProfile)
+		
+		if currentUser == instance.userProfile:
+				currentEvent = EventInfo.objects.get(id=groupID)
+				guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+				items = Item.objects.filter(eventID=groupID)
+				print(request.user.id)
+				form = CreateEventForm(request.POST or None, instance=instance)
+				mapping = {
+					'currentEvent': currentEvent,
+					'guests': guests,
+					'items': items,
+					'form' : form,
+				}
+				if form.is_valid():
+					form.save()
+					print({}.format("valid form"))
+					return HttpResponseRedirect('/')
+				return render(request, 'editEvent.html', mapping)
+		else:
+			currentEvent = EventInfo.objects.get(id=groupID)
+			guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+			items = Item.objects.filter(eventID=groupID)
+			print(currentEvent)
+			print(guests)
+			print(items)
+			mapping = {
+				'currentEvent': currentEvent,
+				'guests': guests,
+				'items': items,
+			}
+			
+		return render(request, 'eventHomePage.html', mapping)
+			
+	else:
+		
+		currentEvent = EventInfo.objects.get(id=groupID)
+		guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+		items = Item.objects.filter(eventID=groupID)
+		print(currentEvent)
+		print(guests)
+		print(items)
+		mapping = {
+			'currentEvent': currentEvent,
+			'guests': guests,
+			'items': items,
+			}
+
+
+		return render(request, 'eventHomePage.html', mapping)
+	return HttpResponseRedirect('/')
+>>>>>>> 5b80c75c1820d990ba5ce548b0164b29e0ab96e0
