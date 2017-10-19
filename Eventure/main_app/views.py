@@ -19,6 +19,8 @@ userIDLength = 8
 
 # Create your views here.
 
+
+
 def register(request):
 	registered = False
 
@@ -125,6 +127,9 @@ def displayEvent(request, groupID, userID):
 def index(request):
 	return render(request, 'index.html', {})
 
+def newIndex(request):
+	return render(request, 'newIndex.html', {})
+
 ################## /createEvent ###################
 def createEvent(request):
 	if not request.user.is_authenticated():
@@ -187,6 +192,7 @@ def createEvent(request):
 					else:
 						print('{}{}{}{}{}'.format("\t", email, " : http://127.0.0.1:8000/event/", newEvent.id,
 						                          emailUserID))
+						
 					
 					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID,
 											   eventID = newEvent, email = email, RSVPStatus = 1,

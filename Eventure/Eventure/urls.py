@@ -21,6 +21,7 @@ from Eventure import settings
 
 urlpatterns = [
 	url(r'^$',views.index,name='index'),
+	url(r'^newIndex$',views.newIndex,name='newIndex'),
     url(r'^admin/', admin.site.urls),
     url(r'^event/(\w{12})(\w{8})$', views.displayEvent, name = 'DisplayEvent'),
 	url(r'^media/(?P<path>.*)$',serve , {'document_root': settings.MEDIA_ROOT, }),
