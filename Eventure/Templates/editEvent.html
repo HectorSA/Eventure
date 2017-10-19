@@ -86,11 +86,8 @@
                   </div>
                   <div class="modal-body">
                       <div id="items-form-container" class="itemTable">
-                          {% for items in itemCreationFormset %}
-                             <div id="item-{{ forloop.counter0 }}" class="itemTable ">
-                                {{ items }}
-                            </div>
-                          {% endfor %}
+                          {{newItem.as_p}}
+
                       </div>
                   </div>
                   <div class="modal-footer">

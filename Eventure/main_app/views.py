@@ -370,7 +370,8 @@ def edit(request,groupID):
 			guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
 			items = Item.objects.filter(eventID=groupID)
 			ItemFormSet = formset_factory(ItemForm)
-			itemCreationFormset = ItemFormSet(request.POST, prefix='item')
+			newItem = ItemForm(request.POST)
+			
 			print(request.user.id)
 			print(instance)
 			form = CreateEventForm(request.POST or None, request.FILES or None, instance=instance)
@@ -380,13 +381,9 @@ def edit(request,groupID):
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
-					return HttpResponseRedirect('/landingPage')
-				else:
-					print('{}'.format("not valid form"))
-					print(form)
-					print(form.is_valid)
 					
-				if itemCreationFormset.is_valid():
+				#itemCreationFormset = ItemFormSet(request.POST, prefix='item')
+				'''####if itemCreationFormset.is_valid():
 					for item in itemCreationFormset:
 						if item.has_changed():
 							itemName = item.cleaned_data["itemName"]
@@ -394,23 +391,34 @@ def edit(request,groupID):
 							print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 							newItem = Item(eventID=groupID, name=itemName, amount=itemAmount)
 							newItem.save()
+					print("test")
+					print(newItem)
+					return HttpResponseRedirect('/landingPage')####'''
+				if newItem.is_valid():
+					itemName = newItem.cleaned_data["itemName"]
+					itemAmount = newItem.cleaned_data["amount"]
+					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
+					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
+					nnewItem.save()
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
 					'form': form,
-					'itemCreationFormset': itemCreationFormset,
+					'newItem': newItem,
+					#'itemCreationFormset': itemCreationFormset,
 				}
 				return render(request, 'editEvent.html', mapping)
 			else:
 					##inviteToEventFormset = EmailFormSet(prefix='invitee')
-				itemCreationFormset = ItemFormSet(prefix='item')
+				#itemCreationFormset = ItemFormSet(prefix='item')
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
 					'form': form,
-					'itemCreationFormset': itemCreationFormset,
+					'newItem': newItem,
+					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
 				
