@@ -29,5 +29,6 @@ urlpatterns = [
 	url(r'^register/$',views.register, name='registrationPage'),
     url(r'^userLogin/$',views.userLogin,  name='userLogin'),
     url(r'^logout/$',views.userLogout, name='logout'),
-	url(r'^event/(\w{12})$',views.edit,name = 'eventHome'),
+	url(r'^event/(\w{12})$',views.eventHomePageView,name = 'eventHome'),
+	url(r'^event/(\w{12})/edit$', views.edit, name='eventEdit'),
 ]

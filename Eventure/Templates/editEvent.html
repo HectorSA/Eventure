@@ -59,6 +59,17 @@
                     </div>
 
                 {%  endfor %}
+            <h2>Who's invited</h2>
+                {% for attendee in invited%}
+                    <div class="media">
+                        <!---<img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">-->
+                        <div class="media-body">
+                            <h5 class="mt-0">{{attendee}}</h5>
+                        </div>
+
+                    </div>
+
+                {%  endfor %}
             <button type="button" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-plus"></span> Invite More People
             </button>
@@ -66,7 +77,7 @@
         <div id ="bringing">
             <h4>Your Items Requested</h4>
             {% for item in items %}
-                <p>{{ item.name }}</p>
+                <p>{{ item.name }} {{ item.amount }}</p>
             {% endfor %}
 
             <!-- Button trigger modal -->
@@ -101,7 +112,7 @@
         </div>
     </div>
 
-    <div id="footer"><p>Copyright @Eventure</p></div>
+    <div id="footer"><p></p></div>
 
 </form>
 {% endblock %}

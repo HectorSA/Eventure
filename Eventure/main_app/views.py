@@ -340,22 +340,31 @@ def landingPageView(request):
 
 def eventHomePageView(request,groupID):
 	print('test')
-
-	if request.method == 'GET':
-		currentEvent = EventInfo.objects.get(id=groupID)
-		guests = Attendee.objects.filter(eventID=groupID,RSVPStatus=3)
-		items = Item.objects.filter(eventID=groupID)
-		print(currentEvent)
-		print(guests)
-		print(items)
-		mapping = {
-			'currentEvent' : currentEvent,
-			'guests' : guests,
-			'items' : items,
-
-		}
-
-	return render(request, 'eventHomePage.html', mapping)
+	
+	instance = EventInfo.objects.get(id=groupID)
+	currentEvent = EventInfo.objects.get(id=groupID)
+	guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+	items = Item.objects.filter(eventID=groupID)
+	
+	mapping = {
+		'currentEvent': currentEvent,
+		'guests': guests,
+		'items': items,
+		# 'itemCreationFormset': itemCreationFormset,
+	}
+	print(currentEvent.type)
+	if request.user.is_authenticated(): #if they are a user
+		currentUser = findUser(request.user.id)
+		print(currentUser)
+		if currentUser == instance.userProfile: #if they are the host
+			return render(request, 'hostEventHomePage.html', mapping)
+		elif currentEvent.type == False:
+			return render(request, 'eventHomePage.html', mapping)
+	elif currentEvent.type == False:
+		return render(request, 'eventHomePage.html', mapping)
+	else:
+		print(currentEvent.type)
+		return render(request,'thisIsPrivate.html')
 
 
 def edit(request,groupID):
@@ -367,8 +376,10 @@ def edit(request,groupID):
 		
 		if currentUser == instance.userProfile:
 			currentEvent = EventInfo.objects.get(id=groupID)
+			print(currentEvent.type)
 			guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
 			items = Item.objects.filter(eventID=groupID)
+			invited = Attendee.objects.filter(eventID=groupID)
 			ItemFormSet = formset_factory(ItemForm)
 			newItem = ItemForm(request.POST)
 			
@@ -406,6 +417,7 @@ def edit(request,groupID):
 					'items': items,
 					'form': form,
 					'newItem': newItem,
+					'invited': invited,
 					#'itemCreationFormset': itemCreationFormset,
 				}
 				return render(request, 'editEvent.html', mapping)
@@ -418,6 +430,7 @@ def edit(request,groupID):
 					'items': items,
 					'form': form,
 					'newItem': newItem,
+					'invited': invited,
 					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
