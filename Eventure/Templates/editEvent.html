@@ -10,7 +10,9 @@
 </head>
 <body>
 
-</body>
+
+
+<h3>Your Event</h3>
 <form enctype="multipart/form-data" method="POST" id="edit">
     {% csrf_token %}
     <div class="container" id="wrap1">
@@ -21,8 +23,7 @@
                     </a>
                 </div>
             <p>{{ form.eventPhoto }}</p>
-            <p>Hosted by {{ currentEvent.userProfile}}</p>
-            <button type="button" class="btn btn-info btn-lg">Chip In</button>
+
 
         </div>
         <div id="info" class="container" style="float:left">
@@ -34,7 +35,7 @@
             <p>{{ form.type }}</p>
         </div>
         <div id="buttonStuff" style="float:left">
-            <h3>Want to attend?</h3>
+            <h3>Save Your Changes</h3>
             <input type="submit" value="Save Changes" class="btn btn-info">
         </div>
     </div>
@@ -53,22 +54,53 @@
                         <!---<img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">-->
                         <div class="media-body">
                             <h5 class="mt-0">{{guest.attendeeName}}</h5>
-
-                            {% for item in guest.items.all %}
-                               <!--- <li>{{ item.name }}</li>-->
-                            {% endfor %}
                         </div>
+
                     </div>
 
                 {%  endfor %}
-
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-plus"></span> Invite More People
+            </button>
         </div>
         <div id ="bringing">
-            <h4>What to bring</h4>
+            <h4>Your Items Requested</h4>
             {% for item in items %}
                 <p>{{ item.name }}</p>
-
             {% endfor %}
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                <span class="glyphicon glyphicon-plus"></span> Add Item
+            </button>
+
+            <!-- Modal -->
+            <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div id="items-form-container" class="itemTable">
+                          {% for items in itemCreationFormset %}
+                             <div id="item-{{ forloop.counter0 }}" class="itemTable ">
+                                {{ items }}
+                            </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Save Changes" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+            </div>
+
         </div>
     </div>
 
@@ -76,3 +108,4 @@
 
 </form>
 {% endblock %}
+</body>
