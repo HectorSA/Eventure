@@ -11,11 +11,12 @@
 <body>
 
 </body>
-<form enctype="multipart/form-data" method="POST" id="SigningUp">
+<form enctype="multipart/form-data" method="POST" id="edit">
+    {% csrf_token %}
     <div class="container" id="wrap1">
         <div id="photo" class="container" style="float:left">
                 <div >
-                    <a target="_blank" href="{{currentEvent.eventPhoto.url}}">
+                    <a target="_blank" href="{{form.eventPhoto.url}}">
                         <img class ="img-fluid" id = "eventPhoto" src ="{{currentEvent.eventPhoto.url}}">
                     </a>
                 </div>
@@ -24,14 +25,15 @@
 
         </div>
         <div id="info" class="container" style="float:left">
-            <h2>{{ currentEvent.name }}</h2>
-            <p>Location: {{ currentEvent.location}}</p>
-            <p>Date: {{ currentEvent.date }}</p>
-            <p>Time: {{ currentEvent.time }}</p>
+            <h2>{{ form.name }}</h2>
+            <p id="location">Location: {{ form.location }}</p>
+            <p id="date">Date: {{ form.date }}</p>
+            <p id="time">Time: {{ form.time }}</p>
+            <p id="category">Category: {{ form.eventCategory }}</p>
         </div>
         <div id="buttonStuff" style="float:left">
             <h3>Want to attend?</h3>
-            <button type="button" class="btn btn-primary btn-lg">Save</button>
+            <input type="submit" value="Save Changes" class="btn btn-info">
         </div>
     </div>
 
@@ -39,7 +41,7 @@
     <div class="container" id="wrap" style="position: relative">
         <div class="container" id="eventContent" style="float:left">
             <h4>Description</h4>
-            <p>{{ currentEvent.description }}</p>
+            <p id="description">{{ form.description }}</p>
         </div>
         <div id = "guests" style="overflow: scroll; float: right">
             <h2>Who's Going</h2>

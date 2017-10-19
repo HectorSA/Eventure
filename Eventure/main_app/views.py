@@ -365,13 +365,24 @@ def edit(request,groupID):
 		currentUser = findUser(request.user.id)
 		print(currentUser)
 		print(instance.userProfile)
+		
 		if currentUser == instance.userProfile:
-			print(request.user.id)
-			form = CreateEventForm(request.POST or None, instance=instance)
-			if form.is_valid():
-				form.save()
-				return redirect('next_view')
-			return render(request, 'editEvent.html', {'form': form})
+				currentEvent = EventInfo.objects.get(id=groupID)
+				guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
+				items = Item.objects.filter(eventID=groupID)
+				print(request.user.id)
+				form = CreateEventForm(request.POST or None, instance=instance)
+				mapping = {
+					'currentEvent': currentEvent,
+					'guests': guests,
+					'items': items,
+					'form' : form,
+				}
+				if form.is_valid():
+					form.save()
+					print({}.format("valid form"))
+					return HttpResponseRedirect('/')
+				return render(request, 'editEvent.html', mapping)
 		else:
 			currentEvent = EventInfo.objects.get(id=groupID)
 			guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
