@@ -20,6 +20,7 @@
                         <img class ="img-fluid" id = "eventPhoto" src ="{{currentEvent.eventPhoto.url}}">
                     </a>
                 </div>
+            <p>{{ form.eventPhoto }}</p>
             <p>Hosted by {{ currentEvent.userProfile}}</p>
             <button type="button" class="btn btn-info btn-lg">Chip In</button>
 
@@ -30,6 +31,7 @@
             <p id="date">Date: {{ form.date }}</p>
             <p id="time">Time: {{ form.time }}</p>
             <p id="category">Category: {{ form.eventCategory }}</p>
+            <p>{{ form.type }}</p>
         </div>
         <div id="buttonStuff" style="float:left">
             <h3>Want to attend?</h3>

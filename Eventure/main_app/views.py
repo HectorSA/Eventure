@@ -370,17 +370,26 @@ def edit(request,groupID):
 				guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
 				items = Item.objects.filter(eventID=groupID)
 				print(request.user.id)
-				form = CreateEventForm(request.POST or None, instance=instance)
+				print(instance)
+				form = CreateEventForm(request.POST or None, request.FILES or None, instance=instance)
+				
+				
+				if request.method == 'POST':
+					if form.is_valid():
+						form.save()
+						print('{}'.format("valid form"))
+						return HttpResponseRedirect('/landingPage')
+					else:
+						print('{}'.format("not valid form"))
+						print(form)
+						print(form.is_valid)
+						
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
-					'form' : form,
+					'form': form,
 				}
-				if form.is_valid():
-					form.save()
-					print({}.format("valid form"))
-					return HttpResponseRedirect('/')
 				return render(request, 'editEvent.html', mapping)
 		else:
 			currentEvent = EventInfo.objects.get(id=groupID)
