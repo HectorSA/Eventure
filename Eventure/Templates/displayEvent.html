@@ -11,9 +11,6 @@
 <body>
 </body>
 <!-- http://127.0.0.1:8000/event/11112222333300000000 -->
-{%if user.is_authenticated%}
-{%endif%}
-{%if not user.is_authenticated%}
 {%for currentEvent in currentEvent%}
 <div class="container" id="wrap1">
     <div id="photo" class="container" style="float:left">
@@ -62,7 +59,7 @@
             </div>
         {%  endfor %}
     </div>
-    <div id ="bringing">
+    <div id ="bringing" style="position: relative">
         <h4>What to bring</h4>
         <select name="{{ item.name }}" size="5" multiple>
         {% for item in items %}
@@ -73,8 +70,5 @@
         </select>
     </div>
 </div>
-
-
 {%endfor%}
-{%endif%}
 {% endblock %}

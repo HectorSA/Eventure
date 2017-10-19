@@ -74,6 +74,9 @@ def register(request):
 
 	return render(request, 'registrationPage.html', mapping)
 
+def displayEventForExistentUser(request,groupID, userID):
+	currentEvent = EventInfo.objects.filter(id=groupID)
+	user = UserProfile.objects.filter(id=request.user.id)
 
 # Used to display an event from a URL given to anon users from an email
 def displayEvent(request, groupID, userID):
@@ -96,13 +99,8 @@ def displayEvent(request, groupID, userID):
 					'items':items,
 				}
 				return render(request, 'displayEvent.html', mapping)
-			userID = findUser(request.user.id)
-			if(userID.is_valid()):
-				mapping = {
-					'userID': userID,
-					'currentEvent':currentEvent
-				}
-				return render(request, 'displayEvent.html',mapping)
+			else:
+				pass
 	elif(request.method == 'POST'):
 		print(request.method)
 		if(attendee is not None):
@@ -315,7 +313,7 @@ def landingPageView(request):
 
 def eventHomePageView(request,groupID):
 	print('test')
-	
+
 	if request.method == 'GET':
 		currentEvent = EventInfo.objects.get(id=groupID)
 		guests = Attendee.objects.filter(eventID=groupID,RSVPStatus=3)
@@ -327,7 +325,7 @@ def eventHomePageView(request,groupID):
 			'currentEvent' : currentEvent,
 			'guests' : guests,
 			'items' : items,
-			
+
 		}
-	
+
 	return render(request, 'eventHomePage.html', mapping)
