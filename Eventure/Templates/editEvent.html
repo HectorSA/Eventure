@@ -1,0 +1,76 @@
+{% extends "Base.html" %}
+{% load staticfiles %}
+
+{% block body_block %}
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your event</title>
+    <link rel="stylesheet" href="{% static 'css/eventHomePage.css' %}"/>
+</head>
+<body>
+
+</body>
+<form enctype="multipart/form-data" method="POST" id="edit">
+    {% csrf_token %}
+    <div class="container" id="wrap1">
+        <div id="photo" class="container" style="float:left">
+                <div >
+                    <a target="_blank" href="{{form.eventPhoto.url}}">
+                        <img class ="img-fluid" id = "eventPhoto" src ="{{currentEvent.eventPhoto.url}}">
+                    </a>
+                </div>
+            <p>Hosted by {{ currentEvent.userProfile}}</p>
+            <button type="button" class="btn btn-info btn-lg">Chip In</button>
+
+        </div>
+        <div id="info" class="container" style="float:left">
+            <h2>{{ form.name }}</h2>
+            <p id="location">Location: {{ form.location }}</p>
+            <p id="date">Date: {{ form.date }}</p>
+            <p id="time">Time: {{ form.time }}</p>
+            <p id="category">Category: {{ form.eventCategory }}</p>
+        </div>
+        <div id="buttonStuff" style="float:left">
+            <h3>Want to attend?</h3>
+            <input type="submit" value="Save Changes" class="btn btn-info">
+        </div>
+    </div>
+
+
+    <div class="container" id="wrap" style="position: relative">
+        <div class="container" id="eventContent" style="float:left">
+            <h4>Description</h4>
+            <p id="description">{{ form.description }}</p>
+        </div>
+        <div id = "guests" style="overflow: scroll; float: right">
+            <h2>Who's Going</h2>
+
+                {% for guest in guests %}
+                    <div class="media">
+                        <!---<img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">-->
+                        <div class="media-body">
+                            <h5 class="mt-0">{{guest.attendeeName}}</h5>
+
+                            {% for item in guest.items.all %}
+                               <!--- <li>{{ item.name }}</li>-->
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                {%  endfor %}
+
+        </div>
+        <div id ="bringing">
+            <h4>What to bring</h4>
+            {% for item in items %}
+                <p>{{ item.name }}</p>
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="footer"><p>Copyright @Eventure</p></div>
+
+</form>
+{% endblock %}

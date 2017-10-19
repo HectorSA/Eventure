@@ -416,5 +416,9 @@ def edit(request,groupID):
 
 
 		return render(request, 'eventHomePage.html', mapping)
+<<<<<<< HEAD
+	return HttpResponseRedirect('/')
+>>>>>>> 5b80c75c1820d990ba5ce548b0164b29e0ab96e0
+=======
 	return HttpResponseRedirect('/')
 >>>>>>> 5b80c75c1820d990ba5ce548b0164b29e0ab96e0

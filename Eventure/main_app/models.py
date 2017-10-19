@@ -18,6 +18,33 @@ class UserProfile(models.Model):
 		return self.firstName + ' ' + self.lastName
 
 class EventInfo(models.Model):
+	NONE = 0
+	PARTY = 1
+	EDUCATION = 2
+	MUSIC = 3
+	FOODDRINK = 4
+	MOVIE = 5
+	ARTS = 6
+	TECH = 7
+	HEALTH = 8
+	OUTDOOR = 9
+	SPORTS = 10
+	
+	EVENTCATEGORY = (
+		(NONE,"Misc"),
+		(PARTY, "Party"),
+		(EDUCATION, "Education"),
+		(MUSIC, "Music"),
+		(FOODDRINK, "Food and Drink"),
+		(MOVIE, "Movies"),
+		(ARTS, "Arts"),
+		(TECH, "Technology"),
+		(HEALTH, "Health"),
+		(OUTDOOR, "Out Doors"),
+		(SPORTS, "Sports")
+	
+	)
+	
 	id = models.CharField(primary_key = True, max_length = 12, default = '')
 	userProfile = models.ForeignKey(UserProfile, null = True)
 	type = models.BooleanField(default = False)  #auto-set to public
@@ -28,6 +55,7 @@ class EventInfo(models.Model):
 	description = models.TextField()
 	eventPhoto = models.ImageField(upload_to = 'event_photos', blank = True, default = None
 	                               , verbose_name='picture')
+	eventCategory = models.IntegerField(choices=EVENTCATEGORY, blank=True, null=True)
 
 
 	def __str__(self):
@@ -46,12 +74,7 @@ class Item(models.Model):
 	def __str__(self):
 		return '{} x {}'.format(self.name, self.amount)
 
-
-class itemBeingTaken(models.Model):
-	itemBeingBroughtID = models.AutoField(primary_key=True)
-	eventID = models.ForeignKey(EventInfo)
-	itemLinkID = models.ForeignKey(Item)
-
+	
 class Attendee(models.Model):
 	NOTATTENDING = 1
 	MAYBE = 2
@@ -68,10 +91,19 @@ class Attendee(models.Model):
 	attendeeID = models.CharField(max_length = 8, default = '')
 	userAttendeeID = models.IntegerField(null = True)
 	eventID = models.ForeignKey(EventInfo, null = True)
-	items = models.ManyToManyField(Item)
 	email = models.EmailField(max_length=256, default='')
 	RSVPStatus = models.IntegerField(choices=RSVPSTATUS, blank=True, null=True)
 	
 	def __str__(self):
 		return '{}'.format(self.attendeeName)
-		
+
+
+class TakenItem(models.Model):
+	itemBeingBroughtID = models.AutoField(primary_key=True)
+	attendeeID = models.ForeignKey(Attendee)
+	itemLinkID = models.ForeignKey(Item)
+	quantity = models.PositiveIntegerField(default=0)
+	
+	def __str__(self):
+		return '{} x {} is being brought by {} '.format(self.itemBeingBroughtID.name,
+		                                                self.quantity, self.attendeeID.attendeeName)
