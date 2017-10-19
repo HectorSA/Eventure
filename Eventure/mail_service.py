@@ -1,5 +1,4 @@
 import smtplib
-from smtplib import SMTPException
 #test receiver passed into mail_service
 receivertest = 'juanromero2011@yahoo.com'
 def mail_service(receiver):
@@ -21,9 +20,9 @@ def mail_service(receiver):
 
    message = """From: %s\nTo: %s\nSubject: %s\n\n%s
        """ % ("pyCharm~ "+MY_ADDRESS,     #Sender
-              receiver,       #Receiver
-              "TEST SUBJECT", #Subject
-              "BODY TEST")    #Message
+              receiver,                   #Receiver
+              "TEST SUBJECT",             #Subject
+              "BODY TEST")                #Message
 
    try:
       mailServer = smtplib.SMTP('smtp.gmail.com', 587)
