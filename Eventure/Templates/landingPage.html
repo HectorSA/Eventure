@@ -115,7 +115,7 @@
                         {% for attendee in attendees %}
                         <div class="card card-inverse card-info">
                             {% if attendee.eventID.eventPhoto %}
-                            <img class="card-img-top" src="{{attendee.eventID.eventPhoto}}">
+                            <img class="card-img-top" src="{{attendee.eventID.eventPhoto.url}}">
                             {% else %}
                             {% if attendee.eventID.eventPhoto == 0 %}
                             <img class="card-img-top" src="{{media_url}}nothingEventGeneric.jpg">
