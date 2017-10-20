@@ -413,6 +413,8 @@ def edit(request,groupID):
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
+					newurl = '/event/' + currentEvent.id
+					return HttpResponseRedirect(newurl)
 					
 					
 				#itemCreationFormset = ItemFormSet(request.POST, prefix='item')
@@ -433,10 +435,7 @@ def edit(request,groupID):
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
 					nnewItem.save()'''
-				if form.is_valid():
-					form.save()
-					print('{}'.format("valid form"))
-					return HttpResponseRedirect('/')
+				
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
