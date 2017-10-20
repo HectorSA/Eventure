@@ -24,12 +24,9 @@ from django.views import View
 def anonymousUserMapping(attendee, eventInfo, eventId):
 	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
 	address = getParsedEventAddr(eventInfo.id)
-	print(eventInfo.id)
-	guests = Attendee.objects.filter(eventID=eventInfo.id).order_by("attendeeName")
-	print(guests)
-	for guest in Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3):
-		print("guestss ",guest )
+	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
 	items = Item.objects.filter(eventID=eventInfo.id)
+	print(attendee.RSVPStatus)
 	return {
 		'attendee': attendee,
 		'eventInfo': eventInfo,
@@ -43,35 +40,31 @@ def registeredUserMapping(request, eventInfo):
 	mapping = {}
 	user = User.objects.get(id = request.user.id)
 	address = getParsedEventAddr(eventInfo.id)
-	print(user.id, user.email , address, eventInfo.id)
-	guests = Attendee.objects.filter(eventID=eventId, RSVPStatus=3)
+	guests = Attendee.objects.filter(eventID=eventInfo.id,RSVPStatus=3).order_by("attendeeName")
 	items = Item.objects.filter(eventID=eventInfo.id)
-	if(user is not None):
-		attendee = Attendee
-		guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
-		for guest in guests:
-			if(guest.email is request.user.email):
-				attendee = guest
-		print("rsvp status")
-		print(attendee.RSVPStatus)
-		rsvpStatus = attendee.RSVPStatus
-		items = Item.objects.filter(eventID=eventInfo.id)
-		mapping = {
-			'eventInfo':eventInfo,
-			'rspvStatus':rsvpStatus,
-			'address': address,
-			'guests': guests,
-			'items': items,
-		}
+	attendee = Attendee
+	for guest in guests:
+		if(guest.email is request.user.email):
+			attendee = guest
+	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
+	items = Item.objects.filter(eventID=eventInfo.id)
+	mapping = {
+		'eventInfo':eventInfo,
+		'rspvStatus':rsvpStatus,
+		'address': address,
+		'guests': guests,
+		'items': items,
+	}
 	return mapping
 
 def setRsvpStatus(request, attendee):
 	if request.POST.get("ATTENDING"):
-		attendee.RSVPStatus = 3
+		setattr(attendee, "RSVPStatus", 3)
 	elif request.POST.get("MAYBE"):
-		attendee.RSVPStatus = 2
+		setattr(attendee, "RSVPStatus", 2)
 	elif request.POST.get("NOTATTENDING"):
-		attendee.RSVPStatus = 1
+		setattr(attendee, "RSVPStatus", 1)
+	attendee.save()
 
 
 class attendeeEventDisplay(View):
@@ -83,6 +76,7 @@ class attendeeEventDisplay(View):
 	attendeeId = ''
 	def get(self,request, *args):
 		argList = list(args)
+		print(len(argList))
 		if(len(argList) >= 2):
 			self.groupId = argList[0]
 			self.attendeeId = argList[1]
@@ -93,7 +87,7 @@ class attendeeEventDisplay(View):
 		elif(len(argList) == 1):
 			self.groupId = argList[0]
 			self.eventInfo = EventInfo.objects.get(id=self.groupId)
-			mapping = registeredUserMapping(request, self.eventInfo, )
+			mapping = registeredUserMapping(request, self.eventInfo)
 			return render(request, self.template_name, mapping)
 
 	def post(self, request, *args, **kwargs):
@@ -110,11 +104,12 @@ class attendeeEventDisplay(View):
 		groupId = args[0]
 		self.eventInfo = EventInfo.objects.get(id=groupId)
 		rsvpStatus = getRSVPStatus(getattr(self.attendee,"RSVPStatus"))
+		print(rsvpStatus)
 		guests = Attendee.objects.filter(eventID=groupId, RSVPStatus=3)
 		items = Item.objects.filter(eventID=groupId)
 		address = getParsedEventAddr(self.eventInfo.id)
 		mapping = {
-			'attendee': getattr(self.attendee, "attendeeName"),
+			'attendee': self.attendee,
 			'eventInfo': self.eventInfo,
 			'address': address,
 			'rsvpStatus': rsvpStatus,
@@ -208,7 +203,6 @@ def displayEvent(request, groupID, userID):
 	elif(request.method == 'POST'):
 		print(request.method)
 		if(attendee is not None):
-			choices = ['ATTENDING','MAYBE','NOTATTENDING']
 			if request.POST.get("ATTENDING"):
 				setattr(attendee,"RSVPStatus",3)
 			elif request.POST.get("MAYBE"):
