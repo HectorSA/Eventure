@@ -431,12 +431,14 @@ def edit(request,groupID):
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
 					nnewItem.save()
-					return HttpResponseRedirect('/')
+					newurl = '/event/' + currentEvent.id
+					return HttpResponseRedirect(newurl)
 				
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
-					return HttpResponseRedirect('/')
+					newurl = '/event/' + currentEvent.id
+					return HttpResponseRedirect(newurl)
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
@@ -460,8 +462,8 @@ def edit(request,groupID):
 					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
-		return HttpResponseRedirect('/')
-
+		return HttpResponseRedirect('')
+		
 	return HttpResponseRedirect('/')
 
 
