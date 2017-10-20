@@ -120,3 +120,11 @@ h5 {
     color: rgba(0, 0, 0, .87);
 }
 
+.container {
+	background-color:#cde364;
+	background-image: radial-gradient(#fff 10%, transparent 10%),
+	radial-gradient(#fff 10%, transparent 10%);
+	background-size: 30px 30px;
+	background-position: 0 0, 15px 15px;
+}
+
