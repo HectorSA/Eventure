@@ -22,56 +22,130 @@
 
         <!--/col-3-->
       <!-- <div class="col-sm-9" style="" contenteditable="false">-->
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>My Events</strong></div>
+        <div class="panel-body">
+            <div class='container'>
 
-            <div class="panel panel-default">
+             <div class='single-item'>
 
-               <div class="panel-heading"><strong>My Events</strong></div>
-                <div class="panel-body">
 
-                    <div class="card-group">
-                    {% for event in allEvents %}
-                    <div class="card" style="width: 20rem;">
-                         <img class="card-img-top" src="..." alt="Card image cap">
-                     <div class="card-block">
-                         <h4 class="card-title">{{event}}</h4>
-                         <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{currentUser}}</h6>
+        {% for event in allEvents %}
+
+<!---------ONE CARD------------------------>
+    <div>
+
+
+    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+
+                <div class="card card-inverse card-info">
+                    {% if event.eventPhoto %}
+                    <img class="card-img-top" src="{{event.eventPhoto.url}}">
+                    {% endif %}
+                    <div class="card-block">
+                        <h4 class="card-title">{{event}}</h4>
+                        <div class="card-text">{{currentUser}}</div>
+                        <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{currentUser}}</h6>
                             <p class="card-text">Date:{{event.date}}</p>
                             <p class="card-text">Time:{{event.time}}</p>
-
-                         <a href="#" class="btn btn-primary">More Info</a>
-
-                        </div>
-</div>
-                        {% endfor %}
                     </div>
-
+                    <div class="card-footer">
+                        <a href="event/{{event.id}}" class = "btn btn-info" role="button">View Event!</a>
                     </div>
-                {% endif %}
-                </div>
-
-
-
-            <div class="panel panel-default">
-                <div class="panel-heading"><strong>Attending Events</strong></div>
-                <div class="panel-body"> This is where the events im attending will go
-
                 </div>
             </div>
-            <div class="panel panel-default target">
-                <div class="panel-heading" contenteditable="false"><strong>Public Events</strong></div>
-                <div class="panel-body">Public Event Feed</div>
+
 
     </div>
-           <div class="panel panel-default">
-               <div class="panel-heading"><strong>Private Events</strong></div>
-                <div class="panel-body"> Private Event Feed
+<!---------ONE CARD---------------->
 
-                </div>
+
+
+
+
+   <!-- <div><h3>DUDE</h3></div>-->
+
+   <!-- <div><h3>WHERES</h3></div>-->
+
+
+
+   <!-- <div><h3>MY</h3></div>-->
+
+
+
+  <!--  <div><h3>CAR!</h3></div>-->
+
+
+
+   <!-- <div><h3>:)</h3></div>-->
+
+{% endfor %}
+  </div>
+
 </div>
+        </div>
+    </div>
 
-        <!--</div>-->
+{% endif %}
 
-<!--</div>-->
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Public Events</strong></div>
+        <div class="panel-body">
+        </div>
+    </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Private Events</strong></div>
+        <div class="panel-body">
+        </div>
+    </div>
+
+<script src="{% static 'scripts/slick.min.js' %}"></script>
+<script>
+    var $mainButton = $(".main-button"),
+    $closeButton = $(".close-button"),
+    $buttonWrapper = $(".button-wrapper"),
+    $ripple = $(".ripple"),
+    $layer = $(".layered-content");
+
+$mainButton.on("click", function(){
+    $ripple.addClass("rippling");
+    $buttonWrapper.addClass("clicked").delay(1500).queue(function(){
+        $layer.addClass("active");
+    });
+});
+
+$closeButton.on("click", function(){
+    $buttonWrapper.removeClass("clicked");
+    $ripple.removeClass("rippling");
+    $layer.removeClass("active");
+});
+
+$(document).ready(function(){
+
+    $(".single-item").slick({
+
+        infinite: false,
+        slidesToShow: 1,
+
+        dots : false,
+        autoplaySpeed: 2000
+
+
+});
+
+
+
+});
+
+</script>
+
+
+
+
+
+
 </body>
 
 {% endblock %}

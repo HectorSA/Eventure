@@ -372,8 +372,7 @@ def eventHomePageView(request,groupID):
 		# 'itemCreationFormset': itemCreationFormset,
 	}
 	print(currentEvent.type)
-	
-	if request.user.is_authenticated():#if they are a user
+	if request.user.is_authenticated():  # if they are a user
 		currentUser = findUser(request.user.id)
 		if currentUser == instance.userProfile:
 			print(currentUser)
@@ -381,12 +380,12 @@ def eventHomePageView(request,groupID):
 		elif currentEvent.type == False:
 			return render(request, 'eventHomePage.html', mapping)
 		else:
-			return render(request, 'thisIsPrivate.html')
+			print(currentEvent.type)
+			return render(request,'thisIsPrivate.html')
 	elif currentEvent.type == False:
 		return render(request, 'eventHomePage.html', mapping)
 	else:
-		print(currentEvent.type)
-		return render(request,'thisIsPrivate.html')
+		return render(request, 'thisIsPrivate.html')
 
 
 def edit(request,groupID):
@@ -428,12 +427,12 @@ def edit(request,groupID):
 					print("test")
 					print(newItem)
 					return HttpResponseRedirect('/landingPage')####'''
-				if newItem.is_valid():
+				'''if newItem.is_valid():
 					itemName = newItem.cleaned_data["itemName"]
 					itemAmount = newItem.cleaned_data["amount"]
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
-					nnewItem.save()
+					nnewItem.save()'''
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
