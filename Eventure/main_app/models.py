@@ -93,7 +93,7 @@ class Attendee(models.Model):
 	eventID = models.ForeignKey(EventInfo, null = True)
 	email = models.EmailField(max_length=256, default='')
 	RSVPStatus = models.IntegerField(choices=RSVPSTATUS, blank=True, null=True)
-
+	
 	def __str__(self):
 		return '{}'.format(self.attendeeName)
 

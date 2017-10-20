@@ -13,109 +13,15 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
+from datetime import date
+
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
 userIDLength = 8
 
 # Create your views here.
-from django.views import View
 
 
-def anonymousUserMapping(attendee, eventInfo):
-	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
-	address = getParsedEventAddr(eventInfo.id)
-	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
-	for guest in Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3):
-		print("guestss ",guest.attendeeName )
-	items = Item.objects.filter(eventID=eventInfo.id)
-	return {
-		'attendee': attendee,
-		'eventInfo': eventInfo,
-		'address': address,
-		'rsvpStatus': rsvpStatus,
-		'guests':guests,
-		'items': items,
-	}
-
-
-def registeredUserMapping(request, eventInfo):
-	mapping = {}
-	user = User.objects.get(id = request.user.id)
-	address = getParsedEventAddr(eventInfo.id)
-	print(user.id, user.email , address, eventInfo.id)
-	guests = [Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)]
-	for guest in guests:
-		print("\n\n\n\nguestss ",guest)
-	items = Item.objects.filter(eventID=eventInfo.id)
-	if(user is not None):
-		attendee = Attendee
-		guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
-		items = Item.objects.filter(eventID=eventInfo.id)
-		mapping = {
-			'eventInfo':eventInfo,
-			'address': address,
-			'guests': guests,
-			'items': items,
-		}
-	return mapping
-
-def setRsvpStatus(request, attendee):
-	choices = ['ATTENDING', 'MAYBE', 'NOTATTENDING']
-	if request.POST.get("ATTENDING"):
-		setattr(attendee, "RSVPStatus", 3)
-	elif request.POST.get("MAYBE"):
-		setattr(attendee, "RSVPStatus", 2)
-	elif request.POST.get("NOTATTENDING"):
-		setattr(attendee, "RSVPStatus", 1)
-
-class attendeeEventDisplay(View):
-	template_name = 'displayEvent.html'
-	userId = UserProfile
-	eventInfo = EventInfo
-	attendee = Attendee
-	groupId = ''
-	attendeeId = ''
-	def get(self,request, *args):
-		argList = list(args)
-		if(len(argList) >= 2):
-			self.groupId = argList[0]
-			self.attendeeId = argList[1]
-			self.eventInfo = EventInfo.objects.get(id=self.groupId)
-			self.attendee = Attendee.objects.get(attendeeID=self.attendeeId)
-			mapping = anonymousUserMapping(self.attendee,self.eventInfo)
-			return render(request, self.template_name, mapping)
-		elif(len(argList) == 1):
-			self.groupId = argList[0]
-			self.eventInfo = EventInfo.objects.get(id=self.groupId)
-			mapping = registeredUserMapping(request, self.eventInfo)
-			return render(request, self.template_name, mapping)
-
-	def post(self, request, *args, **kwargs):
-		argList = list(args)
-		if (len(argList) >= 2):
-			self.groupId = argList[0]
-			self.attendeeId = argList[1]
-			self.eventInfo = EventInfo.objects.get(id=self.groupId)
-			self.attendee = Attendee.objects.get(attendeeID=self.attendeeId)
-		else:
-			self.groupId = argList[0]
-			self.eventInfo = EventInfo.objects.get(id=self.groupId)
-		setRsvpStatus(request, self.attendee)
-		groupId = args[0]
-		self.eventInfo = EventInfo.objects.get(id=groupId)
-		rsvpStatus = getRSVPStatus(getattr(self.attendee,"RSVPStatus"))
-		guests = Attendee.objects.filter(eventID=groupId, RSVPStatus=3)
-		items = Item.objects.filter(eventID=groupId)
-		address = getParsedEventAddr(self.eventInfo.id)
-		mapping = {
-			'attendee': getattr(self.attendee, "attendeeName"),
-			'eventInfo': self.eventInfo,
-			'address': address,
-			'rsvpStatus': rsvpStatus,
-			'guests': guests,
-			'items': items,
-		}
-		return render(request, self.template_name, mapping)
 
 def register(request):
 	registered = False
@@ -220,29 +126,33 @@ def displayEvent(request, groupID, userID):
 			}
 			return render(request, 'displayEvent.html', mapping)
 
-
 def index(request):
 	return render(request, 'index.html', {})
 
 def newIndex(request):
-	if request.method == 'POST':
-
-		return render(request, 'newIndex.html', {})
+	if request.method == 'GET':
+		publicEvents = getAllPublicEvents()
+		print(publicEvents)
+		mapping = {
+			'publicEvents' : publicEvents,
+			'media_url' : settings.MEDIA_URL + 'event_photos/'
+		}
+		return render(request, 'newIndex.html', mapping)
 
 ################## /createEvent ###################
 def createEvent(request):
 	if not request.user.is_authenticated():
 		return	HttpResponseRedirect('/')
-
+	
 	EmailFormSet = formset_factory(EmailInviteeForm)
 	ItemFormSet = formset_factory(ItemForm)
-
+	
 	## This is the eventID that will be assigned to email invitees
 	eventID = 0
 	newEvent = None
 	if request.method == 'POST':
 		eventForm = CreateEventForm(request.POST,request.FILES)
-
+		
 		if eventForm.is_valid():
 			eventID = createAlphanumericSequence(groupIDLength)
 			creatingUser = findUser(request.user.id)
@@ -253,7 +163,7 @@ def createEvent(request):
 			time = eventForm.cleaned_data["time"]
 			description = eventForm.cleaned_data["description"]
 			eventCategory = eventForm.cleaned_data["eventCategory"]
-
+			
 			newEvent = EventInfo(id = eventID, userProfile = creatingUser, type = eventType,
 								 name = name, location = location, date = date,
 								 time = time, description = description,
@@ -261,7 +171,7 @@ def createEvent(request):
 			if 'eventPhoto' in request.FILES:
 				newEvent.eventPhoto = request.FILES['eventPhoto']
 			newEvent.save()
-
+			
 			print('***********************************')
 			print('{}{}'.format("Event: ", name))
 			print('{}{} {}'.format("\tEvent Creater: ", creatingUser.firstName, creatingUser.lastName))
@@ -272,7 +182,7 @@ def createEvent(request):
 			print('{}{}'.format("\tType: ", eventType))
 			print('{}{}'.format("\tCategory: ", newEvent.get_eventCategory_display()))
 			print('{}{}'.format("\tEventID: ", eventID))
-
+		
 		inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
 		if inviteToEventFormset.is_valid():
 			for invite in inviteToEventFormset:
@@ -291,14 +201,14 @@ def createEvent(request):
 					else:
 						print('{}{}{}{}{}'.format("\t", email, " : http://127.0.0.1:8000/event/", newEvent.id,
 						                          emailUserID))
-
-
+						
+					
 					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID,
 											   eventID = newEvent, email = email, RSVPStatus = 1,
 											   userAttendeeID = userAttendeeID)
-
+				
 					newEmailInvitee.save()
-
+		
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 		if itemCreationFormset.is_valid():
 			for item in itemCreationFormset:
@@ -308,7 +218,7 @@ def createEvent(request):
 					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
 					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
 					newItem.save()
-
+				
 		if eventForm.is_valid():
 			print('***********************************')
 			return HttpResponseRedirect('/landingPage')
@@ -349,9 +259,8 @@ def getParsedEventAddr(groupId):
 	return address
 
 ####################get public events ###################
-
-def getAllPublicEvents(groupID):
-	eventInfo = EventInfo.objects.filter(id=groupID)
+def getAllPublicEvents():
+	eventInfo = EventInfo.objects.filter(type=False).filter(date__gte=(date.today())).order_by('date')
 	return eventInfo
 
 ####################get RSVP status ###################
@@ -379,7 +288,7 @@ def findUserViaEmail(emailAddress):
 
 ################### findGroup ########################
 def findGroup(groupID):
-	eventInfo = EventInfo.objects.get(id = groupID)
+	eventInfo = EventInfo.objects.filter(id = groupID)
 	return eventInfo
 
 
@@ -451,12 +360,12 @@ def landingPageView(request):
 
 def eventHomePageView(request,groupID):
 	print('test')
-
+	
 	instance = EventInfo.objects.get(id=groupID)
 	currentEvent = EventInfo.objects.get(id=groupID)
 	guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
 	items = Item.objects.filter(eventID=groupID)
-
+	
 	mapping = {
 		'currentEvent': currentEvent,
 		'guests': guests,
@@ -464,18 +373,20 @@ def eventHomePageView(request,groupID):
 		# 'itemCreationFormset': itemCreationFormset,
 	}
 	print(currentEvent.type)
-	if request.user.is_authenticated(): #if they are a user
+	if request.user.is_authenticated():  # if they are a user
 		currentUser = findUser(request.user.id)
-		print(currentUser)
-		if currentUser == instance.userProfile: #if they are the host
+		if currentUser == instance.userProfile:
+			print(currentUser)
 			return render(request, 'hostEventHomePage.html', mapping)
 		elif currentEvent.type == False:
 			return render(request, 'eventHomePage.html', mapping)
+		else:
+			print(currentEvent.type)
+			return render(request,'thisIsPrivate.html')
 	elif currentEvent.type == False:
 		return render(request, 'eventHomePage.html', mapping)
 	else:
-		print(currentEvent.type)
-		return render(request,'thisIsPrivate.html')
+		return render(request, 'thisIsPrivate.html')
 
 
 def edit(request,groupID):
@@ -484,7 +395,7 @@ def edit(request,groupID):
 		currentUser = findUser(request.user.id)
 		print(currentUser)
 		print(instance.userProfile)
-
+		
 		if currentUser == instance.userProfile:
 			currentEvent = EventInfo.objects.get(id=groupID)
 			print(currentEvent.type)
@@ -493,18 +404,21 @@ def edit(request,groupID):
 			invited = Attendee.objects.filter(eventID=groupID)
 			ItemFormSet = formset_factory(ItemForm)
 			newItem = ItemForm(request.POST)
-
+			
 			print(request.user.id)
 			print(instance)
 			form = CreateEventForm(request.POST or None, request.FILES or None, instance=instance)
-
-
+				
+				
 			if request.method == 'POST':
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
-					return HttpResponseRedirect('/')
-
+					newurl = '/event/' + currentEvent.id
+					#test
+					return HttpResponseRedirect(newurl)
+					
+					
 				#itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 				'''####if itemCreationFormset.is_valid():
 					for item in itemCreationFormset:
@@ -523,12 +437,14 @@ def edit(request,groupID):
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
 					nnewItem.save()'''
+				
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
 					'form': form,
 					'invited': invited,
+					'newItem': newItem,
 					#'itemCreationFormset': itemCreationFormset,
 				}
 				return render(request, 'editEvent.html', mapping)
@@ -541,6 +457,7 @@ def edit(request,groupID):
 					'items': items,
 					'form': form,
 					'invited': invited,
+					'newItem': newItem,
 					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
