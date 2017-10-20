@@ -43,7 +43,8 @@ class CreateEventForm(forms.ModelForm):
 		model = EventInfo
 		fields = ('name','location','date','time','description','type','eventCategory','eventPhoto',)
 		labels = {
-			'name' : 'Event Name'
+			'name' : 'Event Name',
+			'eventCategory': 'Event Category'
 		}
 
 class userLoginForm(forms.Form):
