@@ -425,14 +425,14 @@ def edit(request,groupID):
 					print("test")
 					print(newItem)
 					return HttpResponseRedirect('/landingPage')####'''
-				if newItem.is_valid():
+				'''if newItem.is_valid():
 					itemName = newItem.cleaned_data["itemName"]
 					itemAmount = newItem.cleaned_data["amount"]
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
 					nnewItem.save()
 					newurl = '/event/' + currentEvent.id
-					return HttpResponseRedirect(newurl)
+					return HttpResponseRedirect(newurl)'''
 				
 				if form.is_valid():
 					form.save()
