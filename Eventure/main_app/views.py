@@ -427,6 +427,7 @@ def landingPageView(request):
 		print("helllo")
 		currentUser = findUser(request.user.id)
 		userID = currentUser.id
+		
 		print('***********************************')
 		print('{}{}'.format("\tDUserID: ", request.user.id))
 		print('{}{}'.format("\tUUserID: ", currentUser.id))
@@ -438,11 +439,19 @@ def landingPageView(request):
 
 
 		allEvents = EventInfo.objects.filter(userProfile_id=userID).order_by('date')
+		attendees = Attendee.objects.filter(userAttendeeID=userID)
+		print(userID)
+		print(attendees)
+		print(attendees)
+		for attendee in attendees:
+			print(attendee.eventID.name)
+		
 		print(allEvents)
 		mapping ={
 			'currentUser' : currentUser,
 			'allEvents': allEvents,
-			'media_url': settings.MEDIA_URL + 'event_photos/'
+			'media_url': settings.MEDIA_URL + 'event_photos/',
+			'attendees': attendees,
 		}
 
 
