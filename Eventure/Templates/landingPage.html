@@ -17,6 +17,7 @@
 <br>
         </div>
     </div>
+
     </div>
   <br>
 
@@ -24,20 +25,19 @@
       <!-- <div class="col-sm-9" style="" contenteditable="false">-->
 <div class="panel panel-default">
     <div class="panel-heading"><strong>My Events</strong></div>
-        <div class="panel-body">
             <div class='container'>
 
              <div class='single-item'>
 
 
-        {% for event in allEvents %}
+
 
 <!---------ONE CARD------------------------>
     <div>
 
 
     <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-
+                    {% for event in allEvents %}
                 <div class="card card-inverse card-info">
                     {% if event.eventPhoto %}
                     <img class="card-img-top" src="{{event.eventPhoto.url}}">
@@ -55,10 +55,15 @@
                 </div>
             </div>
 
-
+    {% if forloop.counter|divisibleby:4  and forloop.counter != allEvents.count %}
     </div>
 <!---------ONE CARD---------------->
-
+<div>
+                {% endif %}
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                    {% endfor %}
+                </div>
+</div>
 
 
 
@@ -79,14 +84,13 @@
 
    <!-- <div><h3>:)</h3></div>-->
 
-{% endfor %}
+
   </div>
 
 </div>
-        </div>
-    </div>
 
-{% endif %}
+    {% endif %}
+
 
 
     <div class="panel panel-default">
