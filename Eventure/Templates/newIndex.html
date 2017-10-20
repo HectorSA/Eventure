@@ -21,69 +21,80 @@
     <div>
 
 
-
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
     {% for event in publicEvents %}
-    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+
                 <div class="card card-inverse card-info">
-                    <img class="card-img-top" src="{{event.eventPhoto}}">
+
+
+
+
+
+
+
+
+
+
+
+
+                    {% if event.eventPhoto %}
+                       <img class="card-img-top" src="{{event.eventPhoto.url}}">
+                    {% else %}
+                        {% if event.eventCategory == 0 %}
+                            <img class="card-img-top" src="{{media_url}}nothingEventGeneric.jpg">
+                        {% elif event.eventCategory == 1 %}
+                            <img class="card-img-top" src="{{media_url}}partyEventGeneric.jpg">
+                        {% elif event.eventCategory == 2 %}
+                            <img class="card-img-top" src="{{media_url}}educationEventGeneric.jpg">
+                        {% elif event.eventCategory == 3 %}
+                            <img class="card-img-top" src="{{media_url}}musicEventGeneric.jpg">
+                        {% elif event.eventCategory == 4 %}
+                            <img class="card-img-top" src="{{media_url}}fooddrinkEventGeneric.jpg">
+                        {% elif event.eventCategory == 5 %}
+                            <img class="card-img-top" src="{{media_url}}moviesEventGeneric.jpg">
+                        {% elif event.eventCategory == 6 %}
+                            <img class="card-img-top" src="{{media_url}}artEventGeneric.jpg">
+                        {% elif event.eventCategory == 7 %}
+                            <img class="card-img-top" src="{{media_url}}technologyEventGeneric.jpg">
+                        {% elif event.eventCategory == 8 %}
+                            <img class="card-img-top" src="{{media_url}}healthEventGeneric.jpg">
+                        {% elif event.eventCategory == 9 %}
+                            <img class="card-img-top" src="{{media_url}}outdoorsEventGeneric.jpg">
+                        {% elif event.eventCategory == 10 %}
+                            <img class="card-img-top" src="{{media_url}}sportsEventGeneric.jpg">
+                        {% elif event.eventCategory == None %}
+                            <img class="card-img-top" src="{{media_url}}noneEventGeneric.jpg">
+                        {% endif %}
+                    {% endif %}
                     <div class="card-block">
                         <figure class="profile profile-inline">
-                            <img src="{{event.eventPhoto}}" class="profile-avatar" alt="">
+                            <!--<img src=}" class="profile-avatar" alt="">-->
                         </figure>
                         <h4 class="card-title">{{event.name}}</h4>
                         <div class="card-text">
-                            Going to be wilddd mannn!!!
+
+                            <p><b>Date : </b>{{event.date}}</p>
+                            <p><b>Time : </b>{{event.time}}</p>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-info btn-sm">Show event</button>
+
+                        <a href="event/{{event.id}}" class="btn btn-info btn-sm">View Event </a>
                     </div>
                 </div>
             </div>
 
+        {% if forloop.counter|divisibleby:4  and forloop.counter != publicEvents.count%}
+        </div>
+        <div>
+        {% endif %}
+         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
     {% endfor %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+         </div>
 
     </div>
 
 
-
-
-
-
-    <div><h3>2</h3></div>
-
-
-
-    <div><h3>3</h3></div>
-
-
-
-    <div><h3>4</h3></div>
-
-
-
-    <div><h3>5</h3></div>
-
-
-
-    <div><h3>6</h3></div>
 
 
 

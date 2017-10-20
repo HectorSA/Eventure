@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
+from datetime import date
+
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
 userIDLength = 8
@@ -132,7 +134,8 @@ def newIndex(request):
 		publicEvents = getAllPublicEvents()
 		print(publicEvents)
 		mapping = {
-		'publicEvents' : publicEvents
+			'publicEvents' : publicEvents,
+			'media_url' : settings.MEDIA_URL + 'event_photos/'
 		}
 		return render(request, 'newIndex.html', mapping)
 
@@ -257,7 +260,7 @@ def getParsedEventAddr(groupId):
 
 ####################get public events ###################
 def getAllPublicEvents():
-	eventInfo = EventInfo.objects.filter(type=False)
+	eventInfo = EventInfo.objects.filter(type=False).filter(date__gte=(date.today())).order_by('date')
 	return eventInfo
 
 ####################get RSVP status ###################
