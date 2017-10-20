@@ -102,6 +102,73 @@
 <div class="panel panel-default">
     <div class="panel-heading"><strong>Attending Events</strong></div>
     <div class="panel-body">
+        <div class='container'>
+        <div id="slickBoarder">
+            <div class='single-item'>
+
+
+<!---------ONE CARD------------------------>
+                <div>
+
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                        {% for attendee in attendees %}
+                        <div class="card card-inverse card-info">
+                            {% if attendee.eventID.eventPhoto %}
+                            <img class="card-img-top" src="{{attendee.eventID.eventPhoto.url}}">
+                            {% else %}
+                            {% if attendee.eventID.eventPhoto == 0 %}
+                            <img class="card-img-top" src="{{media_url}}nothingEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 1 %}
+                            <img class="card-img-top" src="{{media_url}}partyEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 2 %}
+                            <img class="card-img-top" src="{{media_url}}educationEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 3 %}
+                            <img class="card-img-top" src="{{media_url}}musicEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 4 %}
+                            <img class="card-img-top" src="{{media_url}}fooddrinkEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 5 %}
+                            <img class="card-img-top" src="{{media_url}}moviesEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 6 %}
+                            <img class="card-img-top" src="{{media_url}}artEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 7 %}
+                            <img class="card-img-top" src="{{media_url}}technologyEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 8 %}
+                            <img class="card-img-top" src="{{media_url}}healthEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 9 %}
+                            <img class="card-img-top" src="{{media_url}}outdoorsEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == 10 %}
+                            <img class="card-img-top" src="{{media_url}}sportsEventGeneric.jpg">
+                            {% elif attendee.eventID.eventPhoto == None %}
+                            <img class="card-img-top" src="{{media_url}}noneEventGeneric.jpg">
+                            {% endif %}
+                            {% endif %}
+                            <div class="card-block">
+                                <h4 class="card-title">{{attendee.eventID.name}}</h4>
+                                <div class="card-text">{{attendee.name}}</div>
+                                <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{attendee.eventID.userProfile}}</h6>
+                                <p class="card-text">Date:{{attendee.eventID.location}}</p>
+                                <p class="card-text">Time:{{attendee.eventID.time}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="event/{{attendee.eventID.id}}{{ attendee.attendeeID }}" class = "btn btn-info" role="button">View Event!</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if forloop.counter|divisibleby:4  and forloop.counter != allEvents.count %}
+                </div>
+                <!---------ONE CARD---------------->
+                <div>
+                    {% endif %}
+                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
     </div>
 </div>
 
