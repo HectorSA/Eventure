@@ -10,9 +10,10 @@
 </head>
 <body>
 
+    <div class="container" style="padding-left: 80%";>
+    <h3>Your Event <a href="{{ request.path}}edit" class="btn btn-info" role="button">edit</a></h3>
 
-    <h3>Your Event</h3>
-    <a href="{{ request.path}}edit" class="btn btn-info" role="button">edit</a>
+    </div>
     <div class="container" id="wrap1">
         <div id="photo" class="container" style="float:left">
                 {% if currentEvent.eventPhoto %}
