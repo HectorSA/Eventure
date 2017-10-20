@@ -54,6 +54,50 @@
                 </div>
             </div>
 
+
+
+
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+
+                <div class="card card-inverse card-info">
+
+                    <img class="card-img-top" src="https://github.com/HectorSA/Eventure/blob/master/Eventure/Templates/media/laloPizzaParty.jpg?raw=true">
+                    <div class="card-block">
+                        <h4 class="card-title">{{event}}</h4>
+                        <div class="card-text">{{currentUser}}</div>
+                        <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{currentUser}}</h6>
+                            <p class="card-text">Date:{{event.date}}</p>
+                            <p class="card-text">Time:{{event.time}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="" class = "btn btn-success" role="button">Check it out!</a>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
 <!---------ONE CARD---------------->
 
@@ -61,21 +105,21 @@
 
 
 
-    <div><h3>DUDE</h3></div>
+   <!-- <div><h3>DUDE</h3></div>-->
 
-    <div><h3>WHERES</h3></div>
-
-
-
-    <div><h3>MY</h3></div>
+   <!-- <div><h3>WHERES</h3></div>-->
 
 
 
-    <div><h3>CAR!</h3></div>
+   <!-- <div><h3>MY</h3></div>-->
 
 
 
-    <div><h3>:)</h3></div>
+  <!--  <div><h3>CAR!</h3></div>-->
+
+
+
+   <!-- <div><h3>:)</h3></div>-->
 
 {% endfor %}
   </div>
@@ -124,7 +168,7 @@ $(document).ready(function(){
 
     $(".single-item").slick({
 
-        infinite: true,
+        infinite: false,
         slidesToShow: 1,
 
         dots : false,
