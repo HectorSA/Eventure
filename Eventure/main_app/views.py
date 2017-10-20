@@ -406,7 +406,7 @@ def userLogin(request):
 			if user is not None:
 				if user.is_active:
 					login(request, user)
-					return render(request,'index.html')
+					return HttpResponseRedirect('/')				
 				else:
 					messages.info(request,'Sorry, this uses is not in our databse')
 					return redirect('userLogin')
