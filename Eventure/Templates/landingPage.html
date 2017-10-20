@@ -3,7 +3,7 @@
 
 {% block body_block %}
 {% if user.is_authenticated %}
-    <link rel="stylesheet" href="{% static 'css/newIndex.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/landingPage.css' %}"/>
 
 <body>
 <!--<hr class="">-->
@@ -23,90 +23,90 @@
   <br>
 
         <!--/col-3-->
-      <!-- <div class="col-sm-9" style="" contenteditable="false">-->
+<!-- <div class="col-sm-9" style="" contenteditable="false">-->
 
 <div class="panel panel-default">
-    <div class="panel-heading"><strong>My Events</strong></div>
-            <div class='container'>
-
-             <div class='single-item'>
+    <div class="panel-heading eventStorage"><strong>My Events</strong></div>
+    <div class='container'>
+        <div id="slickBoarder">
+            <div class='single-item'>
 
 
 <!---------ONE CARD------------------------>
-    <div>
+                <div>
 
 
-    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                    {% for event in allEvents %}
-                <div class="card card-inverse card-info">
-                    {% if event.eventPhoto %}
-                    <img class="card-img-top" src="{{event.eventPhoto.url}}">
-                        {% elif event in publicEvents %}
-                        {% if event.eventCategory == 0 %}
-                        <img class="card-img-top" src="{{media_url}}nothingEventGeneric.jpg">
-                        {% elif event.eventCategory == 1 %}
-                        <img class="card-img-top" src="{{media_url}}partyEventGeneric.jpg">
-                        {% elif event.eventCategory == 2 %}
-                        <img class="card-img-top" src="{{media_url}}educationEventGeneric.jpg">
-                        {% elif event.eventCategory == 3 %}
-                        <img class="card-img-top" src="{{media_url}}musicEventGeneric.jpg">
-                        {% elif event.eventCategory == 4 %}
-                        <img class="card-img-top" src="{{media_url}}fooddrinkEventGeneric.jpg">
-                        {% elif event.eventCategory == 5 %}
-                        <img class="card-img-top" src="{{media_url}}moviesEventGeneric.jpg">
-                        {% elif event.eventCategory == 6 %}
-                        <img class="card-img-top" src="{{media_url}}artEventGeneric.jpg">
-                        {% elif event.eventCategory == 7 %}
-                        <img class="card-img-top" src="{{media_url}}technologyEventGeneric.jpg">
-                        {% elif event.eventCategory == 8 %}
-                        <img class="card-img-top" src="{{media_url}}healthEventGeneric.jpg">
-                        {% elif event.eventCategory == 9 %}
-                        <img class="card-img-top" src="{{media_url}}outdoorsEventGeneric.jpg">
-                        {% elif event.eventCategory == 10 %}
-                        <img class="card-img-top" src="{{media_url}}sportsEventGeneric.jpg">
-                        {% elif event.eventCategory == None %}
-                        <img class="card-img-top" src="{{media_url}}noneEventGeneric.jpg">
-                        {% endif %}
-                        {% endif %}
-                    <div class="card-block">
-                        <h4 class="card-title">{{event}}</h4>
-                        <div class="card-text">{{currentUser}}</div>
-                        <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{currentUser}}</h6>
-                            <p class="card-text">Date:{{event.date}}</p>
-                            <p class="card-text">Time:{{event.time}}</p>
+                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                        {% for event in allEvents %}
+                        <div class="card card-inverse card-info">
+                            {% if event.eventPhoto %}
+                            <img class="card-img-top" src="{{event.eventPhoto.url}}">
+                            {% else %}
+                            {% if event.eventCategory == 0 %}
+                            <img class="card-img-top" src="{{media_url}}nothingEventGeneric.jpg">
+                            {% elif event.eventCategory == 1 %}
+                            <img class="card-img-top" src="{{media_url}}partyEventGeneric.jpg">
+                            {% elif event.eventCategory == 2 %}
+                            <img class="card-img-top" src="{{media_url}}educationEventGeneric.jpg">
+                            {% elif event.eventCategory == 3 %}
+                            <img class="card-img-top" src="{{media_url}}musicEventGeneric.jpg">
+                            {% elif event.eventCategory == 4 %}
+                            <img class="card-img-top" src="{{media_url}}fooddrinkEventGeneric.jpg">
+                            {% elif event.eventCategory == 5 %}
+                            <img class="card-img-top" src="{{media_url}}moviesEventGeneric.jpg">
+                            {% elif event.eventCategory == 6 %}
+                            <img class="card-img-top" src="{{media_url}}artEventGeneric.jpg">
+                            {% elif event.eventCategory == 7 %}
+                            <img class="card-img-top" src="{{media_url}}technologyEventGeneric.jpg">
+                            {% elif event.eventCategory == 8 %}
+                            <img class="card-img-top" src="{{media_url}}healthEventGeneric.jpg">
+                            {% elif event.eventCategory == 9 %}
+                            <img class="card-img-top" src="{{media_url}}outdoorsEventGeneric.jpg">
+                            {% elif event.eventCategory == 10 %}
+                            <img class="card-img-top" src="{{media_url}}sportsEventGeneric.jpg">
+                            {% elif event.eventCategory == None %}
+                            <img class="card-img-top" src="{{media_url}}noneEventGeneric.jpg">
+                            {% endif %}
+                            {% endif %}
+                            <div class="card-block">
+                                <h4 class="card-title">{{event}}</h4>
+                                <div class="card-text">{{currentUser}}</div>
+                                <h6 class="card-subtitle mb-2 text-muted"><strong>Host:</strong>{{currentUser}}</h6>
+                                <p class="card-text">Date:{{event.date}}</p>
+                                <p class="card-text">Time:{{event.time}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="event/{{event.id}}" class = "btn btn-info" role="button">View Event!</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <a href="event/{{event.id}}" class = "btn btn-info" role="button">View Event!</a>
+
+                    {% if forloop.counter|divisibleby:4  and forloop.counter != allEvents.count %}
+                </div>
+                <!---------ONE CARD---------------->
+                <div>
+                    {% endif %}
+                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                        {% endfor %}
                     </div>
                 </div>
+
             </div>
-
-    {% if forloop.counter|divisibleby:4  and forloop.counter != allEvents.count %}
-    </div>
-<!---------ONE CARD---------------->
-<div>
-                {% endif %}
-                <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                    {% endfor %}
-                </div>
-</div>
-
-  </div>
-
-</div>
-</div>
-
-
-
-
-    <div class="panel panel-default">
-        <div class="panel-heading"><strong>Attending Events</strong></div>
-        <div class="panel-body">
         </div>
     </div>
+</div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading"><strong>Upcoming Events</strong></div>
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Attending Events</strong></div>
+    <div class="panel-body">
+    </div>
+</div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Upcoming Events</strong></div>
         <div class="panel-body">
         </div>
     </div>
@@ -114,40 +114,37 @@
 <script src="{% static 'scripts/slick.min.js' %}"></script>
 <script>
     var $mainButton = $(".main-button"),
-    $closeButton = $(".close-button"),
-    $buttonWrapper = $(".button-wrapper"),
-    $ripple = $(".ripple"),
-    $layer = $(".layered-content");
+        $closeButton = $(".close-button"),
+        $buttonWrapper = $(".button-wrapper"),
+        $ripple = $(".ripple"),
+        $layer = $(".layered-content");
 
-$mainButton.on("click", function(){
-    $ripple.addClass("rippling");
-    $buttonWrapper.addClass("clicked").delay(1500).queue(function(){
-        $layer.addClass("active");
+    $mainButton.on("click", function(){
+        $ripple.addClass("rippling");
+        $buttonWrapper.addClass("clicked").delay(1500).queue(function(){
+            $layer.addClass("active");
+        });
     });
-});
 
-$closeButton.on("click", function(){
-    $buttonWrapper.removeClass("clicked");
-    $ripple.removeClass("rippling");
-    $layer.removeClass("active");
-});
+    $closeButton.on("click", function(){
+        $buttonWrapper.removeClass("clicked");
+        $ripple.removeClass("rippling");
+        $layer.removeClass("active");
+    });
 
-$(document).ready(function(){
+        $(document).ready(function(){
 
-    $(".single-item").slick({
+        $(".single-item").slick({
+            arrows: false,
+            infinite: true,
+            slidesToShow: 1,
+            dots : false,
+            autoplay: true,
+            autoplaySpeed: 7000
 
-        infinite: false,
-        slidesToShow: 1,
+        });
+    });
 
-        dots : false,
-        autoplaySpeed: 2000
-
-
-});
-
-
-
-});
 
 </script>
 

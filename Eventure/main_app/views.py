@@ -351,6 +351,7 @@ def landingPageView(request):
 		mapping ={
 			'currentUser' : currentUser,
 			'allEvents': allEvents,
+			'media_url': settings.MEDIA_URL + 'event_photos/'
 		}
 
 
