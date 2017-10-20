@@ -11,23 +11,24 @@
 <body>
 </body>
 <!-- http://127.0.0.1:8000/event/11112222333300000000 -->
-{%for currentEvent in currentEvent%}
 <div class="container" id="wrap1">
     <div id="photo" class="container" style="float:left">
+        {%if eventInfo.eventPhoto%}
         <div >
-            <a target="_blank" href="{{currentEvent.eventPhoto.url}}">
-                <img class ="img-fluid" id = "eventPhoto" src ="{{currentEvent.eventPhoto.url}}">
+            <a target="_blank" href="{{eventInfo.eventPhoto.url}}">
+                <img class ="img-fluid" id = "eventPhoto" src ="{{eventInfo.eventPhoto.url}}">
             </a>
         </div>
-            <p>Hosted by {{ currentEvent.userProfile}}</p>
+        {%endif%}
+            <p>Hosted by {{ eventInfo.userProfile}}</p>
             <button type="button" class="btn btn-info btn-lg">Chip In</button>
     </div>
     <div id="info" class="container" style="float:left; margin:auto">
-        <h2>{{ currentEvent.name }}</h2>
+        <h2>{{ eventInfo.name }}</h2>
         <p>You are currently {{rsvpStatus}}</p>
-        <p>Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{currentEvent.location}}</a></p>
-        <p>Date: {{ currentEvent.date }}</p>
-        <p>Time: {{ currentEvent.time }}</p>
+        <p>Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{eventInfo.location}}</a></p>
+        <p>Date: {{ eventInfo.date }}</p>
+        <p>Time: {{ eventInfo.time }}</p>
     </div>
     <div id="buttonStuff" style="float:left; margin:auto">
         <h3>Want to attend?</h3>
@@ -43,7 +44,7 @@
 <div class="container" id="wrap" style="position: relative">
     <div class="container" id="eventContent" style="float:left">
         <h4>Description</h4>
-        <p>{{ currentEvent.description }}</p>
+        <p>{{ eventInfo.description }}</p>
     </div>
     <div id = "guests" style="overflow: scroll; float: right">
         <h2>Who's Going</h2>
@@ -51,7 +52,7 @@
             <div class="media">
                 <!---<img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">-->
                 <div class="media-body">
-                    <h5 class="mt-0">{{guest.attendeeName}}</h5>
+                    <h5 class="mt-0">{{guest.attendeeID}}</h5>
                     {% for item in guest.items.all %}
                     <!--- <li>{{ item.name }}</li>-->
                     {% endfor %}
@@ -70,5 +71,4 @@
         </select>
     </div>
 </div>
-{%endfor%}
 {% endblock %}
