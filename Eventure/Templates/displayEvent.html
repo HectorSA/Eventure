@@ -62,13 +62,17 @@
     </div>
     <div id ="bringing" style="position: relative">
         <h4>What to bring</h4>
-        <select name="{{ item.name }}" size="5" multiple>
-        {% for item in items %}
-            <option>
-                {{ item.name }}
-            </option>
-        {% endfor %}
-        </select>
+        <form enctype="multipart/form-data" method="POST">
+        {%csrf_token%}
+            <select name="{{ item.name }}" size="5" multiple>
+                {% for item in items %}
+                <option>
+                    {{ item.name }}
+                </option>
+            {% endfor %}
+            </select>
+            <input type="submit" class="btn btn-primary btn-lg" id="rsvp_button"  style="position:relative" name="items.list" value="I bring it!" >
+        </form>
     </div>
 </div>
 {% endblock %}
