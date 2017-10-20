@@ -369,13 +369,10 @@ def eventHomePageView(request,groupID):
 		# 'itemCreationFormset': itemCreationFormset,
 	}
 	print(currentEvent.type)
-	if request.user.is_authenticated(): #if they are a user
-		currentUser = findUser(request.user.id)
+	currentUser = findUser(request.user.id)
+	if request.user.is_authenticated() and currentUser == instance.userProfile: #if they are a user
 		print(currentUser)
-		if currentUser == instance.userProfile: #if they are the host
-			return render(request, 'hostEventHomePage.html', mapping)
-		elif currentEvent.type == False:
-			return render(request, 'eventHomePage.html', mapping)
+		return render(request, 'hostEventHomePage.html', mapping)
 	elif currentEvent.type == False:
 		return render(request, 'eventHomePage.html', mapping)
 	else:
@@ -408,7 +405,7 @@ def edit(request,groupID):
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
-					return HttpResponseRedirect('/')
+					
 					
 				#itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 				'''####if itemCreationFormset.is_valid():
@@ -422,18 +419,23 @@ def edit(request,groupID):
 					print("test")
 					print(newItem)
 					return HttpResponseRedirect('/landingPage')####'''
-				'''if newItem.is_valid():
+				if newItem.is_valid():
 					itemName = newItem.cleaned_data["itemName"]
 					itemAmount = newItem.cleaned_data["amount"]
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
-					nnewItem.save()'''
+					nnewItem.save()
+				if form.is_valid():
+					form.save()
+					print('{}'.format("valid form"))
+					return HttpResponseRedirect('/')
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
 					'form': form,
 					'invited': invited,
+					'newItem': newItem,
 					#'itemCreationFormset': itemCreationFormset,
 				}
 				return render(request, 'editEvent.html', mapping)
@@ -446,6 +448,7 @@ def edit(request,groupID):
 					'items': items,
 					'form': form,
 					'invited': invited,
+					'newItem': newItem,
 					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
