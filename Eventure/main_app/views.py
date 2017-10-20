@@ -366,15 +366,20 @@ def eventHomePageView(request,groupID):
 		# 'itemCreationFormset': itemCreationFormset,
 	}
 	print(currentEvent.type)
-	currentUser = findUser(request.user.id)
-	if request.user.is_authenticated() and currentUser == instance.userProfile: #if they are a user
-		print(currentUser)
-		return render(request, 'hostEventHomePage.html', mapping)
+	if request.user.is_authenticated():  # if they are a user
+		currentUser = findUser(request.user.id)
+		if currentUser == instance.userProfile:
+			print(currentUser)
+			return render(request, 'hostEventHomePage.html', mapping)
+		elif currentEvent.type == False:
+			return render(request, 'eventHomePage.html', mapping)
+		else:
+			print(currentEvent.type)
+			return render(request,'thisIsPrivate.html')
 	elif currentEvent.type == False:
 		return render(request, 'eventHomePage.html', mapping)
 	else:
-		print(currentEvent.type)
-		return render(request,'thisIsPrivate.html')
+		return render(request, 'thisIsPrivate.html')
 
 
 def edit(request,groupID):
