@@ -44,8 +44,6 @@ def registeredUserMapping(request, eventInfo):
 	address = getParsedEventAddr(eventInfo.id)
 	print(user.id, user.email , address, eventInfo.id)
 	guests = [Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)]
-	for guest in guests:
-		print("\n\n\n\nguestss ",guest)
 	items = Item.objects.filter(eventID=eventInfo.id)
 	if(user is not None):
 		attendee = Attendee
