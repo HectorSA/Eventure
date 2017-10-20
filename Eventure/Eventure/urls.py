@@ -18,11 +18,11 @@ from django.contrib import admin
 from main_app import views
 from django.views.static import serve
 from Eventure import settings
-
+from main_app.views import attendeeEventDisplay
 urlpatterns = [
 	url(r'^$',views.newIndex,name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^event/(\w{12})(\w{8})$', views.displayEvent, name = 'DisplayEvent'),
+    url(r'^event/(\w{12})(\w{8})$', attendeeEventDisplay.as_view()),
 	url(r'^media/(?P<path>.*)$',serve , {'document_root': settings.MEDIA_ROOT, }),
     url(r'^createEvent$', views.createEvent, name = 'CreateEvent'),
 	url(r'^landingPage$', views.landingPageView, name = 'Home'),
