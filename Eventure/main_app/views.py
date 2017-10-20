@@ -128,13 +128,9 @@ def index(request):
 	return render(request, 'index.html', {})
 
 def newIndex(request):
-	if request.method == 'GET':
-		publicEvents = getAllPublicEvents()
-		print(publicEvents)
-		mapping = {
-		'publicEvents' : publicEvents
-		}
-		return render(request, 'newIndex.html', mapping)
+	if request.method == 'POST':
+	
+		return render(request, 'newIndex.html', {})
 
 ################## /createEvent ###################
 def createEvent(request):
@@ -256,8 +252,9 @@ def getParsedEventAddr(groupId):
 	return address
 
 ####################get public events ###################
-def getAllPublicEvents():
-	eventInfo = EventInfo.objects.filter(type=False)
+
+def getAllPublicEvents(groupID):
+	eventInfo = EventInfo.objects.filter(id=groupID)
 	return eventInfo
 
 ####################get RSVP status ###################
@@ -369,16 +366,10 @@ def eventHomePageView(request,groupID):
 		# 'itemCreationFormset': itemCreationFormset,
 	}
 	print(currentEvent.type)
-	
-	if request.user.is_authenticated():#if they are a user
-		currentUser = findUser(request.user.id)
-		if currentUser == instance.userProfile:
-			print(currentUser)
-			return render(request, 'hostEventHomePage.html', mapping)
-		elif currentEvent.type == False:
-			return render(request, 'eventHomePage.html', mapping)
-		else:
-			return render(request, 'thisIsPrivate.html')
+	currentUser = findUser(request.user.id)
+	if request.user.is_authenticated() and currentUser == instance.userProfile: #if they are a user
+		print(currentUser)
+		return render(request, 'hostEventHomePage.html', mapping)
 	elif currentEvent.type == False:
 		return render(request, 'eventHomePage.html', mapping)
 	else:
@@ -430,15 +421,11 @@ def edit(request,groupID):
 					itemAmount = newItem.cleaned_data["amount"]
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
-					nnewItem.save()
-					newurl = '/event/' + currentEvent.id
-					return HttpResponseRedirect(newurl)'''
-				
+					nnewItem.save()'''
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
-					newurl = '/event/' + currentEvent.id
-					return HttpResponseRedirect(newurl)
+					return HttpResponseRedirect('/')
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
@@ -462,8 +449,8 @@ def edit(request,groupID):
 					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
-		return HttpResponseRedirect('')
-		
+		return HttpResponseRedirect('/')
+
 	return HttpResponseRedirect('/')
 
 
