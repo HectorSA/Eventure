@@ -431,6 +431,8 @@ def edit(request,groupID):
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
 					nnewItem.save()
+					return HttpResponseRedirect('/')
+				
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
