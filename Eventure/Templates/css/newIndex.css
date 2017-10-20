@@ -9,7 +9,9 @@ h5 {
     line-height: 1.2857em;
     margin: 0;
 }
-
+.card , .card-inverse , .card-info{
+    background: floralwhite;
+}
 .card {
     font-size: 1em;
     overflow: hidden;
@@ -63,7 +65,6 @@ h5 {
     padding: .75em 1em;
     color: rgba(0, 0, 0, .4);
     border-top: 1px solid rgba(0, 0, 0, .05) !important;
-    background: #fff;
 }
 
 .card-inverse .btn {
@@ -121,9 +122,17 @@ h5 {
 }
 
 #slickBoarder {
-	border-radius: 25px;
+    border-radius: 25px;
     padding:0 10px 0 10px;
     border: 2px solid #73AD21;
+
+
+    background: #f46b45;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #eea849, #f46b45);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #eea849, #f46b45); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
 }
 
 .slick-slide {
@@ -131,7 +140,36 @@ h5 {
     outline: none;
 }
 
-#publicEventsLabel {
-    margin-left: 50px;
+
+
+body {
+
+
+    background: #c2e59c; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #c2e59c, #64b3f4); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #c2e59c, #64b3f4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+    height: 100vh;
+
 }
 
+#publicEventsLabel{
+    border-radius: 5px;
+    width: 100%;
+    padding-left: 20px;
+
+    font-size: 40px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    top: 50%;
+    margin-top: 10px;
+
+}
+.jumbotron {
+    margin-top: 20px;
+}
+
+.eventurePic{
+    width: 90%;
+}
