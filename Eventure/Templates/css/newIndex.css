@@ -120,8 +120,15 @@ h5 {
     color: rgba(0, 0, 0, .87);
 }
 
-.container {
+#slickBoarder {
 	border-radius: 25px;
+    padding:0 10px 0 10px;
     border: 2px solid #73AD21;
 }
+
+.slick-slide {
+
+    outline: none;
+}
+
 
