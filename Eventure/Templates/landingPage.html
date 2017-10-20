@@ -18,20 +18,18 @@
         </div>
     </div>
 </div>
-
+{% endif %}
 
   <br>
 
         <!--/col-3-->
       <!-- <div class="col-sm-9" style="" contenteditable="false">-->
-{% endif %}
+
 <div class="panel panel-default">
     <div class="panel-heading"><strong>My Events</strong></div>
             <div class='container'>
 
              <div class='single-item'>
-
-
 
 
 <!---------ONE CARD------------------------>
@@ -43,7 +41,33 @@
                 <div class="card card-inverse card-info">
                     {% if event.eventPhoto %}
                     <img class="card-img-top" src="{{event.eventPhoto.url}}">
-                    {% endif %}
+                        {% elif event in publicEvents %}
+                        {% if event.eventCategory == 0 %}
+                        <img class="card-img-top" src="{{media_url}}nothingEventGeneric.jpg">
+                        {% elif event.eventCategory == 1 %}
+                        <img class="card-img-top" src="{{media_url}}partyEventGeneric.jpg">
+                        {% elif event.eventCategory == 2 %}
+                        <img class="card-img-top" src="{{media_url}}educationEventGeneric.jpg">
+                        {% elif event.eventCategory == 3 %}
+                        <img class="card-img-top" src="{{media_url}}musicEventGeneric.jpg">
+                        {% elif event.eventCategory == 4 %}
+                        <img class="card-img-top" src="{{media_url}}fooddrinkEventGeneric.jpg">
+                        {% elif event.eventCategory == 5 %}
+                        <img class="card-img-top" src="{{media_url}}moviesEventGeneric.jpg">
+                        {% elif event.eventCategory == 6 %}
+                        <img class="card-img-top" src="{{media_url}}artEventGeneric.jpg">
+                        {% elif event.eventCategory == 7 %}
+                        <img class="card-img-top" src="{{media_url}}technologyEventGeneric.jpg">
+                        {% elif event.eventCategory == 8 %}
+                        <img class="card-img-top" src="{{media_url}}healthEventGeneric.jpg">
+                        {% elif event.eventCategory == 9 %}
+                        <img class="card-img-top" src="{{media_url}}outdoorsEventGeneric.jpg">
+                        {% elif event.eventCategory == 10 %}
+                        <img class="card-img-top" src="{{media_url}}sportsEventGeneric.jpg">
+                        {% elif event.eventCategory == None %}
+                        <img class="card-img-top" src="{{media_url}}noneEventGeneric.jpg">
+                        {% endif %}
+                        {% endif %}
                     <div class="card-block">
                         <h4 class="card-title">{{event}}</h4>
                         <div class="card-text">{{currentUser}}</div>
