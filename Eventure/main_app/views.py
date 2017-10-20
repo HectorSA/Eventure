@@ -408,6 +408,7 @@ def edit(request,groupID):
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
+					return HttpResponseRedirect('/')
 					
 				#itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 				'''####if itemCreationFormset.is_valid():
@@ -421,18 +422,17 @@ def edit(request,groupID):
 					print("test")
 					print(newItem)
 					return HttpResponseRedirect('/landingPage')####'''
-				if newItem.is_valid():
+				'''if newItem.is_valid():
 					itemName = newItem.cleaned_data["itemName"]
 					itemAmount = newItem.cleaned_data["amount"]
 					print('{}{}{}{}'.format("\tItem: ", itemName, " x ", itemAmount))
 					nnewItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
-					nnewItem.save()
+					nnewItem.save()'''
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
 					'form': form,
-					'newItem': newItem,
 					'invited': invited,
 					#'itemCreationFormset': itemCreationFormset,
 				}
@@ -445,43 +445,11 @@ def edit(request,groupID):
 					'guests': guests,
 					'items': items,
 					'form': form,
-					'newItem': newItem,
 					'invited': invited,
 					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
-				
-		else:
-			currentEvent = EventInfo.objects.get(id=groupID)
-			guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
-			items = Item.objects.filter(eventID=groupID)
-			print(currentEvent)
-			print(guests)
-			print(items)
-			mapping = {
-				'currentEvent': currentEvent,
-				'guests': guests,
-				'items': items,
-			}
-			
-		return render(request, 'eventHomePage.html', mapping)
-			
-	else:
-		
-		currentEvent = EventInfo.objects.get(id=groupID)
-		guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
-		items = Item.objects.filter(eventID=groupID)
-		print(currentEvent)
-		print(guests)
-		print(items)
-		mapping = {
-			'currentEvent': currentEvent,
-			'guests': guests,
-			'items': items,
-			}
-
-
-		return render(request, 'eventHomePage.html', mapping)
+		return HttpResponseRedirect('/')
 
 	return HttpResponseRedirect('/')
 
