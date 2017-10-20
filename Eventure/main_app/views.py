@@ -414,6 +414,7 @@ def edit(request,groupID):
 					form.save()
 					print('{}'.format("valid form"))
 					newurl = '/event/' + currentEvent.id
+					#test
 					return HttpResponseRedirect(newurl)
 					
 					
