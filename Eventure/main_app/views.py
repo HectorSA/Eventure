@@ -128,9 +128,13 @@ def index(request):
 	return render(request, 'index.html', {})
 
 def newIndex(request):
-	if request.method == 'POST':
-	
-		return render(request, 'newIndex.html', {})
+	if request.method == 'GET':
+		publicEvents = getAllPublicEvents()
+		print(publicEvents)
+		mapping = {
+		'publicEvents' : publicEvents
+		}
+		return render(request, 'newIndex.html', mapping)
 
 ################## /createEvent ###################
 def createEvent(request):
@@ -252,9 +256,8 @@ def getParsedEventAddr(groupId):
 	return address
 
 ####################get public events ###################
-
-def getAllPublicEvents(groupID):
-	eventInfo = EventInfo.objects.filter(id=groupID)
+def getAllPublicEvents():
+	eventInfo = EventInfo.objects.filter(type=False)
 	return eventInfo
 
 ####################get RSVP status ###################

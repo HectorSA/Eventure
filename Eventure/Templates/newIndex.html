@@ -8,7 +8,6 @@
     <meta charset="UTF-8">
     <title>Title</title>
      <link rel="stylesheet" href="{% static 'css/newIndex.css' %}"/>
-    <link rel="stylesheet" href="css/newIndex.css">
 
 
 </head>
@@ -23,16 +22,15 @@
 
 
 
-
-
+    {% for event in publicEvents %}
     <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
                 <div class="card card-inverse card-info">
-                    <img class="card-img-top" src="https://github.com/HectorSA/Eventure/blob/master/Eventure/Templates/media/laloPizzaParty.jpg?raw=true">
+                    <img class="card-img-top" src="{{event.eventPhoto}}">
                     <div class="card-block">
                         <figure class="profile profile-inline">
-                            <img src="https://github.com/HectorSA/Eventure/blob/master/Eventure/media/event_photos/HappyMe_KzeMuMx.jpg?raw=true" class="profile-avatar" alt="">
+                            <img src="{{event.eventPhoto}}" class="profile-avatar" alt="">
                         </figure>
-                        <h4 class="card-title">Lalo Pizza Party</h4>
+                        <h4 class="card-title">{{event.name}}</h4>
                         <div class="card-text">
                             Going to be wilddd mannn!!!
                         </div>
@@ -42,6 +40,9 @@
                     </div>
                 </div>
             </div>
+
+    {% endfor %}
+
 
 
 
