@@ -25,6 +25,7 @@
     </div>
     <div id="info" class="container" style="float:left; margin:auto">
         <h2>{{ eventInfo.name }}</h2>
+        <p>Attendee : {{attendee.email}}</p>
         <p>You are currently {{rsvpStatus}}</p>
         <p>Location: <a href="https://www.google.com/maps/search/?api=1&{{address}}" target="_blank">{{eventInfo.location}}</a></p>
         <p>Date: {{ eventInfo.date }}</p>
@@ -52,7 +53,7 @@
             <div class="media">
                 <!---<img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">-->
                 <div class="media-body">
-                    <h5 class="mt-0">{{guest.attendeeID}}</h5>
+                    <h5 class="mt-0">{{guest.attendeeName}}</h5>
                     {% for item in guest.items.all %}
                     <!--- <li>{{ item.name }}</li>-->
                     {% endfor %}

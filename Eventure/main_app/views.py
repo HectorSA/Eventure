@@ -21,12 +21,14 @@ userIDLength = 8
 from django.views import View
 
 # Create your views here.
-def anonymousUserMapping(attendee, eventInfo):
+def anonymousUserMapping(attendee, eventInfo, eventId):
 	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
 	address = getParsedEventAddr(eventInfo.id)
-	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
+	print(eventInfo.id)
+	guests = Attendee.objects.filter(eventID=eventInfo.id).order_by("attendeeName")
+	print(guests)
 	for guest in Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3):
-		print("guestss ",guest.attendeeName )
+		print("guestss ",guest )
 	items = Item.objects.filter(eventID=eventInfo.id)
 	return {
 		'attendee': attendee,
@@ -42,14 +44,21 @@ def registeredUserMapping(request, eventInfo):
 	user = User.objects.get(id = request.user.id)
 	address = getParsedEventAddr(eventInfo.id)
 	print(user.id, user.email , address, eventInfo.id)
-	guests = [Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)]
+	guests = Attendee.objects.filter(eventID=eventId, RSVPStatus=3)
 	items = Item.objects.filter(eventID=eventInfo.id)
 	if(user is not None):
 		attendee = Attendee
 		guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
+		for guest in guests:
+			if(guest.email is request.user.email):
+				attendee = guest
+		print("rsvp status")
+		print(attendee.RSVPStatus)
+		rsvpStatus = attendee.RSVPStatus
 		items = Item.objects.filter(eventID=eventInfo.id)
 		mapping = {
 			'eventInfo':eventInfo,
+			'rspvStatus':rsvpStatus,
 			'address': address,
 			'guests': guests,
 			'items': items,
@@ -57,13 +66,13 @@ def registeredUserMapping(request, eventInfo):
 	return mapping
 
 def setRsvpStatus(request, attendee):
-	choices = ['ATTENDING', 'MAYBE', 'NOTATTENDING']
 	if request.POST.get("ATTENDING"):
-		setattr(attendee, "RSVPStatus", 3)
+		attendee.RSVPStatus = 3
 	elif request.POST.get("MAYBE"):
-		setattr(attendee, "RSVPStatus", 2)
+		attendee.RSVPStatus = 2
 	elif request.POST.get("NOTATTENDING"):
-		setattr(attendee, "RSVPStatus", 1)
+		attendee.RSVPStatus = 1
+
 
 class attendeeEventDisplay(View):
 	template_name = 'displayEvent.html'
@@ -79,12 +88,12 @@ class attendeeEventDisplay(View):
 			self.attendeeId = argList[1]
 			self.eventInfo = EventInfo.objects.get(id=self.groupId)
 			self.attendee = Attendee.objects.get(attendeeID=self.attendeeId)
-			mapping = anonymousUserMapping(self.attendee,self.eventInfo)
+			mapping = anonymousUserMapping(self.attendee,self.eventInfo, self.groupId)
 			return render(request, self.template_name, mapping)
 		elif(len(argList) == 1):
 			self.groupId = argList[0]
 			self.eventInfo = EventInfo.objects.get(id=self.groupId)
-			mapping = registeredUserMapping(request, self.eventInfo)
+			mapping = registeredUserMapping(request, self.eventInfo, )
 			return render(request, self.template_name, mapping)
 
 	def post(self, request, *args, **kwargs):
