@@ -264,6 +264,9 @@ def createEvent(request):
 								 eventCategory = eventCategory)
 			if 'eventPhoto' in request.FILES:
 				newEvent.eventPhoto = request.FILES['eventPhoto']
+			else:
+				newEvent.eventPhoto = getDefaultPicture(eventCategory)
+				print("DEFAULT\n\n")
 			newEvent.save()
 			printEventInfo(newEvent)
 			
@@ -393,7 +396,7 @@ def eventHomePageView(request,groupID):
 	else:
 		return render(request, 'thisIsPrivate.html')
 
-
+############################## Edit ##########################################
 def edit(request,groupID):
 	instance = EventInfo.objects.get(id=groupID)
 	if request.user.is_authenticated():
@@ -470,7 +473,8 @@ def edit(request,groupID):
 
 	return HttpResponseRedirect('/')
 
-
+######################## None View Functions #################################
+###############################################################################
 ################### createInviteLink #################
 def createInviteLink(eventObject, AttendeeObject):
 	print('{}'.format(AttendeeObject.attendeeName))
@@ -602,3 +606,31 @@ def findUser(djangoUserID):
 def findAttendee(attendeeID):
 	eventureAttendee = Attendee.objects.get(attendeeID=attendeeID)
 	return eventureAttendee
+
+
+################# getDefaultPicture ####################
+def getDefaultPicture(eventCategory):
+	if (eventCategory == 0):
+		return "event_photos/defaultimgs/nothingEventGeneric.jpg"
+	elif (eventCategory == 1):
+		return "event_photos/defaultimgs/partyEventGeneric.jpg"
+	elif (eventCategory == 2):
+		return "event_photos/defaultimgs/educationEventGeneric.jpg"
+	elif (eventCategory == 3):
+		return "event_photos/defaultimgs/musicEventGeneric.jpg"
+	elif (eventCategory == 4):
+		return "event_photos/defaultimgs/fooddrinkEventGeneric.jpg"
+	elif (eventCategory == 5):
+		return "event_photos/defaultimgs/moviesEventGeneric.jpg"
+	elif (eventCategory == 6):
+		return "event_photos/defaultimgs/artEventGeneric.jpg"
+	elif (eventCategory == 7):
+		return "event_photos/defaultimgs/technologyEventGeneric.jpg"
+	elif (eventCategory == 8):
+		return "event_photos/defaultimgs/healthEventGeneric.jpg"
+	elif (eventCategory == 9):
+		return "event_photos/defaultimgs/outdoorsEventGeneric.jpg"
+	elif (eventCategory == 10):
+		return "event_photos/defaultimgs/sportsEventGeneric.jpg"
+	else:
+		return "event_photos/defaultimgs/noneEventGeneric.jpg"
