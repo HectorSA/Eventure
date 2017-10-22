@@ -473,36 +473,18 @@ def userLogout(request):
 
 def landingPageView(request):
 	if request.method == 'GET':
-		print("helllo")
 		currentUser = findUser(request.user.id)
 		userID = currentUser.id
 		
-		print('***********************************')
-		print('{}{}'.format("\tDUserID: ", request.user.id))
-		print('{}{}'.format("\tUUserID: ", currentUser.id))
-		print('{}{}'.format("\tFirst Name: ", currentUser.firstName))
-		print('{}{}'.format("\tLast Name: ", currentUser.lastName))
-		print('{}{}'.format("\tCity: ", currentUser.city))
-		print('{}{}'.format("\tState: ", currentUser.state))
-		print('{}{}'.format("\tZip: ", currentUser.zip))
-
-
 		allEvents = EventInfo.objects.filter(userProfile_id=userID).order_by('date')
 		attendees = Attendee.objects.filter(userAttendeeID=userID)
-		print(userID)
-		print(attendees)
-		print(attendees)
-		for attendee in attendees:
-			print(attendee.eventID.name)
-		
-		print(allEvents)
+
 		mapping ={
 			'currentUser' : currentUser,
 			'allEvents': allEvents,
 			'media_url': settings.MEDIA_URL + 'event_photos/',
 			'attendees': attendees,
 		}
-
 
 	return render(request,'landingPage.html',mapping)
 
