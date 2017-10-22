@@ -189,7 +189,7 @@ function highLightBox(){
 }
 
 function addError(field){
-    $(field).addClass('form-control')
+    //$(field).addClass('form-control')
     $(field).parent().addClass('has-error')
 }
 
