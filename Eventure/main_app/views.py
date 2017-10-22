@@ -265,17 +265,8 @@ def createEvent(request):
 			if 'eventPhoto' in request.FILES:
 				newEvent.eventPhoto = request.FILES['eventPhoto']
 			newEvent.save()
+			printEventInfo(newEvent)
 			
-			print('***********************************')
-			print('{}{}'.format("Event: ", name))
-			print('{}{} {}'.format("\tEvent Creater: ", creatingUser.firstName, creatingUser.lastName))
-			print('{}{}'.format("\tLocation: ", location))
-			print('{}{}'.format("\tDate: ", date))
-			print('{}{}'.format("\tTime: ", time))
-			print('{}{}'.format("\tDescription: ", description))
-			print('{}{}'.format("\tType: ", eventType))
-			print('{}{}'.format("\tCategory: ", newEvent.get_eventCategory_display()))
-			print('{}{}'.format("\tEventID: ", eventID))
 		
 		inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
 		if inviteToEventFormset.is_valid():
@@ -284,23 +275,19 @@ def createEvent(request):
 					emailUserID = createAlphanumericSequence(userIDLength)
 					email = invite.cleaned_data["email"]
 					userAttendeeID = -1
-					print('')
+
 					foundUser = findUserViaEmail(email)
-					if (foundUser):
-						print('{}{}{}{}{}'.format("\t", email, " : http://127.0.0.1:8000/event/", newEvent.id,
-						                          emailUserID))
-						print('{}{}{}{}{}{}'.format("\t", email, " - Found User -- ", foundUser.firstName, " ",
-						                            foundUser.lastName))
+					if(foundUser):
 						userAttendeeID = foundUser.id
-					else:
-						print('{}{}{}{}{}'.format("\t", email, " : http://127.0.0.1:8000/event/", newEvent.id,
-						                          emailUserID))
-						
 					
-					newEmailInvitee = Attendee(attendeeName = email, attendeeID = emailUserID,
-											   eventID = newEvent, email = email, RSVPStatus = 1,
-											   userAttendeeID = userAttendeeID)
-				
+					newEmailInvitee = Attendee(attendeeName=email, attendeeID=emailUserID,
+				                           eventID=newEvent, email=email, RSVPStatus=1,
+				                           userAttendeeID=userAttendeeID)
+					## Printing
+					emailLink = createInviteLink(newEvent, newEmailInvitee)
+					print('{}{}'.format("\t", emailLink))
+					
+					## Saving
 					newEmailInvitee.save()
 		
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
@@ -309,8 +296,10 @@ def createEvent(request):
 				if item.has_changed():
 					itemName = item.cleaned_data["itemName"]
 					itemAmount = item.cleaned_data["amount"]
-					print('{}{}{}{}'.format("\tItem: ",itemName," x ",itemAmount))
+
 					newItem = Item(eventID = newEvent, name = itemName, amount = itemAmount)
+					
+					printItemInfo(newItem)
 					newItem.save()
 				
 		if eventForm.is_valid():
@@ -328,6 +317,63 @@ def createEvent(request):
 	}
 
 	return render(request, 'createEvent.html', mapping)
+
+################### createInviteLink #################
+def createInviteLink(eventObject, AttendeeObject):
+	print('{}'.format(AttendeeObject.attendeeName))
+	
+	emailLink = "http://127.0.0.1:8000/event/" + eventObject.id +  AttendeeObject.attendeeID
+	return emailLink
+	
+################## Print Event Info ##################
+def printEventInfo(eventObject):
+	if (eventObject):
+		print('{}'.format("*****************************************"))
+		print('{}'.format("************** Event Info ***************"))
+		print('{}{}'.format("**\tEvent Name: ", eventObject.name))
+		print('{}{}'.format("**\tEvent Creater: ", eventObject.userProfile))
+		print('{}{}'.format("**\tLocation: ", eventObject.location))
+		print('{}{}'.format("**\tDate: ", eventObject.date))
+		print('{}{}'.format("**\tTime: ", eventObject.time))
+		print('{}{}'.format("**\tDescription: ", eventObject.description))
+		print('{}{}'.format("**\tType: ", eventObject.type))
+		print('{}{}'.format("**\tCategory: ", eventObject.get_eventCategory_display()))
+		print('{}{}'.format("**\tEventID: ", eventObject.id))
+		print('{}'.format("*****************************************"))
+	else:
+		print('{}'.format("************ Event Info *************"))
+		print('{}'.format("\tnil"))
+		print('{}'.format("*************************************"))
+		
+################## Print Item Info ##################
+def printItemInfo(itemObject):
+	if (itemObject):
+		print('{}'.format("************** Item Info ***************"))
+		print('{}{}'.format("\tItem: ", itemObject))
+		print('{}{}'.format("\tEvent ID: ", itemObject.eventID.id))
+		print('{}{}'.format("\tItem ID: ", itemObject.itemID))
+		print('{}{}'.format("\tIs Taken: ", itemObject.isTaken))
+		print('{}'.format("*****************************************"))
+	else:
+		print('{}'.format("************ Event Info *************"))
+		print('{}'.format("\tnil"))
+		print('{}'.format("*****************"))
+		
+
+def printAttendeeInfo(attendeeObject):
+	if (attendeeObject):
+		print('{}'.format("************** Event Info ***************"))
+		print('{}{}'.format("\tAttendee Name: ", attendeeObject.attendeeName))
+		print('{}{}'.format("\tAttendee ID: ", attendeeObject.attendeeID))
+		print('{}{}'.format("\tAttendee User ID: ", attendeeObject.userAttendeeID))
+		print('{}{}'.format("\tAttendee Event ID: ", attendeeObject.eventID.id))
+		print('{}{}'.format("\tAttendee Email: ", attendeeObject.email))
+		print('{}{}'.format("\tAttendee RSVP Status: ", attendeeObject.RSVPStatus))
+		print('{}'.format("*****************************************"))
+	else:
+		print('{}'.format("************ Event Info *************"))
+		print('{}'.format("\tnil"))
+		print('{}'.format("*****************"))
 
 
 ################# Functions used by views #################
