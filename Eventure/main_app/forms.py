@@ -33,6 +33,11 @@ class ItemForm(forms.Form):
 	                         widget=forms.TextInput(attrs={'placeholder': ' Pizza'}))
 	amount = forms.IntegerField()
 
+class takeItemForm(forms.ModelForm):
+	class Meta:
+		model = TakenItem
+		fields = ('itemBeingBroughtID', 'attendeeID','itemLinkID','quantity','comment',)
+		
 class CreateEventForm(forms.ModelForm):
 
 	type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES, label="Event Type",
