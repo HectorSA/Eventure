@@ -103,7 +103,8 @@ class TakenItem(models.Model):
 	attendeeID = models.ForeignKey(Attendee)
 	itemLinkID = models.ForeignKey(Item)
 	quantity = models.PositiveIntegerField(default=0)
-	
+	comment = models.TextField(default='')
+
 	def __str__(self):
 		return '{} x {} is being brought by {} '.format(self.itemBeingBroughtID.name,
 		                                                self.quantity, self.attendeeID.attendeeName)
