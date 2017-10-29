@@ -36,6 +36,8 @@
             <p id="category">Category: {{ form.eventCategory }}</p>
             <p>{{ form.type }}</p>
         </div>
+
+
         <div id="buttonStuff" style="float:left">
             <h3>Save Your Changes</h3>
             <input type="submit" value="Save Changes" class="btn btn-info">
@@ -78,7 +80,7 @@
         </div>
         <div id ="bringing">
             <h4>Your Items Requested</h4>
-            {% for item in items %}
+            {% for item in itemForm %}
                 <p>{{ item.name }} {{ item.amount }}</p>
             {% endfor %}
 
