@@ -104,3 +104,14 @@
     width: 45%;
     height:100px;
 }
+
+
+#itemNeedDiv{
+    border-style: solid;
+    border-color: blueviolet;
+}
+
+#itemNeedNameDiv{
+     border-style: solid;
+    border-color: darkred;
+}

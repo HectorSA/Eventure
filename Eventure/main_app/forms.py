@@ -38,6 +38,11 @@ class itemMForm(forms.ModelForm):
 		model = Item
 		fields = ('name','amount',)
 
+class takeItemForm(forms.ModelForm):
+	class Meta:
+		model = TakenItem
+		fields = ('itemBeingBroughtID', 'attendeeID','itemLinkID','quantity','comment',)
+		
 class CreateEventForm(forms.ModelForm):
 
 	type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES, label="Event Type",
