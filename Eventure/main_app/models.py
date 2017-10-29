@@ -103,6 +103,7 @@ class TakenItem(models.Model):
 	itemBeingBroughtID = models.AutoField(primary_key=True)
 	attendeeID = models.ForeignKey(Attendee)
 	itemLinkID = models.ForeignKey(Item)
+	eventID = models.ForeignKey(EventInfo)
 	quantity = models.PositiveIntegerField(default=0)
 	comment = models.TextField(default='')
 
