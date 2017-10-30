@@ -41,7 +41,7 @@ class itemMForm(forms.ModelForm):
 class takeItemForm(forms.ModelForm):
 	class Meta:
 		model = TakenItem
-		fields = ('itemBeingBroughtID', 'attendeeID','itemLinkID','quantity','comment',)
+		fields = ('itemBeingBroughtID', 'attendeeID','itemLinkID','eventId','quantity','comment',)
 		
 class CreateEventForm(forms.ModelForm):
 

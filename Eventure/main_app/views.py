@@ -26,6 +26,7 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 	address = getParsedEventAddr(eventInfo.id)
 	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
 	items = Item.objects.filter(eventID=eventInfo.id)
+	itemsTaken = TakenItem.objects.filter(eventId=eventInfo.id)
 	print(attendee.RSVPStatus)
 	return {
 		'attendee': attendee,
@@ -34,6 +35,7 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 		'rsvpStatus': rsvpStatus,
 		'guests':guests,
 		'items': items,
+		'itemsTaken': itemsTaken,
 	}
 
 def registeredUserMapping(request, eventInfo):
@@ -42,6 +44,7 @@ def registeredUserMapping(request, eventInfo):
 	address = getParsedEventAddr(eventInfo.id)
 	guests = Attendee.objects.filter(eventID=eventInfo.id,RSVPStatus=3).order_by("attendeeName")
 	items = Item.objects.filter(eventID=eventInfo.id)
+	itemsTaken = TakenItem.objects.filter(eventId=eventInfo.id)
 	attendee = Attendee
 	for guest in guests:
 		if(guest.email is request.user.email):
@@ -54,6 +57,7 @@ def registeredUserMapping(request, eventInfo):
 		'address': address,
 		'guests': guests,
 		'items': items,
+		'itemsTaken': itemsTaken,
 	}
 	return mapping
 
@@ -108,6 +112,7 @@ class attendeeEventDisplay(View):
 		guests = Attendee.objects.filter(eventID=groupId, RSVPStatus=3)
 		items = Item.objects.filter(eventID=groupId)
 		address = getParsedEventAddr(self.eventInfo.id)
+		itemsTaken = TakenItem.objects.filter(eventId=groupId)
 		mapping = {
 			'attendee': self.attendee,
 			'eventInfo': self.eventInfo,
@@ -115,6 +120,7 @@ class attendeeEventDisplay(View):
 			'rsvpStatus': rsvpStatus,
 			'guests': guests,
 			'items': items,
+			'itemsTaken': itemsTaken,
 		}
 		return render(request, self.template_name, mapping)
 
@@ -177,48 +183,6 @@ def displayEventForExistentUser(request,groupID, userID):
 	currentEvent = EventInfo.objects.filter(id=groupID)
 	user = UserProfile.objects.filter(id=request.user.id)
 
-# Used to display an event from a URL given to anon users from an email
-def displayEvent(request, groupID, userID):
-	currentEvent = EventInfo.objects.filter(id = groupID)
-	attendee = findAttendee(userID)
-	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
-	address = getParsedEventAddr(groupID)
-	guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
-	items = Item.objects.filter(eventID=groupID)
-	if(request.method == 'GET'):
-		if(currentEvent is not None):
-			if(attendee is not None):
-				print(rsvpStatus)
-				mapping = {
-					'attendee':getattr(attendee,"attendeeName"),
-					'currentEvent':currentEvent,
-					'address':address,
-					'rsvpStatus':rsvpStatus,
-					'guests':guests,
-					'items':items,
-				}
-				return render(request, 'displayEvent.html', mapping)
-			else:
-				pass
-	elif(request.method == 'POST'):
-		print(request.method)
-		if(attendee is not None):
-			if request.POST.get("ATTENDING"):
-				setattr(attendee,"RSVPStatus",3)
-			elif request.POST.get("MAYBE"):
-				setattr(attendee, "RSVPStatus", 2)
-			elif request.POST.get("NOTATTENDING"):
-				setattr(attendee, "RSVPStatus", 1)
-			rsvpStatus = getRSVPStatus(getattr(attendee,"RSVPStatus"))
-			mapping = {
-				'attendee': attendee,
-				'currentEvent': currentEvent,
-				'address': address,
-				'rsvpStatus': rsvpStatus,
-				'guests': guests,
-				'items': items,
-			}
-			return render(request, 'displayEvent.html', mapping)
 
 def index(request):
 	return render(request, 'index.html', {})
