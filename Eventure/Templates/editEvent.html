@@ -82,6 +82,15 @@
             <h4>Your Items Requested</h4>
             {% for item in itemForm %}
                 <p>{{ item.name }} {{ item.amount }}</p>
+
+
+
+            {{ item.errors }}
+
+
+
+
+
             {% endfor %}
 
             <!-- Button trigger modal -->

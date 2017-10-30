@@ -406,37 +406,39 @@ def edit(request,groupID):
 			invited = Attendee.objects.filter(eventID=groupID)
 			
 			itemList = []
-			form = CreateEventForm(request.POST or None, request.FILES or None, instance=instance)
-			
+			prefix = 2
+			form = CreateEventForm(request.POST or None, request.FILES or None
+			                       , instance=instance, prefix = 'form1')
 			itemForm = None
-			
-			print('{}{}'.format("Post: ", request.POST.dict))
-			print("**************************************")
-			for item in items:
-				print('')
-				print('Item: {} , id: {}'.format(item, item.itemID))
-				itemInstance = Item.objects.get(itemID=item.itemID)
-				itemForm = itemMForm(request.POST, instance=itemInstance)
-				print(itemForm)
-				itemList.append(itemForm)
-			print("**************************************")
-			
-			#print('{}{}'.format("Element 0:", itemList[0]))
+			print('{}{}'.format("Request Method: ", request.method))
 			
 			if request.method == 'POST':
-				for item in itemList:
-					if item.is_valid:
-						item.save()
+				print('{}{}'.format("POST: ", request.POST))
+				print("**************************************")
+				for item in items:
+					print('')
+					print('Item: {} , id: {}'.format(item, item.itemID))
+					itemInstance = Item.objects.get(itemID=item.itemID)
+					itemForm = itemMForm(request.POST, instance=itemInstance
+					                     , prefix = '{}{}'.format("form",prefix))
+					print(itemForm)
+					itemList.append(itemForm)
+					prefix = prefix + 1
+				print("**************************************")
+				
+				
+				for itemFormModel in itemList:
+					if itemFormModel.is_valid():
+						itemFormModel.save()
+					else:
+						print("invalid")
 				
 				if form.is_valid():
 					form.save()
 					print('{}'.format("valid form"))
 					newurl = '/event/' + currentEvent.id
-					#test
 					return HttpResponseRedirect(newurl)
 				
-				
-				
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
@@ -444,12 +446,23 @@ def edit(request,groupID):
 					'form': form,
 					'itemForm': itemList,
 					'invited': invited,
-					#'itemCreationFormset': itemCreationFormset,
 				}
 				return render(request, 'editEvent.html', mapping)
-			else:
-				##inviteToEventFormset = EmailFormSet(prefix='invitee')
-				#itemCreationFormset = ItemFormSet(prefix='item')
+			elif request.method == 'GET':
+				
+				print("**************************************")
+				for item in items:
+					print('')
+					print('Item: {} , id: {}'.format(item, item.itemID))
+					itemInstance = Item.objects.get(itemID=item.itemID)
+					itemForm = itemMForm(instance=itemInstance
+					, prefix = '{}{}'.format("form", prefix))
+					print(itemForm)
+					itemList.append(itemForm)
+					prefix = prefix + 1
+				print("**************************************")
+				
+				
 				mapping = {
 					'currentEvent': currentEvent,
 					'guests': guests,
@@ -457,7 +470,6 @@ def edit(request,groupID):
 					'form': form,
 					'itemForm': itemList,
 					'invited': invited,
-					#'itemCreationFormset': itemCreationFormset,
 				}
 			return render(request, 'editEvent.html', mapping)
 		return HttpResponseRedirect('/')
