@@ -358,39 +358,80 @@ def eventHomePageView(request,groupID):
 		return render(request, 'thisIsPrivate.html')
 
 ############################## Edit ##########################################
-def edit(request,groupID):
-	instance = EventInfo.objects.get(id=groupID)
+def edit(request,eventID):
+	instance = EventInfo.objects.get(id=eventID)
 	if request.user.is_authenticated():
 		currentUser = findUser(request.user.id)
 		
+		### Formset Setup
+		EmailFormSet = formset_factory(EmailInviteeForm)
+		ItemFormSet = formset_factory(ItemForm, extra=3)
+		
 		if currentUser == instance.userProfile:
-			currentEvent = EventInfo.objects.get(id=groupID)
-			guests = Attendee.objects.filter(eventID=groupID, RSVPStatus=3)
-			items = Item.objects.filter(eventID=groupID)
-			invited = Attendee.objects.filter(eventID=groupID)
+			currentEvent = EventInfo.objects.get(id=eventID)
+			guests = Attendee.objects.filter(eventID=eventID, RSVPStatus=3)
+			items = Item.objects.filter(eventID=eventID)
+			invited = Attendee.objects.filter(eventID=eventID)
 			
 			itemList = []
 			prefix = 2
 			form = CreateEventForm(request.POST or None, request.FILES or None
 			                       , instance=instance, prefix = 'form1')
 			itemForm = None
-			print('{}{}'.format("Request Method: ", request.method))
 			
 			if request.method == 'POST':
-				print('{}{}'.format("POST: ", request.POST))
-				print("**************************************")
+				
+				### For adding items
+				##################################################################################
+				itemCreationFormset = ItemFormSet(request.POST, prefix='item')
+				if itemCreationFormset.is_valid():
+					for item in itemCreationFormset:
+						if item.has_changed():
+							itemName = item.cleaned_data["itemName"]
+							itemAmount = item.cleaned_data["amount"]
+							
+							newItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
+							
+							printItemInfo(newItem)
+							newItem.save()
+				##################################################################################
+				
+				### For adding attendees
+				##################################################################################
+				inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
+				if inviteToEventFormset.is_valid():
+					for invite in inviteToEventFormset:
+						if invite.has_changed():
+							emailUserID = createAlphanumericSequence(userIDLength)
+							email = invite.cleaned_data["email"]
+							userAttendeeID = -1
+							
+							foundUser = findUserViaEmail(email)
+							if (foundUser):
+								userAttendeeID = foundUser.id
+							
+							newEmailInvitee = Attendee(attendeeName=email, attendeeID=emailUserID,
+							                           eventID=currentEvent, email=email, RSVPStatus=1,
+							                           userAttendeeID=userAttendeeID)
+							## Printing
+							emailLink = createInviteLink(currentEvent, newEmailInvitee)
+							print('{}{}'.format("\t", emailLink))
+							
+							## Saving
+							newEmailInvitee.save()
+				##################################################################################
+				
+				### For editing items
+				################################################
 				for item in items:
-					print('')
-					print('Item: {} , id: {}'.format(item, item.itemID))
 					itemInstance = Item.objects.get(itemID=item.itemID)
 					itemForm = itemMForm(request.POST, instance=itemInstance
 					                     , prefix = '{}{}'.format("form",prefix))
-					print(itemForm)
 					itemList.append(itemForm)
 					prefix = prefix + 1
-				print("**************************************")
+				################################################
 				
-				
+				## For saving items
 				for itemFormModel in itemList:
 					if itemFormModel.is_valid():
 						itemFormModel.save()
@@ -404,6 +445,8 @@ def edit(request,groupID):
 					return HttpResponseRedirect(newurl)
 				
 				mapping = {
+					'itemCreationFormset': itemCreationFormset,
+					'inviteToEventFormset': inviteToEventFormset,
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
@@ -414,20 +457,22 @@ def edit(request,groupID):
 				return render(request, 'editEvent.html', mapping)
 			elif request.method == 'GET':
 				
-				print("**************************************")
+				inviteToEventFormset = EmailFormSet(prefix='invitee')
+				itemCreationFormset = ItemFormSet(prefix='item')
+				
+				################################################
 				for item in items:
-					print('')
-					print('Item: {} , id: {}'.format(item, item.itemID))
 					itemInstance = Item.objects.get(itemID=item.itemID)
 					itemForm = itemMForm(instance=itemInstance
 					, prefix = '{}{}'.format("form", prefix))
-					print(itemForm)
 					itemList.append(itemForm)
 					prefix = prefix + 1
-				print("**************************************")
+				################################################
 				
 				
 				mapping = {
+					'itemCreationFormset': itemCreationFormset,
+					'inviteToEventFormset': inviteToEventFormset,
 					'currentEvent': currentEvent,
 					'guests': guests,
 					'items': items,
@@ -546,7 +591,7 @@ def getRSVPStatus(rsvpNumber):
 	return RSVPSTATUS[rsvpNumber]
 
 
-################### findGroup ########################
+################### findUserViaEmail #################
 def findUserViaEmail(emailAddress):
 	try:
 		eventureUser = UserProfile.objects.get(user__email=emailAddress)
@@ -555,8 +600,8 @@ def findUserViaEmail(emailAddress):
 	return eventureUser
 
 
-################### findGroup ########################
-def findGroup(groupID):
+################### findEvent ########################
+def findEvent(groupID):
 	eventInfo = EventInfo.objects.filter(id=groupID)
 	return eventInfo
 
