@@ -380,23 +380,24 @@ def edit(request,eventID):
 			itemForm = None
 			
 			if request.method == 'POST':
-				### For adding items
+				print(request.POST)
+				### For adding NEW items
 				##################################################################################
 				itemCreationFormset = ItemFormSet(request.POST, prefix='item')
-				if itemCreationFormset.is_valid():
-					for item in itemCreationFormset:
+				#if itemCreationFormset.is_valid():
+				for item in itemCreationFormset:
+					if item.is_valid():
 						if item.has_changed():
 							
 							itemName = item.cleaned_data["itemName"]
 							itemAmount = item.cleaned_data["amount"]
-							
-							newItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
-							
-							printItemInfo(newItem)
-							newItem.save()
+							if (itemAmount !=0):
+								newItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
+								newItem.save()
+								printItemInfo(newItem)
 				##################################################################################
 				
-				### For adding attendees
+				### For adding NEW attendees
 				##################################################################################
 				inviteToEventFormset = EmailFormSet(request.POST, prefix='invitee')
 				if inviteToEventFormset.is_valid():
@@ -421,7 +422,7 @@ def edit(request,eventID):
 							newEmailInvitee.save()
 				##################################################################################
 				
-				### For editing items
+				### For editing CURRENT items
 				################################################
 				for item in items:
 					itemInstance = Item.objects.get(itemID=item.itemID)

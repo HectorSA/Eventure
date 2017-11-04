@@ -8,6 +8,7 @@ $(document).ready(function() {
         $('tbody#items-form-container').append(compiledTmpl);
         $('tbody#items-form-container [id^=item-]').addClass("itemTable");
 
+
         // update form count
         $('#id_item-TOTAL_FORMS').attr('value', count+1);
         addItemBootStrap(); // Add BS to new forms
@@ -38,7 +39,6 @@ var itemTable = $('.itemTable');
 // Delete button
 itemTable.on("click", "a.deleteElement", function(ev) {
     ev.preventDefault();
-    console.log("Hello");
     $(this).parent().parent().children("td").children().hide();
 
 });
@@ -77,10 +77,12 @@ $('#edit').submit(function(event) {
 function removeHiddenElements() {
     $('.tableItemName').each(function (index) {
         if( $(this).children().is(":hidden") )
-            console.log($(this).parent().children('.tableItemAmount').children().val(0));
+            $(this).parent().children('.tableItemAmount').children().val(0);
 
 
     });
+
+
 }
 
 function addEmailBootStrap(){

@@ -24,10 +24,10 @@
                 <i class="fa fa-undo"></i>
             </a>
         </th>
-        <td id="item-__prefix__">
+        <td id="item-__prefix__" class ="tableItemName">
             {{ itemCreationFormset.empty_form.itemName }}
         </td>
-        <td id="item-__prefix__">
+        <td id="item-__prefix__" class="tableItemAmount">
             {{ itemCreationFormset.empty_form.amount }}
         </td>
     </tr>
@@ -151,6 +151,10 @@
 
             <hr>
 
+
+
+
+            <!-- Item formset to add additional items -->
             {{ itemCreationFormset.management_form }}
             <h4>Add items</h4>
             <table class="table table-sm">
@@ -180,10 +184,10 @@
 
 
 
-                        <td id="item-{{ forloop.counter0 }}" class="itemTable ">
+                        <td id="item-{{ forloop.counter0 }}" class="itemTable tableItemName">
                                 {{ items.itemName }}
                             </td>
-                            <td id="item-{{ forloop.counter0 }}" class="itemTable ">
+                            <td id="item-{{ forloop.counter0 }}" class="itemTable tableItemAmount">
                                 {{ items.amount }}
                             </td>
                             </tr>
