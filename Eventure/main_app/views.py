@@ -380,13 +380,13 @@ def edit(request,eventID):
 			itemForm = None
 			
 			if request.method == 'POST':
-				
 				### For adding items
 				##################################################################################
 				itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 				if itemCreationFormset.is_valid():
 					for item in itemCreationFormset:
 						if item.has_changed():
+							
 							itemName = item.cleaned_data["itemName"]
 							itemAmount = item.cleaned_data["amount"]
 							
@@ -425,22 +425,24 @@ def edit(request,eventID):
 				################################################
 				for item in items:
 					itemInstance = Item.objects.get(itemID=item.itemID)
-					itemForm = itemMForm(request.POST, instance=itemInstance
-					                     , prefix = '{}{}'.format("form",prefix))
-					itemList.append(itemForm)
+					if (item.amount != 0):
+						itemForm = itemMForm(request.POST, instance=itemInstance
+						                     , prefix = '{}{}'.format("form",prefix))
+						
+						if itemForm.is_valid():
+							itemAmountPosted = itemForm.cleaned_data['amount']
+							if (itemAmountPosted == 0):
+								itemInstance.delete()
+							else:
+								itemForm.save()
+							
 					prefix = prefix + 1
 				################################################
 				
-				## For saving items
-				for itemFormModel in itemList:
-					if itemFormModel.is_valid():
-						itemFormModel.save()
-					else:
-						print("invalid")
+
 				
 				if form.is_valid():
 					form.save()
-					print('{}'.format("valid form"))
 					newurl = '/event/' + currentEvent.id
 					return HttpResponseRedirect(newurl)
 				

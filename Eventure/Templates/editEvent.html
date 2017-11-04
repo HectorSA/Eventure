@@ -136,15 +136,14 @@
                         <a href="#" class="btn btn-info btn-block modifyItemList deleteElement">
                           <span class="glyphicon glyphicon-remove"></span>
                         </a>
-
                          <a href="#" style="display: none" class="btn btn-info btn-block
                          modifyItemList redoElement">
 
                             <i class="fa fa-undo"></i>
                         </a>
                     </th>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.amount }}</td>
+                    <td class="tableItemName">{{ item.name }}</td>
+                    <td class="tableItemAmount">{{ item.amount }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

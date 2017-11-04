@@ -39,14 +39,15 @@ var itemTable = $('.itemTable');
 itemTable.on("click", "a.deleteElement", function(ev) {
     ev.preventDefault();
     console.log("Hello");
-    $(this).parent().parent().children("td").hide();
+    $(this).parent().parent().children("td").children().hide();
+
 });
 
 // Undo button
 itemTable.on("click", "a.redoElement", function(ev) {
     ev.preventDefault();
 
-    $(this).parent().parent().children("td").show();
+    $(this).parent().parent().children("td").children().show();
 
 });
 
@@ -62,6 +63,25 @@ $(document).ready(function (){
     addItemBootStrap();
     addItemTableBootStrap();
 });
+
+// Submit function
+$('#edit').submit(function(event) {
+
+ event.preventDefault(); //this will prevent the default submit
+ removeHiddenElements();
+
+ $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+});
+
+// Set up for deletion
+function removeHiddenElements() {
+    $('.tableItemName').each(function (index) {
+        if( $(this).children().is(":hidden") )
+            console.log($(this).parent().children('.tableItemAmount').children().val(0));
+
+
+    });
+}
 
 function addEmailBootStrap(){
     $('[id$="email"]').each(function(index) {
