@@ -384,7 +384,6 @@ def edit(request,eventID):
 				### For adding NEW items
 				##################################################################################
 				itemCreationFormset = ItemFormSet(request.POST, prefix='item')
-				#if itemCreationFormset.is_valid():
 				for item in itemCreationFormset:
 					if item.is_valid():
 						if item.has_changed():
