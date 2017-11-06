@@ -2,48 +2,53 @@
 {% load staticfiles %}
 
 {% block body_block %}
+ <link rel="stylesheet" href="{% static 'css/myeventspage.css' %}"/>
+
+<body>
+<h2>My Events</h2>
 <div class="container">
-    <div class="jumbotron">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive" table style="background-color: whitesmoke">
+        <table summary="" class="table table-bordered table-hover">
 
       {% for event in allEvents %}
-        <table style="background-color: whitesmoke" class="table table-responsive">
-
-           <!--<tr>
-               {% if event.eventPhoto %}
-              <td> <img src="{{event.eventPhoto.url}}" class="img-"></br>
-               {% endif %}
-            </tr>-->
-
-
+        <thead>
             <tr>
-              <td width="10%" colspan="2">Your Event: {{event}}</td>
-
+              <th>Date</th>
+              <th>Event</th>
+              <th>Time</th>
+              <th>ID</th>
+              <th>Host</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{event.date}}</td>
+                <td> <a href="event/{{event.id}}" target="_blank">{{event}}</a></td>
+              <td>{{event.time}}</td>
+              <td>{{event.id}}</td>
+              <td>{{currentUser}}</td>
             </tr>
 
-            <tr>
-             <td width="10%" colspan="2">Date: {{event.date}}</td>
-            </tr>
-
-
-            <tr>
-              <td>Event#: {{event.id}}</td>
-            </tr>
-
-
-            <tr>
-              <td height="50px"> Description: </br> {{event.description}} </td>
-            </tr>
+          </tbody>
+              {% endfor %}
+          <tfoot>
+          </tfoot>
         </table>
 
-
-
-
-
-
-
-
-      {% endfor %}
-
+      </div>
     </div>
   </div>
+</div>
+
+</body>
+
+
+
+
+
+
+
+
 {% endblock %}
