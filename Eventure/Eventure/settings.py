@@ -125,10 +125,20 @@ USE_TZ = True
 
 TIME_INPUT_FORMATS = ('%I:%M%p',)
 
-# Static files (CSS, JavaScript, Images)
+# Static files (CSS, JavaScript,s Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+#backend is setup for debug purposes
+#For email purposes
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST =  'stmp.gmail.com'
+EMAIL_HOST_USER = 'jromeutsa@gmail.com'
+EMAIL_HOST_PASSWORD = 'computerscience1'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
