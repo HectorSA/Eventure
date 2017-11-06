@@ -275,7 +275,7 @@ def createEvent(request):
 				
 		if eventForm.is_valid():
 			print('***********************************')
-			sendEmailToAtendees(name, request.user.get_full_name())
+			sendEmailToAtendees(name, request.user.get_full_name(), request)
 
 			return HttpResponseRedirect('/landingPage')
 	else:
