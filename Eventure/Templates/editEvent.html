@@ -9,12 +9,45 @@
     <link rel="stylesheet" href="{% static 'css/eventHomePage.css' %}"/>
 </head>
 <body>
+<br>
+<!-- Item List Template -->
+<script type="text/html" id="item-template">
+    <tr>
+        <th width="8%" scope="row">
+            <a href="#" class="btn btn-info btn-block modifyItemList deleteElement">
+              <span class="glyphicon glyphicon-remove"></span>
+            </a>
+
+             <a href="#" style="display: none" class="btn btn-info btn-block
+             modifyItemList redoElement">
+
+                <i class="fa fa-undo"></i>
+            </a>
+        </th>
+        <td id="item-__prefix__" class ="tableItemName">
+            {{ itemCreationFormset.empty_form.itemName }}
+        </td>
+        <td id="item-__prefix__" class="tableItemAmount">
+            {{ itemCreationFormset.empty_form.amount }}
+        </td>
+    </tr>
+</script>
+
+<!-- Invite List Template -->
+<script type="text/html" id="invitee-template">
+    <div id="invitee-__prefix__">
+        {{ inviteToEventFormset.empty_form.email }}
+    </div>
+</script>
 
 
 
-<h3>Your Event</h3>
 <form enctype="multipart/form-data" method="POST" id="edit">
+
     {% csrf_token %}
+       <div class="container" style="padding-left: 80%";>
+      <input type="submit" value="Save Changes" class="btn btn-info">
+    </div>
     <div class="container" id="wrap1">
         <div id="photo" class="container" style="float:left">
                 {% if currentEvent.eventPhoto %}
@@ -38,12 +71,11 @@
         </div>
 
 
-        <div id="buttonStuff" style="float:left">
-            <h3>Save Your Changes</h3>
-            <input type="submit" value="Save Changes" class="btn btn-info">
-        </div>
-    </div>
 
+    </div>
+    <br>
+    <br>
+    <br>
 
     <div class="container" id="wrap" style="position: relative">
         <div class="container" id="eventContent" style="float:left">
@@ -74,53 +106,108 @@
                     </div>
 
                 {%  endfor %}
-            <button type="button" class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-plus"></span> Invite More People
-            </button>
+
+            {{ inviteToEventFormset.management_form }}
+            <div id="invitees-form-container">
+                {% for invitee in inviteToEventFormset %}
+                    <div id="invitee-{{ forloop.counter0 }}" class="inviteTable">
+                        {{ invitee.as_table }}
+                    </div>
+                {% endfor %}
+            </div>
+
+                <a href="#" id="invitee-item-button" class="btn btn-info add-invitee">Add Invitee</a>
         </div>
         <div id ="bringing">
+
             <h4>Your Items Requested</h4>
-            {% for item in itemForm %}
-                <p>{{ item.name }} {{ item.amount }}</p>
+            <table class="table table-sm itemTable">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th style="padding-left: 25px" >Item</th>
+                  <th style="padding-left: 25px" >Amount</th>
+                </tr>
+              </thead>
+                <tbody>
+                {% for item in itemForm %}
+                <tr >
+                    <th width="8%" scope="row">
+                        <a href="#" class="btn btn-info btn-block modifyItemList deleteElement">
+                          <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                         <a href="#" style="display: none" class="btn btn-info btn-block
+                         modifyItemList redoElement">
+
+                            <i class="fa fa-undo"></i>
+                        </a>
+                    </th>
+                    <td class="tableItemName">{{ item.name }}</td>
+                    <td class="tableItemAmount">{{ item.amount }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <hr>
 
 
 
-            {{ item.errors }}
+
+            <!-- Item formset to add additional items -->
+            {{ itemCreationFormset.management_form }}
+            <h4>Add items</h4>
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th style="padding-left: 25px" >Item</th>
+                  <th style="padding-left: 25px" >Amount</th>
+                </tr>
+              </thead>
+                <tbody id="items-form-container" class="itemTable">
+
+                        {% for items in itemCreationFormset %}
+                        <tr>
+                        <th width="8%" scope="row" class="buttonHeader">
+                            <a href="#" class="btn btn-info btn-block modifyItemList deleteElement">
+                              <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+
+                             <a href="#" style="display: none" class="btn btn-info btn-block
+                             modifyItemList redoElement">
+
+                                <i class="fa fa-undo"></i>
+                            </a>
+                        </th>
 
 
 
 
+                        <td id="item-{{ forloop.counter0 }}" class="itemTable tableItemName">
+                                {{ items.itemName }}
+                            </td>
+                            <td id="item-{{ forloop.counter0 }}" class="itemTable tableItemAmount">
+                                {{ items.amount }}
+                            </td>
+                            </tr>
+                        {% endfor %}
 
-            {% endfor %}
+                </tbody>
+            </table>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                <span class="glyphicon glyphicon-plus"></span> Add Item
-            </button>
 
-            <!-- Modal -->
-            <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                      <div id="items-form-container" class="itemTable">
-                         <!-- {{newItem.as_p}}-->
-
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input type="submit" value="Save Changes" class="btn btn-info">
-                  </div>
-                </div>
-              </div>
+            <!--{{ itemCreationFormset.management_form }}
+            <div id="items-form-container" class="itemTable">
+                {% for items in itemCreationFormset %}
+                    <div id="item-{{ forloop.counter0 }}" class="itemTable ">
+                        {{ items }}
+                    </div>
+                {% endfor %}
             </div>
+            -->
+            <a href="#" id="add-item-button" class="btn btn-info add-item">Add Additional Items</a>
+
 
         </div>
     </div>
@@ -128,5 +215,6 @@
     <div id="footer"><p></p></div>
 
 </form>
+<script src="{% static 'scripts/editEvent.js' %}"></script>
 {% endblock %}
 </body>
