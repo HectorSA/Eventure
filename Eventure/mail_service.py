@@ -1,4 +1,7 @@
 import smtplib
+from django.template import loader
+from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.utils.html import strip_tags
 #test receiver passed into mail_service
 receivertest = 'juanromero2011@yahoo.com'
 def mail_service(receiver):
@@ -35,3 +38,18 @@ def mail_service(receiver):
       print('Error: email cannot be sent')
 
 mail_service(receivertest) #call
+
+recipientList =[]
+
+def create_recipient_list(email):
+   recipientList.append(email)
+
+def sendEmailToAtendees(eventName, host):
+   subject = '{host} has invited you to {eventName}'.format(host = host, eventName=eventName)
+   html_message = loader.render_to_string('Eventure/Templates/displayEvent.html')
+   text_content = strip_tags(html_message)
+   msg = EmailMultiAlternatives(subject, text_content, recipientList)
+   msg.attach_alternative(html_message, "text/html")
+   msg.send()
+   print (subject,recipientList)
+

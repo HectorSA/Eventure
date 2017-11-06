@@ -14,6 +14,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 from datetime import date
+from mail_service import create_recipient_list, sendEmailToAtendees
 
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
@@ -252,11 +253,14 @@ def createEvent(request):
 				                           userAttendeeID=userAttendeeID)
 					## Printing
 					emailLink = createInviteLink(newEvent, newEmailInvitee)
+					print("this is the email", email)
 					print('{}{}'.format("\t", emailLink))
-					
+
+					##Add email to a recipient List
+					create_recipient_list(email)
 					## Saving
 					newEmailInvitee.save()
-		
+
 		itemCreationFormset = ItemFormSet(request.POST, prefix='item')
 		if itemCreationFormset.is_valid():
 			for item in itemCreationFormset:
@@ -271,6 +275,8 @@ def createEvent(request):
 				
 		if eventForm.is_valid():
 			print('***********************************')
+			sendEmailToAtendees(name, request.user.get_full_name())
+
 			return HttpResponseRedirect('/landingPage')
 	else:
 		eventForm = CreateEventForm()
@@ -282,7 +288,6 @@ def createEvent(request):
 		'itemCreationFormset': itemCreationFormset,
 		'inviteToEventFormset': inviteToEventFormset,
 	}
-
 	return render(request, 'createEvent.html', mapping)
 
 ################userLogin(request)#########################
