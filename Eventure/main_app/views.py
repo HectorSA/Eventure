@@ -335,6 +335,24 @@ def landingPageView(request):
 	return render(request,'landingPage.html',mapping)
 
 
+def myEventsPageView(request):
+	if request.method == 'GET':
+		currentUser = findUser(request.user.id)
+		userID = currentUser.id
+
+		allEvents = EventInfo.objects.filter(userProfile_id=userID).order_by('date')
+		attendees = Attendee.objects.filter(userAttendeeID=userID)
+
+		mapping = {
+			'currentUser': currentUser,
+			'allEvents': allEvents,
+			'media_url': settings.MEDIA_URL + 'event_photos/',
+			'attendees': attendees,
+		}
+
+	return render(request, 'myEventsPage.html', mapping)
+
+
 def eventHomePageView(request,groupID):
 	
 	instance = EventInfo.objects.get(id=groupID)

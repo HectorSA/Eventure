@@ -1,0 +1,49 @@
+{% extends "Base.html" %}
+{% load staticfiles %}
+
+{% block body_block %}
+<div class="container">
+    <div class="jumbotron">
+
+      {% for event in allEvents %}
+        <table style="background-color: whitesmoke" class="table table-responsive">
+
+           <tr>
+               {% if event.eventPhoto %}
+              <td> <img src="{{event.eventPhoto.url}}" class="img-"></br>
+               {% endif %}
+            </tr>
+
+
+            <tr>
+              <td width="10%" colspan="2">Your Event: {{event}}</td>
+
+            </tr>
+
+            <tr>
+             <td width="10%" colspan="2">Date: {{event.date}}</td>
+            </tr>
+
+
+            <tr>
+              <td>Event#: {{event.id}}</td>
+            </tr>
+
+
+            <tr>
+              <td height="50px"> Description: </br> {{event.description}} </td>
+            </tr>
+        </table>
+
+
+
+
+
+
+
+
+      {% endfor %}
+
+    </div>
+  </div>
+{% endblock %}

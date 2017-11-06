@@ -26,6 +26,7 @@ urlpatterns = [
 	url(r'^media/(?P<path>.*)$',serve , {'document_root': settings.MEDIA_ROOT, }),
     url(r'^createEvent$', views.createEvent, name = 'CreateEvent'),
 	url(r'^landingPage$', views.landingPageView, name = 'Home'),
+	url(r'^myEventsPage$', views.myEventsPageView, name = 'myEvents'),
 	url(r'^register/$',views.register, name='registrationPage'),
     url(r'^userLogin/$',views.userLogin,  name='userLogin'),
     url(r'^logout/$',views.userLogout, name='logout'),
