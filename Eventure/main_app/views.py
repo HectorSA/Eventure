@@ -27,7 +27,7 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 	address = getParsedEventAddr(eventInfo.id)
 	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
 	items = Item.objects.filter(eventID=eventInfo.id)
-	itemsTaken = TakenItem.objects.filter(eventId=eventInfo.id)
+	itemsTaken = TakenItem.objects.filter(eventID=eventInfo.id)
 	print(attendee.RSVPStatus)
 	return {
 		'attendee': attendee,
