@@ -26,16 +26,36 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
 	address = getParsedEventAddr(eventInfo.id)
 	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
-	items = Item.objects.filter(eventID=eventInfo.id)
+	allEventItems = Item.objects.filter(eventID=eventInfo.id)
 	itemsTaken = TakenItem.objects.filter(eventID=eventInfo.id)
-	print(attendee.RSVPStatus)
+	print("items:",allEventItems)
+	print("itemsTaken:",itemsTaken)
+	
+	for item in allEventItems:
+
+		sum = 0
+		amountTakenOfItem = itemsTaken.filter(itemLinkID=item.itemID)
+		for takenItem in amountTakenOfItem:
+			sum = takenItem.quantity
+		itemsBrought = sum
+		item.amountTaken = itemsBrought
+		if (item.amount - sum) == 0:
+			item.isTaken = True
+		else:
+			item.isTaken = False
+			
+		if item.isTaken == False:
+			print(item,"Amount Needed:",item.amountTaken)
+		
+		
+	
 	return {
 		'attendee': attendee,
 		'eventInfo': eventInfo,
 		'address': address,
 		'rsvpStatus': rsvpStatus,
 		'guests':guests,
-		'items': items,
+		'items': allEventItems,
 		'itemsTaken': itemsTaken,
 	}
 
@@ -52,6 +72,8 @@ def registeredUserMapping(request, eventInfo):
 			attendee = guest
 	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
 	items = Item.objects.filter(eventID=eventInfo.id)
+
+	
 	mapping = {
 		'eventInfo':eventInfo,
 		'rspvStatus':rsvpStatus,
@@ -88,12 +110,11 @@ class attendeeEventDisplay(View):
 			self.eventInfo = EventInfo.objects.get(id=self.groupId)
 			self.attendee = Attendee.objects.get(attendeeID=self.attendeeId)
 			mapping = anonymousUserMapping(self.attendee,self.eventInfo, self.groupId)
+			
+			
+			
 			return render(request, self.template_name, mapping)
-		elif(len(argList) == 1):
-			self.groupId = argList[0]
-			self.eventInfo = EventInfo.objects.get(id=self.groupId)
-			mapping = registeredUserMapping(request, self.eventInfo)
-			return render(request, self.template_name, mapping)
+
 
 	def post(self, request, *args, **kwargs):
 		argList = list(args)

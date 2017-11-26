@@ -67,23 +67,42 @@
     </div>
     <div class="container" id="bringing">
 
-        <h4>What to bring</h4>
         <h2>Needed</h2>
-        <div class="container" id="needed">
-            {% for item in items %}
-                <div class="container" id ="itemNeedDiv">
-                    <div id ="itemNeedNameDiv">
-                        {{ item.name }} {{ item.amount }}
-                    </div>
-                    <div id ="attendeeBringItem">
-                    </div>
-                </div>
-            {% endfor %}
 
-        </div>
-        <div class="container" id="notneeded">
+        {% for item in items %}
+            {% if forloop.counter|divisibleby:4 %}
+                <div class="row">
+            {% endif %}
 
-        </div>
+                <div class="wrapper col-sm-3">
+                    <div class="card">
+                        <div class="card__title">{{ item.name }}</div>
+                        <div class="card__description"> Bring </div>
+
+                        <div class="cardbottom cardbottom--fontforeground clearfix">
+                            <div class="one-third">
+                                <div class="value">{{item.amountTaken}}</div>
+                                <div class="valuedescription">Signed-up</div>
+                            </div>
+
+                            <div class="one-third">
+                                <div class="value">{{ item.amount }}</div>
+                                <div class="valuedescription">Needed</div>
+                            </div>
+
+                            <div class="one-third no-border">
+                                <div class="value">Sign up</div>
+                            </div>
+                        </div> <!-- End Card Bottom -->
+                    </div> <!-- End Card-->
+                </div> <!-- End Wrapper -->
+
+            {% if forloop.counter|divisibleby:4 %}
+                </div> <!-- End Row -->
+            {% endif %}
+        {% endfor %}
+
+
     </div>
 </div>
 {% endblock %}
