@@ -57,19 +57,18 @@
                 <!---<img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="Generic placeholder image">-->
                 <div class="media-body">
                     <h5 class="mt-0">{{guest.attendeeName}}</h5>
-                    {% for item in guest.items.all %}
-                    <!--- <li>{{ item.name }}</li>-->
-                    {% endfor %}
                 </div>
             </div>
             {%  endfor %}
         </div>
     </div>
+    <form enctype="multipart/form-data" method="POST" id="SigningUp">
+    {% csrf_token %}
     <div class="container" id="bringing">
 
         <h2>Needed</h2>
 
-        {% for item1, item2 in formList %}
+        {% for item1, item2 in itemFormTuple %}
             {% if forloop.counter|divisibleby:4 %}
                 <div class="row">
             {% endif %}
@@ -101,7 +100,7 @@
                 </div> <!-- End Row -->
             {% endif %}
         {% endfor %}
-
+<input id="submitButton" type="submit" class="btn btn-warning" value="Submit">
 
     </div>
 </div>

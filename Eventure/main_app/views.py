@@ -26,15 +26,27 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
 	address = getParsedEventAddr(eventInfo.id)
 	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
-	allEventItems = Item.objects.filter(eventID=eventInfo.id)
-	itemsTaken = TakenItem.objects.filter(eventID=eventInfo.id)
-	print("items:",allEventItems)
-	print("itemsTaken:",itemsTaken)
+	
+	itemFormTuple = getItemsForDisplayEvent(eventInfo.id)
+	return {
+		'attendee': attendee,
+		'eventInfo' : eventInfo,
+		'address': address,
+		'rsvpStatus': rsvpStatus,
+		'guests' : guests,
+		'itemFormTuple' : itemFormTuple,
+	}
+
+def getItemsForDisplayEvent(eventID):
+	allEventItems = Item.objects.filter(eventID=eventID)
+	itemsTaken = TakenItem.objects.filter(eventID=eventID)
+	#print("items:", allEventItems)
+	#print("itemsTaken:", itemsTaken)
 	formList = []
 	itemList = []
 	prefix = 0
-	for item in allEventItems:
 	
+	for item in allEventItems:
 		sum = 0
 		amountTakenOfItem = itemsTaken.filter(itemLinkID=item.itemID)
 		for takenItem in amountTakenOfItem:
@@ -42,56 +54,21 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 		itemsBrought = sum
 		item.amountTaken = itemsBrought
 		amountNeeded = item.amount - sum
-		if amountNeeded== 0:
+		if amountNeeded == 0:
 			item.isTaken = True
 		else:
 			item.isTaken = False
-			
+		
 		if item.isTaken == False:
-			print(item,"Amount Needed:",item.amountTaken)
-			itemForm = takeItemForm(amountNeeded,prefix='{}{}'.format("form", prefix))
+			#print(item, "Amount Needed:", item.amountTaken)
+			itemForm = takeItemForm(amountNeeded, prefix='{}{}'.format("form", prefix))
 			formList.append(itemForm)
-			print("Item Form:",itemForm)
+			#print("Item Form:", itemForm)
 			itemList.append(item)
 			prefix = prefix + 1
-			
-	formList = zip(itemList, formList)
-	
-	return {
-		'attendee': attendee,
-		'eventInfo': eventInfo,
-		'address': address,
-		'rsvpStatus': rsvpStatus,
-		'guests':guests,
-		'items': allEventItems,
-		'itemsTaken': itemsTaken,
-		'formList' : formList,
-	}
+		
+	return zip(itemList, formList)
 
-def registeredUserMapping(request, eventInfo):
-	mapping = {}
-	user = User.objects.get(id = request.user.id)
-	address = getParsedEventAddr(eventInfo.id)
-	guests = Attendee.objects.filter(eventID=eventInfo.id,RSVPStatus=3).order_by("attendeeName")
-	items = Item.objects.filter(eventID=eventInfo.id)
-	itemsTaken = TakenItem.objects.filter(eventId=eventInfo.id)
-	attendee = Attendee
-	for guest in guests:
-		if(guest.email is request.user.email):
-			attendee = guest
-	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
-	items = Item.objects.filter(eventID=eventInfo.id)
-
-	
-	mapping = {
-		'eventInfo':eventInfo,
-		'rspvStatus':rsvpStatus,
-		'address': address,
-		'guests': guests,
-		'items': items,
-		'itemsTaken': itemsTaken,
-	}
-	return mapping
 
 def setRsvpStatus(request, attendee):
 	if request.POST.get("ATTENDING"):
@@ -119,9 +96,6 @@ class attendeeEventDisplay(View):
 			self.eventInfo = EventInfo.objects.get(id=self.groupId)
 			self.attendee = Attendee.objects.get(attendeeID=self.attendeeId)
 			mapping = anonymousUserMapping(self.attendee,self.eventInfo, self.groupId)
-			
-			
-			
 			return render(request, self.template_name, mapping)
 
 
@@ -132,27 +106,39 @@ class attendeeEventDisplay(View):
 			self.attendeeId = argList[1]
 			self.eventInfo = EventInfo.objects.get(id=self.groupId)
 			self.attendee = Attendee.objects.get(attendeeID=self.attendeeId)
-		else:
-			self.groupId = argList[0]
-			self.eventInfo = EventInfo.objects.get(id=self.groupId)
+
 		setRsvpStatus(request, self.attendee)
 		groupId = args[0]
 		self.eventInfo = EventInfo.objects.get(id=groupId)
 		rsvpStatus = getRSVPStatus(getattr(self.attendee,"RSVPStatus"))
-		print(rsvpStatus)
+		
 		guests = Attendee.objects.filter(eventID=groupId, RSVPStatus=3)
-		items = Item.objects.filter(eventID=groupId)
+
 		address = getParsedEventAddr(self.eventInfo.id)
-		itemsTaken = TakenItem.objects.filter(eventId=groupId)
+		itemFormTuple = getItemsForDisplayEvent(self.eventInfo.id)
+		
+		form0 = takeItemFormBind(request.POST, prefix="form0")
+		
+		print("form0:",form0)
+		
+		if form0.is_valid():
+			print("Valid form")
+		else:
+			print("Not Valid")
+		
+		
+		for key,value in request.POST.items():
+			print("Key:",key,"Value:",value)
+		
 		mapping = {
 			'attendee': self.attendee,
 			'eventInfo': self.eventInfo,
 			'address': address,
 			'rsvpStatus': rsvpStatus,
 			'guests': guests,
-			'items': items,
-			'itemsTaken': itemsTaken,
+			'itemFormTuple' : itemFormTuple,
 		}
+		
 		return render(request, self.template_name, mapping)
 
 def register(request):

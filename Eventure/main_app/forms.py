@@ -48,12 +48,15 @@ class takeItemForm(forms.Form):
 
 	def __init__(self, max_value, *args, **kwargs):
 		super(takeItemForm, self).__init__(*args, **kwargs)
-		self.fields['quantity'] = forms.IntegerField(validators=[MinValueValidator(0),
-		                                                         MaxValueValidator(max_value)], max_value = max_value)
+		self.fields['bringing'] = forms.IntegerField(
+			validators=[MinValueValidator(0), MaxValueValidator(max_value)], max_value = max_value, initial=0)
 		
-	quantity = None
-	
+	bringing = None
 
+
+class takeItemFormBind(forms.Form):
+	bringing = forms.IntegerField()
+	
 
 class CreateEventForm(forms.ModelForm):
 
