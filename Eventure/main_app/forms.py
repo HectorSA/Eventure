@@ -4,6 +4,7 @@ from .models import *
 from .models import UserProfile
 from django.forms import ModelForm
 from django.forms import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 EVENT_TYPE_CHOICES = (
     (True, 'Private'),
@@ -38,11 +39,22 @@ class itemMForm(forms.ModelForm):
 		model = Item
 		fields = ('name','amount',)
 
-class takeItemForm(forms.ModelForm):
+class takeItemModelForm(forms.ModelForm):
 	class Meta:
 		model = TakenItem
 		fields = ('itemBeingBroughtID', 'attendeeID','itemLinkID','eventID','quantity','comment',)
 		
+class takeItemForm(forms.Form):
+
+	def __init__(self, max_value, *args, **kwargs):
+		super(takeItemForm, self).__init__(*args, **kwargs)
+		self.fields['quantity'] = forms.IntegerField(validators=[MinValueValidator(0),
+		                                                         MaxValueValidator(max_value)], max_value = max_value)
+		
+	quantity = None
+	
+
+
 class CreateEventForm(forms.ModelForm):
 
 	type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES, label="Event Type",

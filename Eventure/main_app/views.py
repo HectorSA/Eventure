@@ -30,24 +30,32 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 	itemsTaken = TakenItem.objects.filter(eventID=eventInfo.id)
 	print("items:",allEventItems)
 	print("itemsTaken:",itemsTaken)
-	
+	formList = []
+	itemList = []
+	prefix = 0
 	for item in allEventItems:
-
+	
 		sum = 0
 		amountTakenOfItem = itemsTaken.filter(itemLinkID=item.itemID)
 		for takenItem in amountTakenOfItem:
 			sum = takenItem.quantity
 		itemsBrought = sum
 		item.amountTaken = itemsBrought
-		if (item.amount - sum) == 0:
+		amountNeeded = item.amount - sum
+		if amountNeeded== 0:
 			item.isTaken = True
 		else:
 			item.isTaken = False
 			
 		if item.isTaken == False:
 			print(item,"Amount Needed:",item.amountTaken)
-		
-		
+			itemForm = takeItemForm(amountNeeded,prefix='{}{}'.format("form", prefix))
+			formList.append(itemForm)
+			print("Item Form:",itemForm)
+			itemList.append(item)
+			prefix = prefix + 1
+			
+	formList = zip(itemList, formList)
 	
 	return {
 		'attendee': attendee,
@@ -57,6 +65,7 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 		'guests':guests,
 		'items': allEventItems,
 		'itemsTaken': itemsTaken,
+		'formList' : formList,
 	}
 
 def registeredUserMapping(request, eventInfo):
