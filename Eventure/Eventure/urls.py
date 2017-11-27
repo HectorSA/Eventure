@@ -29,6 +29,7 @@ urlpatterns = [
 	url(r'^myEventsPage$', views.myEventsPageView, name = 'myEvents'),
 	url(r'^register/$',views.register, name='registrationPage'),
     url(r'^userLogin/$',views.userLogin,  name='userLogin'),
+	url(r'^SearchEvent/$',views.SearchEvent,  name='searchevent'),
     url(r'^logout/$',views.userLogout, name='logout'),
 	url(r'^event/(\w{12})/$',views.eventHomePageView,name = 'eventHome'),
 	url(r'^event/(\w{12})/edit$', views.edit, name='eventEdit'),

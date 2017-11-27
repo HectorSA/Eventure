@@ -108,5 +108,5 @@ class TakenItem(models.Model):
 	comment = models.TextField(default='')
 
 	def __str__(self):
-		return '{} x {} is being brought by {} '.format(self.itemBeingBroughtID.name,
+		return '{} x {} is being brought by {} '.format(self.itemLinkID.name,
 		                                                self.quantity, self.attendeeID.attendeeName)
