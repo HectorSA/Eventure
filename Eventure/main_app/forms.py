@@ -56,7 +56,12 @@ class takeItemForm(forms.Form):
 
 class takeItemFormBind(forms.Form):
 	bringing = forms.IntegerField()
-	
+
+class SearchEvent(forms.Form):
+	type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES, label="Event Type",
+	                         initial=True, widget=forms.Select(), required=True)
+
+
 
 class CreateEventForm(forms.ModelForm):
 

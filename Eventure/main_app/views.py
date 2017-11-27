@@ -525,7 +525,16 @@ def edit(request,eventID):
 		return HttpResponseRedirect('/')
 
 	return HttpResponseRedirect('/')
-
+def SearchEvent(request):
+	if request.method == 'GET':
+		searchevent = SearchEvent()
+		mapping = {
+			'searchevent': searchevent
+		}
+		return render(request, 'SearchEvent.html', mapping)
+	if request.method == 'POST':
+		return render(request, 'SearchEvent.html', mapping)
+	return HttpResponseRedirect('/')
 ######################## None View Functions #################################
 ###############################################################################
 ################### createInviteLink #################
