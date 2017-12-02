@@ -69,6 +69,73 @@ def getItemsForDisplayEvent(eventID):
 		
 	return zip(itemList, formList)
 
+def assignSelectedItems(eventID, itemDict, attendeeId):
+
+	# Get all items from event
+	allEventItems = Item.objects.filter(eventID=eventID)
+	
+	# Get all items that someone signed up for
+	itemsTaken = TakenItem.objects.filter(eventID=eventID)
+	print(itemsTaken)
+	
+	# Get this attendee
+	attendee = Attendee.objects.get(attendeeID=attendeeId)
+	print("attendee:",attendee)
+	
+	# Get all items that THIS attendee signed up for
+	attendeeSignedUp = itemsTaken.filter(attendeeID=attendee)
+	
+	
+	print("All Items")
+	for item in allEventItems:
+		print("item:",item)
+	print("")
+	
+	print("All Taken")
+	for taken in itemsTaken:
+		print("taken:",taken)
+	print("")
+	
+	print("Attendee taken")
+	for taken in attendeeSignedUp:
+		print("ATaken:", taken)
+	print("")
+	
+	sortedDicList = sorted(itemDict.items())
+	print(sortedDicList)
+	
+	# This will hold items that were selected, i.e. formVal != 0
+	ItemSelectedArray = []
+	
+	# Go through each form, if the from value was not zero
+	# Grab the corresponding value of that form
+	# Save the value and the item as tuple into an array
+	for tuple, item in zip(sortedDicList,allEventItems):
+		valueOfForm = int(tuple[1])
+		if valueOfForm != 0:
+			ItemSelectedArray.append((item, valueOfForm))
+			print("Tuple:", tuple[1])
+		
+	print("")
+	
+	# Search brought items
+	# Check if user is registered for that item
+	# If so modify
+	# else create listing
+	for itemB in ItemSelectedArray:
+		listing = attendeeSignedUp.filter(itemLinkID=itemB[0]).first()
+		if listing != None:
+			listing.quantity += itemB[1]
+			listing.save()
+			print("This user has already signed up for this item")
+		else:
+			print("New listing")
+		print("Item", itemB[0], "Value", itemB[1])
+		print("Listing:", listing)
+		
+	
+	#for key, value in sorted(itemDict.items()):
+	#	print("Key:", key, "Value:", value)
 
 def setRsvpStatus(request, attendee):
 	if request.POST.get("ATTENDING"):
@@ -117,18 +184,12 @@ class attendeeEventDisplay(View):
 		address = getParsedEventAddr(self.eventInfo.id)
 		itemFormTuple = getItemsForDisplayEvent(self.eventInfo.id)
 		
-		form0 = takeItemFormBind(request.POST, prefix="form0")
+		# Create a dictionary from querydictionary
+		dictionaryOfForms = request.POST.dict()
+		# remove csrf token
+		del dictionaryOfForms['csrfmiddlewaretoken']
 		
-		print("form0:",form0)
-		
-		if form0.is_valid():
-			print("Valid form")
-		else:
-			print("Not Valid")
-		
-		
-		for key,value in request.POST.items():
-			print("Key:",key,"Value:",value)
+		assignSelectedItems(self.eventInfo.id, dictionaryOfForms, self.attendeeId)
 		
 		mapping = {
 			'attendee': self.attendee,
