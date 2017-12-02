@@ -69,11 +69,14 @@ def getItemsForDisplayEvent(eventID):
 		
 	return zip(itemList, formList)
 
-def assignSelectedItems(eventID, itemDict, attendeeId):
+def assignSelectedItems(event, itemDict, attendeeId):
+
+	eventID = event.id
 
 	# Get all items from event
 	allEventItems = Item.objects.filter(eventID=eventID)
 	
+
 	# Get all items that someone signed up for
 	itemsTaken = TakenItem.objects.filter(eventID=eventID)
 	print(itemsTaken)
@@ -88,7 +91,12 @@ def assignSelectedItems(eventID, itemDict, attendeeId):
 	
 	print("All Items")
 	for item in allEventItems:
-		print("item:",item)
+		amountTakenOfItem = itemsTaken.filter(itemLinkID=item.itemID).first()
+		if amountTakenOfItem != None:
+			if amountTakenOfItem.quantity == item.amount:
+				print("item:",item,"is all brought")
+				allEventItems=allEventItems.exclude(itemID=item.itemID)
+		print("item:",item,"amount taken:",amountTakenOfItem)
 	print("")
 	
 	print("All Taken")
@@ -130,6 +138,10 @@ def assignSelectedItems(eventID, itemDict, attendeeId):
 			print("This user has already signed up for this item")
 		else:
 			print("New listing")
+			newListing = TakenItem(attendeeID = attendee, itemLinkID = itemB[0],
+			                    eventID = event, quantity =itemB[1])
+			newListing.save()
+			
 		print("Item", itemB[0], "Value", itemB[1])
 		print("Listing:", listing)
 		
@@ -182,14 +194,16 @@ class attendeeEventDisplay(View):
 		guests = Attendee.objects.filter(eventID=groupId, RSVPStatus=3)
 
 		address = getParsedEventAddr(self.eventInfo.id)
-		itemFormTuple = getItemsForDisplayEvent(self.eventInfo.id)
+	
 		
 		# Create a dictionary from querydictionary
 		dictionaryOfForms = request.POST.dict()
 		# remove csrf token
 		del dictionaryOfForms['csrfmiddlewaretoken']
 		
-		assignSelectedItems(self.eventInfo.id, dictionaryOfForms, self.attendeeId)
+		assignSelectedItems(self.eventInfo, dictionaryOfForms, self.attendeeId)
+		
+		itemFormTuple = getItemsForDisplayEvent(self.eventInfo.id)
 		
 		mapping = {
 			'attendee': self.attendee,
