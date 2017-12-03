@@ -149,7 +149,9 @@ def assignSelectedItems(event, itemDict, attendeeId):
 	for itemB in ItemSelectedArray:
 		listing = attendeeSignedUp.filter(itemLinkID=itemB[0]).first()
 		if listing != None:
+			print("Before edit:",listing.quantity)
 			listing.quantity += itemB[1]
+			print("After edit:", listing.quantity)
 			listing.save()
 			
 			print("This user has already signed up for this item")
@@ -248,8 +250,8 @@ class attendeeEventDisplay(View):
 				dictionaryOfBringing[key] = value
 		
 
-		assignSelectedItems(self.eventInfo, dictionaryOfNeeded, self.attendeeId)
 		editBroughtItems(self.attendee, dictionaryOfBringing)
+		assignSelectedItems(self.eventInfo, dictionaryOfNeeded, self.attendeeId)
 		
 		
 		itemFormTuple = getItemsForDisplayEvent(self.eventInfo.id)
