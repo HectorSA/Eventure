@@ -26,6 +26,7 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 	rsvpStatus = getRSVPStatus(attendee.RSVPStatus)
 	address = getParsedEventAddr(eventInfo.id)
 	guests = Attendee.objects.filter(eventID=eventInfo.id, RSVPStatus=3)
+	itemsBroughtTuple = getItemsSignUpFor(eventId,attendee)
 	
 	itemFormTuple = getItemsForDisplayEvent(eventInfo.id)
 	return {
@@ -35,6 +36,7 @@ def anonymousUserMapping(attendee, eventInfo, eventId):
 		'rsvpStatus': rsvpStatus,
 		'guests' : guests,
 		'itemFormTuple' : itemFormTuple,
+		'itemsBroughtTuple' : itemsBroughtTuple
 	}
 
 def getItemsForDisplayEvent(eventID):
@@ -44,6 +46,7 @@ def getItemsForDisplayEvent(eventID):
 	#print("itemsTaken:", itemsTaken)
 	formList = []
 	itemList = []
+	stillNeed = []
 	prefix = 0
 	
 	for item in allEventItems:
@@ -58,6 +61,8 @@ def getItemsForDisplayEvent(eventID):
 			item.isTaken = True
 		else:
 			item.isTaken = False
+			
+		item.save()
 		
 		if item.isTaken == False:
 			#print(item, "Amount Needed:", item.amountTaken)
@@ -65,9 +70,30 @@ def getItemsForDisplayEvent(eventID):
 			formList.append(itemForm)
 			#print("Item Form:", itemForm)
 			itemList.append(item)
+			stillNeed.append(amountNeeded)
 			prefix = prefix + 1
 		
-	return zip(itemList, formList)
+	return zip(itemList, formList, stillNeed)
+
+def getItemsSignUpFor(eventID, attendee):
+	itemsTaken = TakenItem.objects.filter(eventID=eventID).filter(attendeeID = attendee)
+	# print("items:", allEventItems)
+	# print("itemsTaken:", itemsTaken)
+	formList = []
+	itemList = []
+	stillNeed = []
+	prefix = 0
+	
+	for item in itemsTaken:
+		itemForm = broughtItemForm(item.quantity,item.itemLinkID.amount, prefix='{}{}'.format("takening", prefix))
+		formList.append(itemForm)
+		# print("Item Form:", itemForm)
+		itemList.append(item)
+		stillNeedAmount = item.itemLinkID.amount - item.itemLinkID.amountTaken
+		stillNeed.append(stillNeedAmount)
+		prefix = prefix + 1
+		
+	return zip(itemList, formList, stillNeed)
 
 def assignSelectedItems(event, itemDict, attendeeId):
 
@@ -76,14 +102,11 @@ def assignSelectedItems(event, itemDict, attendeeId):
 	# Get all items from event
 	allEventItems = Item.objects.filter(eventID=eventID)
 	
-
 	# Get all items that someone signed up for
 	itemsTaken = TakenItem.objects.filter(eventID=eventID)
-	print(itemsTaken)
 	
 	# Get this attendee
 	attendee = Attendee.objects.get(attendeeID=attendeeId)
-	print("attendee:",attendee)
 	
 	# Get all items that THIS attendee signed up for
 	attendeeSignedUp = itemsTaken.filter(attendeeID=attendee)
@@ -99,15 +122,8 @@ def assignSelectedItems(event, itemDict, attendeeId):
 		print("item:",item,"amount taken:",amountTakenOfItem)
 	print("")
 	
-	print("All Taken")
-	for taken in itemsTaken:
-		print("taken:",taken)
-	print("")
+
 	
-	print("Attendee taken")
-	for taken in attendeeSignedUp:
-		print("ATaken:", taken)
-	print("")
 	
 	sortedDicList = sorted(itemDict.items())
 	print(sortedDicList)
@@ -135,6 +151,7 @@ def assignSelectedItems(event, itemDict, attendeeId):
 		if listing != None:
 			listing.quantity += itemB[1]
 			listing.save()
+			
 			print("This user has already signed up for this item")
 		else:
 			print("New listing")
@@ -142,12 +159,35 @@ def assignSelectedItems(event, itemDict, attendeeId):
 			                    eventID = event, quantity =itemB[1])
 			newListing.save()
 			
+			
 		print("Item", itemB[0], "Value", itemB[1])
 		print("Listing:", listing)
 		
 	
 	#for key, value in sorted(itemDict.items()):
 	#	print("Key:", key, "Value:", value)
+
+
+def editBroughtItems(attendee, editedItemDict):
+	# Get this attendee
+	
+	# Get all items that THIS attendee signed up for
+	takenItems = TakenItem.objects.filter(attendeeID=attendee)
+	
+	sortedDictList = sorted(editedItemDict.items())
+	
+	for dict, item in zip(sortedDictList,takenItems):
+		##print("Editted Item Dict:", dict[0], "value:",dict[1])
+		##print("Item Taken Filter:",item)
+		formValue = int(dict[1])
+		if formValue == 0:
+			print("deleting:",item)
+			item.delete()
+		elif (formValue != item.quantity):
+			print("Item Change:",item)
+			item.quantity = formValue
+			item.save()
+			
 
 def setRsvpStatus(request, attendee):
 	if request.POST.get("ATTENDING"):
@@ -198,12 +238,22 @@ class attendeeEventDisplay(View):
 		
 		# Create a dictionary from querydictionary
 		dictionaryOfForms = request.POST.dict()
+		dictionaryOfNeeded = {}
+		dictionaryOfBringing = {}
 		# remove csrf token
-		del dictionaryOfForms['csrfmiddlewaretoken']
+		for key, value in dictionaryOfForms.items():
+			if key.startswith("form"):
+				dictionaryOfNeeded[key] = value
+			if key.startswith("takening"):
+				dictionaryOfBringing[key] = value
 		
-		assignSelectedItems(self.eventInfo, dictionaryOfForms, self.attendeeId)
+
+		assignSelectedItems(self.eventInfo, dictionaryOfNeeded, self.attendeeId)
+		editBroughtItems(self.attendee, dictionaryOfBringing)
+		
 		
 		itemFormTuple = getItemsForDisplayEvent(self.eventInfo.id)
+		itemsBroughtTuple = getItemsSignUpFor(self.eventInfo.id, self.attendee)
 		
 		mapping = {
 			'attendee': self.attendee,
@@ -212,6 +262,7 @@ class attendeeEventDisplay(View):
 			'rsvpStatus': rsvpStatus,
 			'guests': guests,
 			'itemFormTuple' : itemFormTuple,
+			'itemsBroughtTuple': itemsBroughtTuple,
 		}
 		
 		return render(request, self.template_name, mapping)

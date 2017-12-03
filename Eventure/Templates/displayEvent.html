@@ -64,16 +64,54 @@
     </div>
     <form enctype="multipart/form-data" method="POST" id="SigningUp">
     {% csrf_token %}
+
     <div class="container" id="bringing">
-
-        <h2>Needed</h2>
-
-        {% for item1, item2 in itemFormTuple %}
+        <h2>Bringing</h2>
+         {% for item1, item2, item3 in itemsBroughtTuple %}
             {% if forloop.counter|divisibleby:4 %}
                 <div class="row">
             {% endif %}
 
-                <div class="wrapper col-sm-3">
+                <div class="wrapper col-sm-3 nopaddingonleft">
+                    <div class="card">
+                        <div class="card__title">{{ item1.itemLinkID.name }}</div>
+                        <div class="card__description"> {{item2}} </div>
+
+                        <div class="cardbottom cardbottom--fontforeground clearfix">
+                            <div class="one-third">
+                                <div class="value">{{item1.quantity}}</div>
+                                <div class="valuedescription">Bringing</div>
+                            </div>
+
+                            <div class="one-third">
+                                <div class="value">{{item3}}</div>
+                                <div class="valuedescription">Still Need</div>
+                            </div>
+
+                            <div class="one-third no-border">
+                                <div class="value">{{ item1.itemLinkID.amount}}</div>
+                                <div class="valuedescription">Requested</div>
+                            </div>
+                        </div> <!-- End Card Bottom -->
+                    </div> <!-- End Card-->
+                </div> <!-- End Wrapper -->
+
+            {% if forloop.counter|divisibleby:4 %}
+                </div> <!-- End Row -->
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+
+    <div class="container" id="bringing">
+        <h2>Needed</h2>
+        {% for item1, item2, item3 in itemFormTuple %}
+            {% if forloop.counter|divisibleby:4 %}
+                <div class="row">
+            {% endif %}
+
+                <div class="wrapper col-sm-3 nopaddingonleft">
                     <div class="card">
                         <div class="card__title">{{ item1.name }}</div>
                         <div class="card__description"> {{item2}} </div>
@@ -85,12 +123,13 @@
                             </div>
 
                             <div class="one-third">
-                                <div class="value">{{ item1.amount }}</div>
-                                <div class="valuedescription">Needed</div>
+                                <div class="value">{{ item3}}</div>
+                                <div class="valuedescription">Still Need</div>
                             </div>
 
                             <div class="one-third no-border">
-                                <div class="value">Sign up</div>
+                                <div class="value">{{ item1.amount}}</div>
+                                <div class="valuedescription">Requested</div>
                             </div>
                         </div> <!-- End Card Bottom -->
                     </div> <!-- End Card-->
