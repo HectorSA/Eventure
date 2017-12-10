@@ -110,3 +110,25 @@ class TakenItem(models.Model):
 	def __str__(self):
 		return '{} x {} is being brought by {} '.format(self.itemLinkID.name,
 		                                                self.quantity, self.attendeeID.attendeeName)
+
+
+class Poll(models.Model):
+	pollID = models.AutoField(primary_key=True)
+	question = models.CharField(max_length=200)
+	eventID = models.ForeignKey(EventInfo, null=True)
+	def __str__(self):
+		return '{}'.format(self.question)
+
+class Choice(models.Model):
+	poll = models.ForeignKey(Poll)
+	choice_text = models.CharField(max_length=200)
+	votes = models.IntegerField(default=0)
+	def __str__(self):
+		return '{}'.format(self.choice_text,self.poll,self.votes)
+
+class voter(models.Model):
+	poll = models.ForeignKey(Poll)
+	attendeeID = models.ForeignKey(Attendee)
+	
+	def __str__(self):
+		return '{}'.format(self.attendeeID,self.poll)
