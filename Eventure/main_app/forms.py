@@ -94,3 +94,19 @@ class LandingViewForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
 		fields = ('user','id','firstName','lastName','city','state','zip',)
+
+class CreatePollForm(forms.ModelForm):
+	class Meta:
+		model = Poll
+		fields = ('question',)
+		labels = {
+			'question' : 'question'
+		}
+
+
+class PollChoiceForm(forms.ModelForm):
+	class Meta:
+		model = Choice
+		fields = ('choice_text',)
+		labels = {'choice_text' : 'choice_text'}
+

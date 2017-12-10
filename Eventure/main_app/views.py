@@ -824,3 +824,46 @@ def getDefaultPicture(eventCategory):
 		return "event_photos/defaultimgs/sportsEventGeneric.jpg"
 	else:
 		return "event_photos/defaultimgs/noneEventGeneric.jpg"
+	
+######Poll views
+
+def createPoll(request,eventID):
+	instance = EventInfo.objects.get(id=eventID)
+	if request.user.is_authenticated():
+		currentUser = findUser(request.user.id)
+		
+		### Formset Setup
+		#EmailFormSet = formset_factory(EmailInviteeForm)
+		#pollForm = CreatePollForm()
+		#ItemFormSet = formset_factory(ItemForm, extra=3)
+		ChoiceFormSet = formset_factory(PollChoiceForm,extra=2)
+		
+		if currentUser == instance.userProfile:
+			currentEvent = EventInfo.objects.get(id=eventID)
+			#guests = Attendee.objects.filter(eventID=eventID, RSVPStatus=3)
+			
+			if request.method == 'POST':
+				pollForm = CreatePollForm(request.POST)
+				
+				if pollForm.is_valid():
+					pollQuestion = pollForm.cleaned_data["question"]
+					currentPoll = Poll(pollQuestion,eventID)
+					print(currentPoll)
+					choiceCreationFormset = ChoiceFormSet(request.POST, prefix='choice')
+					for choice in choiceCreationFormset:
+						if choice.is_valid():
+							if choice.has_changed():
+								
+								choice_text = choice.cleaned_data["choice_text"]
+								
+								newChoice = Choice(poll=currentPoll.pollID, choice_text=choice_text, votes=0)
+								print(newChoice)
+								newChoice.save()
+								printItemInfo(newChoice)
+			else:
+				pollForm = CreatePollForm()
+	mapping = {'pollForm': pollForm,
+	           'ChoiceFormSet': ChoiceFormSet,
+	           }
+	
+	return render(request, 'createPoll.html', mapping)
