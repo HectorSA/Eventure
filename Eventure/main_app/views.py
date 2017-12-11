@@ -565,6 +565,8 @@ def edit(request, eventID):
                                 newItem = Item(eventID=currentEvent, name=itemName, amount=itemAmount)
                                 newItem.save()
                                 printItemInfo(newItem)
+                                sendEventChangeNotification(currentEvent)
+
                 ##################################################################################
 
                 ### For adding NEW attendees
@@ -591,6 +593,7 @@ def edit(request, eventID):
 
                             ## Saving
                             newEmailInvitee.save()
+                    sendEmailToAtendees(currentEvent)
                 ##################################################################################
 
                 ### For editing CURRENT items
@@ -617,7 +620,6 @@ def edit(request, eventID):
 
                 if form.is_valid():
                     form.save()
-                    sendEventChangeNotification(currentEvent)
                     newurl = '/event/' + currentEvent.id
                     return HttpResponseRedirect(newurl)
 
