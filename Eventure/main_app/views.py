@@ -403,11 +403,9 @@ def createEvent(request):
                                                userAttendeeID=userAttendeeID)
                     ## Printing
                     emailLink = createInviteLink(newEvent, newEmailInvitee)
-                    print("this is the email", email)
-                    print('{}{}'.format("\t", emailLink))
 
                     ##Add email to a recipient List
-                    create_recipient_list(email)
+                    create_recipient_list(email,emailLink)
                     ## Saving
                     newEmailInvitee.save()
 
@@ -425,8 +423,7 @@ def createEvent(request):
 
         if eventForm.is_valid():
             print('***********************************')
-            sendEmailToAtendees(name, request.user.get_full_name(), request)
-
+            sendEmailToAtendees(newEvent)
             return HttpResponseRedirect('/landingPage')
     else:
         eventForm = CreateEventForm()
