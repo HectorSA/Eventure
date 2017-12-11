@@ -587,6 +587,7 @@ def edit(request, eventID):
                             ## Printing
                             emailLink = createInviteLink(currentEvent, newEmailInvitee)
                             print('{}{}'.format("\t", emailLink))
+                            create_recipient_list(email, emailLink)
 
                             ## Saving
                             newEmailInvitee.save()
@@ -614,10 +615,9 @@ def edit(request, eventID):
                     prefix = prefix + 1
                 ################################################
 
-
-
                 if form.is_valid():
                     form.save()
+                    sendEmailToAtendees(currentEvent)
                     newurl = '/event/' + currentEvent.id
                     return HttpResponseRedirect(newurl)
 
