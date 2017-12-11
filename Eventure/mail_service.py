@@ -3,7 +3,7 @@ from django.template import loader, RequestContext, Context
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core import mail
 from django.utils.html import strip_tags
-import html2text
+##import html2text
 
 #global variable for recipient list
 recipientList =[]
