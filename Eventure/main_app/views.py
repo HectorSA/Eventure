@@ -149,12 +149,21 @@ def assignSelectedItems(event, itemDict, attendeeId):
 	for itemB in ItemSelectedArray:
 		listing = attendeeSignedUp.filter(itemLinkID=itemB[0]).first()
 		if listing != None:
-			print("Before edit:",listing.quantity)
-			listing.quantity += itemB[1]
-			print("After edit:", listing.quantity)
-			listing.save()
-			
-			print("This user has already signed up for this item")
+			quantitySignedUpFor = itemB[1]
+			if listing.quantity + quantitySignedUpFor > itemB[0].amount:
+				# print("********************************************")
+				# print("exceeding Maximum")
+				# print("listing:",listing)
+				# print("listing.quantity:", listing.quantity)
+				# print("amount of item:",quantitySignedUpFor)
+				# print("Exceeds maximum by:", (listing.quantity + quantitySignedUpFor)- itemB[0].amount)
+				# print("********************************************")
+				
+				listing.quantity = itemB[0].amount
+				listing.save()
+			else:
+				listing.quantity += quantitySignedUpFor
+				listing.save()
 		else:
 			print("New listing")
 			newListing = TakenItem(attendeeID = attendee, itemLinkID = itemB[0],
