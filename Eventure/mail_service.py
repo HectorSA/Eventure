@@ -46,6 +46,7 @@ def sendEventChangeNotification(newEvent):
         message = 'Hey, ' + attendeeEmail + ' the event you have been invited to: ' + newEvent.name + ' has been modified\nClick on the link to see the changes:\n' + emaiLinkDict.get(
             attendeeEmail)
         email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [attendeeEmail], connection=connection)
+        resetGlobals()
         email.send()
     connection.close()
 
@@ -56,5 +57,4 @@ def sendItemsEmailUpdate(attendeeEmail,hostName, eventName,itemName):
     message = "Hello we are sorry to inform you that: "+ hostName+" has changed the item: '"+ itemName + " for event: "+ eventName +"\nAs a result of the change you have been automatically unsigned up for the item: "+ itemName+"\n"
     email = EmailMessage(subject,message,settings.DEFAULT_FROM_EMAIL, [attendeeEmail],connection=connection)
     email.send()
-    resetGlobals()
     connection.close()
