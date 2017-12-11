@@ -682,14 +682,20 @@ def SearchEvent(request):
 def deleteItemsBrought(Item):
 	
 	print("item updated:", Item.name)
+	eventName = Item.eventID.name
+	hostName = Item.eventID.userProfile.firstName + " " + Item.eventID.userProfile.lastName
+	itemName = Item.name
+	
 	# Get all items from event
 	allEventItems = TakenItem.objects.filter(itemLinkID=Item)
 
 	if allEventItems != None:
 		for itemTaken in allEventItems:
-			itemName = itemTaken.itemLinkID.name
+			
 			attendeeEmail = itemTaken.attendeeID.email
-			print(itemName,"is being brought by",attendeeEmail)
+			print("Email:",attendeeEmail)
+			print("Hello we are sorry to inform you that ",hostName," has changed the item '",itemName,"' for event '",eventName, "'", sep ="")
+			print("As a result of the change you have been automatically unsigned up for the item:", itemName)
 
 ################### createInviteLink #################
 def createInviteLink(eventObject, AttendeeObject):
