@@ -128,11 +128,34 @@
 
         </div>
         <div id ="bringing">
-            <h4>What to bring</h4>
-            {% for item in items %}
-                <p>{{ item.name }} x {{ item.amount }}</p>
+            <table class="table table-sm" style="width: 400px; /*border:1px gray solid">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Brought</th>
+                  <th>Requested</th>
+                </tr>
+              </thead>
+                <tbody id="items-form-container" class="itemTable">
 
-            {% endfor %}
+                {% for item in items %}
+                        <tr>
+                            <td  width="30%" class="itemTable tableItemName">
+                                {{ item.name }}
+                            </td>
+                            <td width="30%" class="itemTable tableItemAmount">
+                                {{ item.amountTaken }}
+                            </td>
+                            <td width="30%"  class="itemTable tableItemAmount">
+                                {{ item.amount }}
+                            </td>
+
+                            </tr>
+                        {% endfor %}
+
+                </tbody>
+            </table>
+
         </div>
     </div>
 
