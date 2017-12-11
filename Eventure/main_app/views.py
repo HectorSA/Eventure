@@ -647,8 +647,6 @@ def edit(request, eventID):
                     itemList.append(itemForm)
                     prefix = prefix + 1
                 ################################################
-
-
                 mapping = {
                     'itemCreationFormset': itemCreationFormset,
                     'inviteToEventFormset': inviteToEventFormset,
