@@ -14,7 +14,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 from datetime import date
-from mail_service import create_recipient_list, sendEmailToAtendees
+from mail_service import create_recipient_list, sendEmailToAtendees,sendItemsEmailUpdate
 
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
@@ -691,10 +691,9 @@ def deleteItemsBrought(Item):
     if allEventItems != None:
         for itemTaken in allEventItems:
             attendeeEmail = itemTaken.attendeeID.email
+            sendItemsEmailUpdate(attendeeEmail,hostName, itemName,itemTaken)
             print("Email:", attendeeEmail)
-            #print("Hello we are sorry to inform you that ", hostName, " has changed the item '", itemName,
-             #     "' for event '", eventName, "'", sep="")
-            print("As a result of the change you have been automatically unsigned up for the item:", itemName)
+
 
 
 ################### createInviteLink #################
