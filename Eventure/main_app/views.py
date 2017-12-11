@@ -556,7 +556,6 @@ def edit(request,eventID):
 			itemForm = None
 			
 			if request.method == 'POST':
-				print(request.POST)
 				### For adding NEW items
 				##################################################################################
 				itemCreationFormset = ItemFormSet(request.POST, prefix='item')
@@ -607,6 +606,10 @@ def edit(request,eventID):
 						
 						if itemForm.is_valid():
 							itemAmountPosted = itemForm.cleaned_data['amount']
+							### Notify users of item change
+							if (item.amount != itemAmountPosted):
+								deleteItemsBrought(item)
+								
 							if (itemAmountPosted == 0):
 								itemInstance.delete()
 							else:
@@ -674,6 +677,20 @@ def SearchEvent(request):
 	return HttpResponseRedirect('/')
 ######################## None View Functions #################################
 ###############################################################################
+
+
+def deleteItemsBrought(Item):
+	
+	print("item updated:", Item.name)
+	# Get all items from event
+	allEventItems = TakenItem.objects.filter(itemLinkID=Item)
+
+	if allEventItems != None:
+		for itemTaken in allEventItems:
+			itemName = itemTaken.itemLinkID.name
+			attendeeEmail = itemTaken.attendeeID.email
+			print(itemName,"is being brought by",attendeeEmail)
+
 ################### createInviteLink #################
 def createInviteLink(eventObject, AttendeeObject):
 	print('{}'.format(AttendeeObject.attendeeName))
