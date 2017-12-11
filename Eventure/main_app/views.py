@@ -14,7 +14,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 from datetime import date
-from mail_service import create_recipient_list, sendEmailToAtendees,sendItemsEmailUpdate
+from mail_service import create_recipient_list, sendEmailToAtendees,sendItemsEmailUpdate, sendEventChangeNotification
 
 WEBSITENAME = 'Eventure'
 groupIDLength = 12
@@ -617,7 +617,7 @@ def edit(request, eventID):
 
                 if form.is_valid():
                     form.save()
-                    sendEmailToAtendees(currentEvent)
+                    sendEventChangeNotification(currentEvent)
                     newurl = '/event/' + currentEvent.id
                     return HttpResponseRedirect(newurl)
 
