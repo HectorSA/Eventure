@@ -711,7 +711,7 @@ def deleteItemsBrought(Item):
 	if allEventItems != None:
 		for itemTaken in allEventItems:
 			attendeeEmail = itemTaken.attendeeID.email
-			#sendItemsEmailUpdate(attendeeEmail,hostName, eventName ,itemName)
+			sendItemsEmailUpdate(attendeeEmail,hostName, eventName ,itemName)
 			print("Email:", attendeeEmail)
 			itemTaken.delete()
 			
