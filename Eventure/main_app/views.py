@@ -55,7 +55,7 @@ def getItemsForDisplayEvent(eventID):
 		sum = 0
 		amountTakenOfItem = itemsTaken.filter(itemLinkID=item.itemID)
 		for takenItem in amountTakenOfItem:
-			sum = takenItem.quantity
+			sum += takenItem.quantity
 		itemsBrought = sum
 		item.amountTaken = itemsBrought
 		amountNeeded = item.amount - sum
@@ -159,14 +159,16 @@ def assignSelectedItems(event, itemDict, attendeeId):
 				# print("********************************************")
 
 				listing.quantity = itemB[0].amount
-				itemB[0].amountTaken = itemB[0].amount
+				itemB[0].amountTaken += itemB[1]
 				listing.save()
 			else:
+				
 				listing.quantity += quantitySignedUpFor
 				listing.save()
+				itemB[0].amountTaken += itemB[1]
 		else:
 			print("New listing")
-			itemB[0].amountTaken = itemB[1]
+			itemB[0].amountTaken += itemB[1]
 			newListing = TakenItem(attendeeID=attendee, itemLinkID=itemB[0],
 								   eventID=event, quantity=itemB[1])
 			newListing.save()
@@ -709,7 +711,7 @@ def deleteItemsBrought(Item):
 	if allEventItems != None:
 		for itemTaken in allEventItems:
 			attendeeEmail = itemTaken.attendeeID.email
-			sendItemsEmailUpdate(attendeeEmail,hostName, eventName ,itemName)
+			#sendItemsEmailUpdate(attendeeEmail,hostName, eventName ,itemName)
 			print("Email:", attendeeEmail)
 			itemTaken.delete()
 			
