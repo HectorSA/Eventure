@@ -625,9 +625,6 @@ def edit(request, eventID):
 									itemInstance.delete()
 								else:
 									itemForm.save()
-									item.amount = itemAmountPosted
-									item.amountTaken = 0
-									item.save()
 							else:
 								if (itemAmountPosted == 0):
 									itemInstance.delete()
