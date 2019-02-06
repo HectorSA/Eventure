@@ -355,7 +355,7 @@ def newIndex(request):
 
 ################## /createEvent ###################
 def createEvent(request):
-    if not request.user.is_authenticated():
+    if(not request.user.is_authenticated):
         return HttpResponseRedirect('/')
 
     EmailFormSet = formset_factory(EmailInviteeForm)
@@ -519,7 +519,7 @@ def eventHomePageView(request, groupID):
         # 'itemCreationFormset': itemCreationFormset,
     }
 
-    if request.user.is_authenticated():  # if they are a user
+    if (request.user.is_authenticated):  # if they are a user
         currentUser = findUser(request.user.id)
         if currentUser == instance.userProfile:
             return render(request, 'hostEventHomePage.html', mapping)
@@ -536,7 +536,7 @@ def eventHomePageView(request, groupID):
 ############################## Edit ##########################################
 def edit(request, eventID):
     instance = EventInfo.objects.get(id=eventID)
-    if request.user.is_authenticated():
+    if (request.user.is_authenticated):
         currentUser = findUser(request.user.id)
 
         ### Formset Setup
@@ -874,7 +874,7 @@ def getDefaultPicture(eventCategory):
 
 def createPoll(request, eventID):
     instance = EventInfo.objects.get(id=eventID)
-    if request.user.is_authenticated():
+    if (request.user.is_authenticated):
         currentUser = findUser(request.user.id)
 
         ### Formset Setup

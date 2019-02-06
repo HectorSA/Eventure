@@ -1,0 +1,6 @@
+Django==2.1.5
+django-localflavor==2.1
+ez-setup==0.9
+mysqlclient==1.4.1
+Pillow==5.4.1
+pytz==2018.9

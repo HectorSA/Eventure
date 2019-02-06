@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'Eventure.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'eventureDB',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Eventure',
+        'USER': 'eventure',
+        'PASSWORD': '@howdy',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
